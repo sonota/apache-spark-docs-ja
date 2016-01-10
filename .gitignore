@@ -1,0 +1,13 @@
+/docs/_site/
+/docs/_plugins/_site/
+/build/
+
+# Bundler
+/.bundle/
+/vendor/
+
+# Emacs
+*~
+
+# rbenv
+/.ruby-version
