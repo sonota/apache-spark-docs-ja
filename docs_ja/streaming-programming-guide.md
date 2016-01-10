@@ -980,32 +980,54 @@ Note that, if you want to receive multiple streams of data in parallel
  you can create multiple input DStreams
  (discussed further
    in the [Performance Tuning](#level-of-parallelism-in-data-receiving) section).
-This will
-create multiple receivers which will simultaneously receive multiple data streams. But note that a
-Spark worker/executor is a long-running task, hence it occupies one of the cores allocated to the
-Spark Streaming application. Therefore, it is important to remember that a Spark Streaming application
-needs to be allocated enough cores (or threads, if running locally) to process the received data,
-as well as to run the receiver(s).
+This will create multiple receivers which will simultaneously receive multiple data streams.
+But note that a Spark worker/executor is a long-running task,
+ hence it occupies one of the cores allocated to the Spark Streaming application.
+Therefore, it is important to remember that
+ a Spark Streaming application needs to be allocated enough cores
+ (or threads, if running locally)
+ to process the received data,
+ as well as to run the receiver(s).
 <!-- ja -->
 複数のストリームを並行に受け取りたい場合、
 複数の入力 DStreams を生成できることに留意してください
 （[Performance Tuning](#level-of-parallelism-in-data-receiving) のセクションで詳しく説明します）。
+これは同時に複数のデータ・ストリームを受け取る複数のレシーバを生成します。
+しかし、Spark の worker/executor は長時間実行されるタスクですので、
+Spark Streaming アプリケーションに割り当てられた複数のコアの 1 つを占有すること
+に注意してください。
+そのため、
+レシーバを実行するのと同様、
+受け取ったデータを処理するためには Spark Streaming アプリケーションに
+十分なコア（ローカルで動作させる場合はスレッド）
+を割り当てる必要があることを覚えておくことが重要です。
 <!-- /pair -->
 
 ##### Points to remember
 {:.no_toc}
 
-<!-- pair -->
-- When running a Spark Streaming program locally, do not use "local" or "local[1]" as the master URL.
-  Either of these means that only one thread will be used for running tasks locally. If you are using
-  a input DStream based on a receiver (e.g. sockets, Kafka, Flume, etc.), then the single thread will
-  be used to run the receiver, leaving no thread for processing the received data. Hence, when
-  running locally, always use "local[*n*]" as the master URL, where *n* > number of receivers to run
-  (see [Spark Properties](configuration.html#spark-properties) for information on how to set
-  the master).
-<!-- ja -->
-- ローカルで動かす場合、 "local" や "local[1]" を master URL として使わないでください。
-<!-- /pair -->
+- <!-- pair -->
+  When running a Spark Streaming program locally, do not use "local" or "local[1]" as the master URL.
+  Either of these means that only one thread will be used for running tasks locally.
+  If you are using a input DStream based on a receiver
+   (e.g. sockets, Kafka, Flume, etc.),
+   then the single thread will be used to run the receiver,
+   leaving no thread for processing the received data.
+  Hence, when running locally, always use "local[*n*]" as the master URL,
+   where *n* > number of receivers to run
+  (see [Spark Properties](configuration.html#spark-properties)
+   for information on how to set the master).
+  <!-- ja -->
+  ローカルで動かす場合、 "local" や "local[1]" を master URL として使わないでください。
+  そのように指定した場合、ローカルでのタスク実行に使われるスレッドが 1 つだけであることを意味します。
+  （たとえば、ソケット、Kafka, Flume などの）レシーバに基づいた入力 DStream を使っている場合、
+  レシーバを実行するために 1 つのスレッドが使われ、
+  受け取ったデータを処理するための残りのスレッドがない状態になります。
+  そこで、ローカルで実行する場合は、
+  必ず *n* > レシーバ数 となるように "local[*n*]" を指定してください
+  （master の設定方法については
+  [Spark Properties](configuration.html#spark-properties) を参照してください）。
+  <!-- /pair -->
 
 <!-- pair -->
 - Extending the logic to running on a cluster, the number of cores allocated to the Spark Streaming
