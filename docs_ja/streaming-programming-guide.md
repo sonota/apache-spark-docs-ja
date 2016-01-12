@@ -1029,14 +1029,14 @@ Spark Streaming アプリケーションに割り当てられた複数のコア�
   [Spark Properties](configuration.html#spark-properties) を参照してください）。
   <!-- /pair -->
 
-<!-- pair -->
-- Extending the logic to running on a cluster, the number of cores allocated to the Spark Streaming
+- <!-- pair -->
+  Extending the logic to running on a cluster, the number of cores allocated to the Spark Streaming
   application must be more than the number of receivers.
   Otherwise the system will receive data, but not be able to process it.
-<!-- ja -->
-- Spark Streaming アプリケーションに割り当てるコア数はレシーバの数より大きくなければいけません。
+  <!-- ja -->
+  Spark Streaming アプリケーションに割り当てるコア数はレシーバの数より大きくなければいけません。
   そうでなければ、システムはデータを受け取ることはできても処理することができません。
-<!-- /pair -->
+  <!-- /pair -->
 
 ### Basic Sources
 {:.no_toc}
@@ -1130,12 +1130,12 @@ and add it to the classpath.
 
 Some of these advanced sources are as follows.
 
-<!-- pair -->
-- **Kafka:** Spark Streaming {{site.SPARK_VERSION_SHORT}} is compatible with Kafka 0.8.2.1. See the [Kafka Integration Guide](streaming-kafka-integration.html) for more details.
-<!-- ja -->
-- **Kafka:** Spark Streaming {{site.SPARK_VERSION_SHORT}} は Kafka 0.8.2.1 と互換性があります。
+- <!-- pair -->
+  **Kafka:** Spark Streaming {{site.SPARK_VERSION_SHORT}} is compatible with Kafka 0.8.2.1. See the [Kafka Integration Guide](streaming-kafka-integration.html) for more details.
+  <!-- ja -->
+  **Kafka:** Spark Streaming {{site.SPARK_VERSION_SHORT}} は Kafka 0.8.2.1 と互換性があります。
   詳しくは [Kafka Integration Guide](streaming-kafka-integration.html) を参照してください。
-<!-- /pair -->
+  <!-- /pair -->
 
 - **Flume:** Spark Streaming {{site.SPARK_VERSION_SHORT}} is compatible with Flume 1.6.0. See the [Flume Integration Guide](streaming-flume-integration.html) for more details.
 
@@ -1646,11 +1646,17 @@ For the Python API, see [DStream](api/python/pyspark.streaming.html#pyspark.stre
 <!-- pair -->
 Output operations allow DStream's data to be pushed out
  to external systems like a database or a file systems.
-Since the output operations actually allow the transformed data to be consumed by external systems,
-they trigger the actual execution of all the DStream transformations (similar to actions for RDDs).
+Since the output operations actually allow the transformed data
+ to be consumed by external systems,
+ they trigger the actual execution of all the DStream transformations
+ (similar to actions for RDDs).
 Currently, the following output operations are defined:
 <!-- ja -->
 出力操作によってDStream のデータをデータベースやファイルシステムのような外部システムへ出力できます。
+（RDD に対するアクションと同様に）
+出力操作によって
+変換されたデータが外部のシステムに実際に消費されるようになるため、
+すべての DStream の変換の実際の実行は出力操作によってトリガーされます。
 <!-- /pair -->
 
 <table class="table">
@@ -1706,7 +1712,7 @@ Currently, the following output operations are defined:
 <tr><td></td><td></td></tr>
 </table>
 
-### Design Patterns for using foreachRDD
+### Design Patterns for using foreachRDD // foreachRDD のデザインパターン
 {:.no_toc}
 
 <!-- pair -->
@@ -1720,11 +1726,21 @@ Some of the common mistakes to avoid are as follows.
 よくある間違いをいくつか挙げましょう。
 <!-- /pair -->
 
+<!-- pair -->
 Often writing data to external system requires creating a connection object
-(e.g. TCP connection to a remote server) and using it to send data to a remote system.
-For this purpose, a developer may inadvertently try creating a connection object at
-the Spark driver, and then try to use it in a Spark worker to save records in the RDDs.
+ (e.g. TCP connection to a remote server) and using it to send data to a remote system.
+For this purpose, a developer may inadvertently try
+ creating a connection object at the Spark driver,
+ and then try to use it in a Spark worker to save records in the RDDs.
 For example (in Scala),
+<!-- ja -->
+多くの場合、外部システムへの出力は
+コネクション・オブジェクト（たとえば、リモートのサーバへの TCP コネクション）
+の生成を必要とします。
+この目的のために、開発者は不注意にドライバでコネクション・オブジェクトを生成し、
+RDD 中のレコードを保存するためにそのオブジェクトをワーカで使おうとするかもしれません。
+たとえば（Scala の場合）、
+<!-- /pair -->
 
 <div class="codetabs">
 <div data-lang="scala" markdown="1">
@@ -1749,14 +1765,34 @@ dstream.foreachRDD(sendRecord)
 </div>
 </div>
 
-This is incorrect as this requires the connection object to be serialized and sent from the
-driver to the worker. Such connection objects are rarely transferrable across machines. This
-error may manifest as serialization errors (connection object not serializable), initialization
-errors (connection object needs to be initialized at the workers), etc. The correct solution is
-to create the connection object at the worker.
+<!-- pair -->
+This is incorrect
+ as this requires the connection object to be serialized and sent from the driver to the worker.
+Such connection objects are rarely transferrable across machines.
+This error may manifest as serialization errors (connection object not serializable),
+ initialization errors (connection object needs to be initialized at the workers),
+ etc.
+The correct solution is to create the connection object at the worker.
+<!-- ja -->
+コネクション・オブジェクトをシリアライズして
+ドライバからワーカへ送信しなければならなくなるため、
+これは正しくありません。
+このようなコネクション・オブジェクトをマシン間で送信できることはめったにないのです。
+この場合、
+シリアライズのエラー（connection object not serializable）や
+初期化エラー（connection object needs to be initialized at the workers）
+といったエラーが発生するでしょう。
+<!-- /pair -->
 
-However, this can lead to another common mistake - creating a new connection for every record.
+<!-- pair -->
+However, this can lead to another common mistake
+ - creating a new connection for every record.
 For example,
+<!-- ja -->
+しかし、レコードごとにコネクションを新たに生成しようとするのも
+別のよくある間違いです。
+たとえば、
+<!-- /pair -->
 
 <div class="codetabs">
 <div data-lang="scala" markdown="1">
@@ -1782,11 +1818,23 @@ dstream.foreachRDD(lambda rdd: rdd.foreach(sendRecord))
 </div>
 </div>
 
-Typically, creating a connection object has time and resource overheads. Therefore, creating and
-destroying a connection object for each record can incur unnecessarily high overheads and can
-significantly reduce the overall throughput of the system. A better solution is to use
-`rdd.foreachPartition` - create a single connection object and send all the records in a RDD
-partition using that connection.
+<!-- pair -->
+Typically, creating a connection object has time and resource overheads.
+Therefore, creating and destroying a connection object for each record
+ can incur unnecessarily high overheads
+ and can significantly reduce the overall throughput of the system.
+A better solution is to use `rdd.foreachPartition`
+ - create a single connection object
+ and send all the records in a RDD partition using that connection.
+<!-- ja -->
+一般的に、コネクション・オブジェクトの生成は時間とリソースのオーバーヘッドを伴います。
+そのため、レコードごとにオブジェクトの生成と破棄を行うと、
+不要な高いオーバーヘッドを生じ、
+システムのスループットをはっきりと低下させる可能性があります。
+もっと良い解決法は `rdd.foreachPartition` を使うこと
+―― 単一のコネクション・オブジェクトを生成し、
+そのオブジェクトをつかって RDD パーティション内のすべてのレコードを送信することです。
+<!-- /pair -->
 
 <div class="codetabs">
 <div data-lang="scala" markdown="1">
@@ -1813,11 +1861,26 @@ dstream.foreachRDD(lambda rdd: rdd.foreachPartition(sendPartition))
 </div>
 </div>
 
-  This amortizes the connection creation overheads over many records.
+<!-- pair -->
+This amortizes the connection creation overheads over many records.
+<!-- ja -->
+これは
+多くのレコードで生じていた
+コネクション生成のオーバーヘッドを減らします。
+<!-- /pair -->
 
-Finally, this can be further optimized by reusing connection objects across multiple RDDs/batches.
-One can maintain a static pool of connection objects than can be reused as
-RDDs of multiple batches are pushed to the external system, thus further reducing the overheads.
+<!-- pair -->
+Finally, this can be further optimized
+ by reusing connection objects across multiple RDDs/batches.
+<!-- ja -->
+最終的に、
+複数の RDD/batch にまたがってコネクション・オブジェクトを再利用することで
+さらに最適化できます。
+One can maintain a static pool of connection objects
+ than can be reused as RDDs of multiple batches
+ are pushed to the external system,
+ thus further reducing the overheads.
+<!-- /pair -->
 
 <div class="codetabs">
 <div data-lang="scala" markdown="1">
@@ -1848,14 +1911,46 @@ dstream.foreachRDD(lambda rdd: rdd.foreachPartition(sendPartition))
 </div>
 </div>
 
-Note that the connections in the pool should be lazily created on demand and timed out if not used for a while. This achieves the most efficient sending of data to external systems.
+<!-- pair -->
+Note that the connections in the pool should be
+ lazily created on demand
+ and timed out if not used for a while.
+This achieves the most efficient sending of data to external systems.
+<!-- ja -->
+プール中のコネクションは必要になったときに遅延生成され、
+しばらくするとタイムアウトすべき点に注意してください。
+これにより外部のシステムへの送信がもっとも効率的になります。
+<!-- /pair -->
 
 
 ##### Other points to remember:
 {:.no_toc}
-- DStreams are executed lazily by the output operations, just like RDDs are lazily executed by RDD actions. Specifically, RDD actions inside the DStream output operations force the processing of the received data. Hence, if your application does not have any output operation, or has output operations like `dstream.foreachRDD()` without any RDD action inside them, then nothing will get executed. The system will simply receive the data and discard it.
+- <!-- pair -->
+  DStreams are executed lazily by the output operations,
+   just like RDDs are lazily executed by RDD actions.
+  Specifically, RDD actions inside the DStream output operations
+   force the processing of the received data.
+  Hence, if your application does not have any output operation,
+   or has output operations like `dstream.foreachRDD()` without any RDD action inside them,
+   then nothing will get executed.
+  The system will simply receive the data and discard it.
+  <!-- ja -->
+  RDD が RDD actions によって遅延実行されるのとちょうど同じように、
+  DStream は出力操作によって遅延実行されます。
+  具体的には、 DStream 出力操作の内部の RDD actions は
+  受け取ったデータの処理を強制します。
+  そのため、アプリケーションが出力操作を使っていない場合、
+  または `dstream.foreachRDD()` のような、その内部に RDD action を持たない出力操作を使っている場合は
+  何も実行されません。
+  <!-- /pair -->
 
-- By default, output operations are executed one-at-a-time. And they are executed in the order they are defined in the application.
+- <!-- pair -->
+  By default, output operations are executed one-at-a-time.
+  And they are executed in the order they are defined in the application.
+  <!-- ja -->
+  デフォルトでは、出力操作は 1 つずつ実行されます。
+  また、アプリケーションで定義された順番で実行されます。
+  <!-- /pair -->
 
 ***
 
