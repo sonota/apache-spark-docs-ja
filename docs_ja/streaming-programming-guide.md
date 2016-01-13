@@ -47,7 +47,7 @@ live dashboards に出力できます。
 Internally, it works as follows. Spark Streaming receives live input data streams and divides
 the data into batches, which are then processed by the Spark engine to generate the final stream of results in batches.
 <!-- ja -->
-内部では、次＜次の図？＞のように動きます。
+内部では、次の図のように動きます。
 Spark Streaming は live input data stream を受け取り、
 そのデータを複数の batch に分割し、
 最終的な結果のストリームを生成するために Spark エンジンによって処理されます。
@@ -2118,11 +2118,23 @@ information on different persistence levels can be found in the [Spark Programmi
 
 ## Checkpointing // チェックポイント
 
-A streaming application must operate 24/7 and hence must be resilient to failures unrelated
-to the application logic (e.g., system failures, JVM crashes, etc.). For this to be possible,
-Spark Streaming needs to *checkpoint* enough information to a fault-
-tolerant storage system such that it can recover from failures. There are two types of data
-that are checkpointed.
+<!-- pair -->
+A streaming application must operate 24/7
+ and hence must be resilient to failures unrelated to the application logic
+ (e.g., system failures, JVM crashes, etc.).
+For this to be possible,
+ Spark Streaming needs to *checkpoint* enough information
+ to a fault-tolerant storage system
+ such that it can recover from failures.
+There are two types of data that are checkpointed.
+<!-- ja -->
+ストリーミング・アプリケーションは連続稼働させなければならないため、
+アプリケーション・ロジックと関係のない失敗（システムエラー、 JVM のクラッシュあんど）
+に対して resilient でなければいけません。
+これを可能にするために、失敗時にリカバーできるように
+ Spark Streaming は 十分な情報を耐障害性のあるストレージ・システムに *チェックポイント処理* する必要があります。
+チェックポイント処理されるデータには 2 種類あります。
+<!-- /pair -->
 
 - *Metadata checkpointing* - Saving of the information defining the streaming computation to
   fault-tolerant storage like HDFS. This is used to recover from failure of the node running the
