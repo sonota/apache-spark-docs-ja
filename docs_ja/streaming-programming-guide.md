@@ -2129,16 +2129,28 @@ For this to be possible,
 There are two types of data that are checkpointed.
 <!-- ja -->
 ストリーミング・アプリケーションは連続稼働させなければならないため、
-アプリケーション・ロジックと関係のない失敗（システムエラー、 JVM のクラッシュあんど）
+アプリケーション・ロジックと関係のない失敗（システムエラー、 JVM のクラッシュなど）
 に対して resilient でなければいけません。
 これを可能にするために、失敗時にリカバーできるように
  Spark Streaming は 十分な情報を耐障害性のあるストレージ・システムに *チェックポイント処理* する必要があります。
 チェックポイント処理されるデータには 2 種類あります。
 <!-- /pair -->
 
-- *Metadata checkpointing* - Saving of the information defining the streaming computation to
-  fault-tolerant storage like HDFS. This is used to recover from failure of the node running the
-  driver of the streaming application (discussed in detail later). Metadata includes:
+- <!-- pair -->
+  *Metadata checkpointing* - Saving of the information
+  defining the streaming computation
+  to fault-tolerant storage like HDFS.
+  This is used to recover from failure of the node
+  running the driver of the streaming application (discussed in detail later).
+  Metadata includes:
+  <!-- ja -->
+  *メタデータのチェックポイント* - 
+  HDFS のような耐障害性のあるストレージに
+  streaming computation を定義している情報を保存します。
+  これは streaming アプリケーションのドライバを実行している
+  ノードの障害からのリカバリを行うのに使われます（後のほうで詳しく説明します）。
+  メタデータには次のものが含まれます:
+  <!-- /pair -->
   +  *Configuration* - The configuration that was used to create the streaming application.
   +  *DStream operations* - The set of DStream operations that define the streaming application.
   +  *Incomplete batches* - Batches whose jobs are queued but have not completed yet.
