@@ -2151,19 +2151,52 @@ There are two types of data that are checkpointed.
   ノードの障害からのリカバリを行うのに使われます（後のほうで詳しく説明します）。
   メタデータには次のものが含まれます:
   <!-- /pair -->
-  +  *Configuration* - The configuration that was used to create the streaming application.
-  +  *DStream operations* - The set of DStream operations that define the streaming application.
-  +  *Incomplete batches* - Batches whose jobs are queued but have not completed yet.
-- *Data checkpointing* - Saving of the generated RDDs to reliable storage. This is necessary
-  in some *stateful* transformations that combine data across multiple batches. In such
-  transformations, the generated RDDs depend on RDDs of previous batches, which causes the length
-  of the dependency chain to keep increasing with time. To avoid such unbounded increases in recovery
-   time (proportional to dependency chain), intermediate RDDs of stateful transformations are periodically
+  +  <!-- pair -->
+     *Configuration* - The configuration that was used to create the streaming application.
+     <!-- ja -->
+     *設定* - streaming アプリケーションを生成するのに使われた設定
+     <!-- /pair -->
+  +  <!-- pair -->
+     *DStream operations* - The set of DStream operations that define the streaming application.
+     <!-- ja -->
+     *DStream の操作* - streaming アプリケーションを定義する DStream の操作のセット
+     <!-- /pair -->
+  +  <!-- pair -->
+     *Incomplete batches* - Batches whose jobs are queued but have not completed yet.
+     <!-- ja -->
+     *完了していないバッチ* - ジョブがキューに入れられたが完了していないバッチ
+     <!-- /pair -->
+- <!-- pair -->
+  *Data checkpointing* - Saving of the generated RDDs to reliable storage.
+  This is necessary in some *stateful* transformations that combine data across multiple batches.
+  In such transformations, the generated RDDs depend on RDDs of previous batches,
+  which causes the length of the dependency chain to keep increasing with time.
+  To avoid such unbounded increases in recovery time (proportional to dependency chain),
+  intermediate RDDs of stateful transformations are periodically
   *checkpointed* to reliable storage (e.g. HDFS) to cut off the dependency chains.
+  <!-- ja -->
+  *データのチェックポイント処理* - 生成された RDD を信頼性のあるストレージに保存します。
+  これは複数の batches にまたがってデータを結合する *ステートフルな* 変換操作で必要になる場合があります。
+  そのような変換処理では、前のバッチの RDD に依存して RDD が生成されるため、
+  依存チェーンが時間経過に従って増え続けることになります。
+  リカバリにかかる時間が（依存チェーンに比例して）際限なく増えるのを避けるため、
+  依存チェーンを断ち切るために
+  変換操作の中間 RDD を
+  定期的に信頼性のあるストレージ（たとえば HDFS）へ *チェックポイント処理* します。
+  <!-- /pair -->
 
+<!-- pair -->
 To summarize, metadata checkpointing is primarily needed for recovery from driver failures,
-whereas data or RDD checkpointing is necessary even for basic functioning if stateful
-transformations are used.
+whereas data or RDD checkpointing is necessary even for basic functioning
+ if stateful transformations are used.
+<!-- ja -->
+まとめると、
+メタデータのチェックポイント処理は主にドライバの障害からのリカバリのために必要です。
+一方、
+ステートフルな変換処理が使われている場合は
+basic functioning であることを考慮しても
+データまたは RDD のチェックポイント処理が必要になります。
+<!-- /pair -->
 
 #### When to enable Checkpointing
 {:.no_toc}
