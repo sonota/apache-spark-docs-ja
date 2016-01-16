@@ -2201,21 +2201,50 @@ basic functioning であることを考慮しても
 #### When to enable Checkpointing
 {:.no_toc}
 
+<!-- pair -->
 Checkpointing must be enabled for applications with any of the following requirements:
+<!-- ja -->
+チェックポイント処理は
+次の要求のいずれかとともにあるアプリケーションに対して
+有効にならなければならない:
+<!-- /pair -->
 
-- *Usage of stateful transformations* - If either `updateStateByKey` or `reduceByKeyAndWindow` (with
-  inverse function) is used in the application, then the checkpoint directory must be provided to
-  allow for periodic RDD checkpointing.
-- *Recovering from failures of the driver running the application* - Metadata checkpoints are used
-   to recover with progress information.
+- *Usage of stateful transformations* - If either `updateStateByKey` or `reduceByKeyAndWindow`
+  (with inverse function) is used in the application,
+  then the checkpoint directory must be provided to allow for periodic RDD checkpointing.
+- <!-- pair -->
+  *Recovering from failures of the driver running the application* - 
+  Metadata checkpoints are used to recover with progress information.
+  <!-- ja -->
+  *アプリケーションを実行しているドライバの障害からのリカバリ* - 
+  メタデータのチェックポイントは
+  progress information とともにリカバリのために使われる。
+  <!-- /pair -->
 
-Note that simple streaming applications without the aforementioned stateful transformations can be
-run without enabling checkpointing. The recovery from driver failures will also be partial in
-that case (some received but unprocessed data may be lost). This is often acceptable and many run
-Spark Streaming applications in this way. Support for non-Hadoop environments is expected
-to improve in the future.
+<!-- pair -->
+Note that simple streaming applications
+ without the aforementioned stateful transformations
+ can be run without enabling checkpointing.
+The recovery from driver failures
+ will also be partial in that case
+ (some received but unprocessed data may be lost).
+This is often acceptable
+ and many run Spark Streaming applications in this way.
+Support for non-Hadoop environments is expected to improve
+ in the future.
+<!-- ja -->
+ここで留意すべきは、
+前述のステートフルな変換操作のないシンプルな streaming アプリケーションは
+チェックポイント処理を有効にしなくても実行できるということです。
+そのようなケースでは
+ドライバの障害からのリカバリは部分的でもあるでしょう
+（受け取ったが処理されていないデータは失われるかもしれません）。
+これはしばしば許容できますし、
+多くは Spark Streaming アプリケーションをこの方法で実行します。
+将来的には、非 Hadoop 環境の対応が改善されることが期待されます。
+<!-- /pair -->
 
-#### How to configure Checkpointing
+#### How to configure Checkpointing // チェックポイント処理の設定方法
 {:.no_toc}
 
 Checkpointing can be enabled by setting a directory in a fault-tolerant,
