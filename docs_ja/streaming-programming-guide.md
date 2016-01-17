@@ -2247,22 +2247,55 @@ Support for non-Hadoop environments is expected to improve
 #### How to configure Checkpointing // チェックポイント処理の設定方法
 {:.no_toc}
 
-Checkpointing can be enabled by setting a directory in a fault-tolerant,
-reliable file system (e.g., HDFS, S3, etc.) to which the checkpoint information will be saved.
-This is done by using `streamingContext.checkpoint(checkpointDirectory)`. This will allow you to
-use the aforementioned stateful transformations. Additionally,
-if you want to make the application recover from driver failures, you should rewrite your
-streaming application to have the following behavior.
+<!-- pair -->
+Checkpointing can be enabled
+ by setting a directory
+ in a fault-tolerant, reliable file system (e.g., HDFS, S3, etc.)
+ to which the checkpoint information will be saved.
+This is done by using `streamingContext.checkpoint(checkpointDirectory)`.
+This will allow you to use the aforementioned stateful transformations.
+Additionally,
+ if you want to make the application recover from driver failures,
+ you should rewrite your streaming application to have the following behavior.
+<!-- ja -->
+チェックポイント情報が保存される、
+耐障害性があり信頼性のあるファイルシステム（HDFS, S3 など）内の
+ディレクトリを設定することで
+チェックポイント処理を有効にできます。
+これは `streamingContext.checkpoint(checkpointDirectory)` を使うことで行われます。
+これにより、前述のステートフルな変換操作を使えるようになります。
+加えて、ドライバの障害からアプリケーションをリカバリしたい場合は、
+streaming アプリケーションが次の振る舞いを持つように書きなおすべきです。
+<!-- /pair -->
 
-  + When the program is being started for the first time, it will create a new StreamingContext,
-    set up all the streams and then call start().
-  + When the program is being restarted after failure, it will re-create a StreamingContext
+  + <!-- pair -->
+    When the program is being started for the first time,
+    it will create a new StreamingContext, set up all the streams and then call start().
+    <!-- ja -->
+    初回のプログラム始動時に
+    新しい StreamingContext を生成し、すべてのストリームをセットアップし、それから start() を呼ぶ。
+    <!-- /pair -->
+  + <!-- pair -->
+    When the program is being restarted after failure,
+    it will re-create a StreamingContext
     from the checkpoint data in the checkpoint directory.
+    <!-- ja -->
+    障害の後でプログラムを再始動する際に、
+    チェックポイント・ディレクトリ内のチェックポイント・データから
+    StreamingContext を再生成する。
+    <!-- /pair -->
 
 <div class="codetabs">
 <div data-lang="scala" markdown="1">
 
-This behavior is made simple by using `StreamingContext.getOrCreate`. This is used as follows.
+<!-- pair -->
+This behavior is made simple by using `StreamingContext.getOrCreate`.
+This is used as follows.
+<!-- ja -->
+このふるまいは
+`StreamingContext.getOrCreate` を使うことで簡単にできます。
+次のように使います。
+<!-- /pair -->
 
 {% highlight scala %}
 // Function to create and setup a new StreamingContext
@@ -2286,12 +2319,25 @@ context.start()
 context.awaitTermination()
 {% endhighlight %}
 
+<!-- pair -->
 If the `checkpointDirectory` exists, then the context will be recreated from the checkpoint data.
 If the directory does not exist (i.e., running for the first time),
-then the function `functionToCreateContext` will be called to create a new
-context and set up the DStreams. See the Scala example
+ then the function `functionToCreateContext` will be called
+ to create a new context and set up the DStreams.
+See the Scala example
 [RecoverableNetworkWordCount]({{site.SPARK_GITHUB_URL}}/tree/master/examples/src/main/scala/org/apache/spark/examples/streaming/RecoverableNetworkWordCount.scala).
 This example appends the word counts of network data into a file.
+<!-- ja -->
+`checkpointDirectory` が存在している場合、
+コンテキストはチェックポイント・データから再生成されます。
+ディレクトリが存在していない場合（つまり、初回の実行の場合）、
+新しいコンテキストを生成し DStreams をセットアップするために
+`functionToCreateContext` が呼ばれます。
+Scala のサンプル
+[RecoverableNetworkWordCount]({{site.SPARK_GITHUB_URL}}/tree/master/examples/src/main/scala/org/apache/spark/examples/streaming/RecoverableNetworkWordCount.scala)
+を参照してください。
+このサンプルではネットワークのデータのワード・カウントをファイルに追記しています。
+<!-- /pair -->
 
 </div>
 <div data-lang="java" markdown="1">
@@ -2369,20 +2415,52 @@ You can also explicitly create a `StreamingContext` from the checkpoint data and
 </div>
 </div>
 
-In addition to using `getOrCreate` one also needs to ensure that the driver process gets
-restarted automatically on failure. This can only be done by the deployment infrastructure that is
-used to run the application. This is further discussed in the
+<!-- pair -->
+In addition to using `getOrCreate`
+ one also needs to ensure that
+ the driver process gets restarted automatically on failure.
+This can only be done by the deployment infrastructure
+ that is used to run the application.
+This is further discussed in the
 [Deployment](#deploying-applications) section.
+<!-- ja -->
+`getOrCreate` を使うことに加えて、
+障害の際にドライバ・プロセスが自動的に再始動されることが保証されている必要もあります。
+これは、アプリケーションの実行に使われるデプロイのインフラによってのみなされ得ます。
+これについては
+[デプロイ](#deploying-applications) の節でさらに説明します。
+<!-- /pair -->
 
+<!-- pair -->
 Note that checkpointing of RDDs incurs the cost of saving to reliable storage.
 This may cause an increase in the processing time of those batches where RDDs get checkpointed.
-Hence, the interval of
-checkpointing needs to be set carefully. At small batch sizes (say 1 second), checkpointing every
-batch may significantly reduce operation throughput. Conversely, checkpointing too infrequently
-causes the lineage and task sizes to grow, which may have detrimental effects. For stateful
-transformations that require RDD checkpointing, the default interval is a multiple of the
-batch interval that is at least 10 seconds. It can be set by using
-`dstream.checkpoint(checkpointInterval)`. Typically, a checkpoint interval of 5 - 10 sliding intervals of a DStream is a good setting to try.
+Hence, the interval of checkpointing needs to be set carefully.
+At small batch sizes (say 1 second),
+ checkpointing every batch may significantly reduce operation throughput.
+Conversely, checkpointing too infrequently
+ causes the lineage and task sizes to grow, which may have detrimental effects.
+For stateful transformations that require RDD checkpointing,
+ the default interval is
+ a multiple of the batch interval
+ that is at least 10 seconds.
+It can be set by using `dstream.checkpoint(checkpointInterval)`.
+Typically, a checkpoint interval of 5 - 10 sliding intervals of a DStream is a good setting to try.
+<!-- ja -->
+ここで留意すべきなのは
+RDD のチェックポイント処理によって
+信頼性のあるストレージへ保存するコストが発生してしまうということです。
+RDD がチェックポイント処理される場合、
+これらのバッチの処理時間が増えてしまうかもしれません。
+したがって、チェックポイント処理の間隔は慎重に設定する必要があります。
+（1 秒程度の）小さなバッチでは、すべてのバッチごとにチェックポイント処理を行うと
+操作のスループットが明らかに落ちるかもしれません。
+反対に、チェックポイント処理の間隔が長い場合、
+the lineage とタスクサイズが増え、有害な影響が出るかもしれません。
+RDD のチェックポイント処理が必要なステートフルな変換のために、
+デフォルトの間隔は多様なバッチの間隔で、少なくとも 10 秒です。
+それは `dstream.checkpoint(checkpointInterval)` を使うことで設定できます。
+Typically, a checkpoint interval of 5 - 10 sliding intervals of a DStream is a good setting to try.
+<!-- /pair -->
 
 ***
 
