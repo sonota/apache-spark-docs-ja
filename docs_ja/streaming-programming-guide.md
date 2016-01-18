@@ -2475,37 +2475,71 @@ This section discusses the steps to deploy a Spark Streaming application.
 ### Requirements
 {:.no_toc}
 
+<!-- pair -->
 To run a Spark Streaming applications, you need to have the following.
+<!-- ja -->
+Spark Streaming アプリケーションを実行するには次のものが必要です。
+<!-- /pair -->
 
-- *Cluster with a cluster manager* - This is the general requirement of any Spark application,
+- <!-- pair -->
+  *Cluster with a cluster manager* - This is the general requirement of any Spark application,
   and discussed in detail in the [deployment guide](cluster-overview.html).
+  <!-- ja -->
+  *クラスタとクラスタ・マネージャ* - これは Spark アプリケーション一般に必要なもので、
+  [デプロイ・ガイド](cluster-overview.html) でくわしく説明します。
+  <!-- /pair -->
 
-- *Package the application JAR* - You have to compile your streaming application into a JAR.
-  If you are using [`spark-submit`](submitting-applications.html) to start the
-  application, then you will not need to provide Spark and Spark Streaming in the JAR. However,
-  if your application uses [advanced sources](#advanced-sources) (e.g. Kafka, Flume, Twitter),
+- <!-- pair -->
+  *Package the application JAR* - You have to compile your streaming application into a JAR.
+  If you are using [`spark-submit`](submitting-applications.html) to start the application,
+  then you will not need to provide Spark and Spark Streaming in the JAR.
+  However, if your application uses [advanced sources](#advanced-sources) (e.g. Kafka, Flume, Twitter),
   then you will have to package the extra artifact they link to, along with their dependencies,
-  in the JAR that is used to deploy the application. For example, an application using `TwitterUtils`
-  will have to include `spark-streaming-twitter_{{site.SCALA_BINARY_VERSION}}` and all its
-  transitive dependencies in the application JAR.
+  in the JAR that is used to deploy the application.
+  For example, an application using `TwitterUtils`
+  will have to include `spark-streaming-twitter_{{site.SCALA_BINARY_VERSION}}`
+  and all its transitive dependencies in the application JAR.
+  <!-- ja -->
+  *アプリケーション JAR のパッケージング* - 
+  streaming アプリケーションをコンパイルして JAR にする必要があります。
+  アプリケーションを始動するのに [`spark-submit`](submitting-applications.html) 
+  を使う場合 Spark と Spark Streaming を JAR に含める必要はありません。
+  ただし、 [advanced sources](#advanced-sources) (Kafka, Flume, Twitter など)
+  を使っている場合は、アプリケーションのデプロイに使われる JAR にそれらも含める必要があるでしょう。
+  たとえば `TwitterUtils` を使っているアプリケーションは
+   `spark-streaming-twitter_{{site.SCALA_BINARY_VERSION}}`
+  と all its transitive dependencies を JAR に含めておく必要があるでしょう。
+  <!-- /pair -->
 
-- *Configuring sufficient memory for the executors* - Since the received data must be stored in
+- <!-- pair -->
+  *Configuring sufficient memory for the executors* - Since the received data must be stored in
   memory, the executors must be configured with sufficient memory to hold the received data. Note
   that if you are doing 10 minute window operations, the system has to keep at least last 10 minutes
   of data in memory. So the memory requirements for the application depends on the operations
   used in it.
+  <!-- ja -->
+  TODO
+  <!-- /pair -->
 
-- *Configuring checkpointing* - If the stream application requires it, then a directory in the
+- <!-- pair -->
+  *Configuring checkpointing* - If the stream application requires it, then a directory in the
   Hadoop API compatible fault-tolerant storage (e.g. HDFS, S3, etc.) must be configured as the
   checkpoint directory and the streaming application written in a way that checkpoint
   information can be used for failure recovery. See the [checkpointing](#checkpointing) section
   for more details.
+  <!-- ja -->
+  TODO
+  <!-- /pair -->
 
-- *Configuring automatic restart of the application driver* - To automatically recover from a
+- <!-- pair -->
+  *Configuring automatic restart of the application driver* - To automatically recover from a
   driver failure, the deployment infrastructure that is
   used to run the streaming application must monitor the driver process and relaunch the driver
   if it fails. Different [cluster managers](cluster-overview.html#cluster-manager-types)
   have different tools to achieve this.
+  <!-- ja -->
+  TODO
+  <!-- /pair -->
     + *Spark Standalone* - A Spark application driver can be submitted to run within the Spark
       Standalone cluster (see
       [cluster deploy mode](spark-standalone.html#launching-spark-applications)), that is, the
@@ -2519,7 +2553,8 @@ To run a Spark Streaming applications, you need to have the following.
     + *Mesos* - [Marathon](https://github.com/mesosphere/marathon) has been used to achieve this
       with Mesos.
 
-- *Configuring write ahead logs* - Since Spark 1.2,
+- <!-- pair -->
+  *Configuring write ahead logs* - Since Spark 1.2,
   we have introduced _write ahead logs_ for achieving strong
   fault-tolerance guarantees. If enabled,  all the data received from a receiver gets written into
   a write ahead log in the configuration checkpoint directory. This prevents data loss on driver
@@ -2533,8 +2568,12 @@ To run a Spark Streaming applications, you need to have the following.
   received data within Spark be disabled when the write ahead log is enabled as the log is already
   stored in a replicated storage system. This can be done by setting the storage level for the
   input stream to `StorageLevel.MEMORY_AND_DISK_SER`.
+  <!-- ja -->
+  TODO
+  <!-- /pair -->
 
-- *Setting the max receiving rate* - If the cluster resources is not large enough for the streaming
+- <!-- pair -->
+  *Setting the max receiving rate* - If the cluster resources is not large enough for the streaming
   application to process data as fast as it is being received, the receivers can be rate limited
   by setting a maximum rate limit in terms of records / sec.
   See the [configuration parameters](configuration.html#spark-streaming)
@@ -2544,6 +2583,9 @@ To run a Spark Streaming applications, you need to have the following.
   rate limits and dynamically adjusts them if the processing conditions change. This backpressure
   can be enabled by setting the [configuration parameter](configuration.html#spark-streaming)
   `spark.streaming.backpressure.enabled` to `true`.
+  <!-- ja -->
+  TODO
+  <!-- /pair -->
 
 ### Upgrading Application Code
 {:.no_toc}
