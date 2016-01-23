@@ -2513,32 +2513,50 @@ Spark Streaming アプリケーションを実行するには次のものが必�
 
 - <!-- pair -->
   *Configuring sufficient memory for the executors* - Since the received data must be stored in
-  memory, the executors must be configured with sufficient memory to hold the received data. Note
-  that if you are doing 10 minute window operations, the system has to keep at least last 10 minutes
-  of data in memory. So the memory requirements for the application depends on the operations
-  used in it.
+  memory, the executors must be configured with sufficient memory to hold the received data.
+  Note that if you are doing 10 minute window operations,
+  the system has to keep at least last 10 minutes of data in memory.
+  So the memory requirements for the application depends on the operations used in it.
   <!-- ja -->
-  TODO
+  *エグゼキュータに十分なメモリを設定する* - 受け取ったデータは
+  メモリに保存しなければならないため、
+  エグゼキュータには受け取ったデータを保持するための十分なメモリが設定されなければいけません。
+  ここで留意すべきなのは、10 分のウィンドウ操作を行なっている場合、
+  システムは最後の少なくとも 10 分間のデータをメモリに保持していなければならないということです。
+  つまり、アプリケーションに対するメモリ要求はその中で使われている操作に依存しています。
   <!-- /pair -->
 
 - <!-- pair -->
-  *Configuring checkpointing* - If the stream application requires it, then a directory in the
-  Hadoop API compatible fault-tolerant storage (e.g. HDFS, S3, etc.) must be configured as the
-  checkpoint directory and the streaming application written in a way that checkpoint
-  information can be used for failure recovery. See the [checkpointing](#checkpointing) section
-  for more details.
+  *Configuring checkpointing* - If the stream application requires it,
+  then a directory in the Hadoop API compatible fault-tolerant storage (e.g. HDFS, S3, etc.)
+  must be configured as the checkpoint directory
+  and the streaming application written in a way that checkpoint information
+  can be used for failure recovery.
+  See the [checkpointing](#checkpointing) section for more details.
   <!-- ja -->
-  TODO
+  *チェックポイント処理の設定* - stream アプリケーション がそれを要求する場合、
+  Hadoop API と互換性を持ち耐障害性のあるストレージ（例: HDFS, S3 など）にあるディレクトリを
+  チェックポイント・ディレクトリとして設定しなければならず、
+  障害からのリカバリのためにチェックポイント情報を使うことができるように
+  streaming アプリケーションを書いておかなければいけません。
+  くわしくは[チェックポイント処理](#checkpointing)の節を参照してください。
   <!-- /pair -->
 
 - <!-- pair -->
-  *Configuring automatic restart of the application driver* - To automatically recover from a
-  driver failure, the deployment infrastructure that is
-  used to run the streaming application must monitor the driver process and relaunch the driver
-  if it fails. Different [cluster managers](cluster-overview.html#cluster-manager-types)
+  *Configuring automatic restart of the application driver* - To automatically recover
+  from a driver failure, the deployment infrastructure
+  that is used to run the streaming application
+  must monitor the driver process
+  and relaunch the driver if it fails.
+  Different [cluster managers](cluster-overview.html#cluster-manager-types)
   have different tools to achieve this.
   <!-- ja -->
-  TODO
+  *アプリケーション・ドライバの自動再起動の設定* -
+  ドライバの障害からのリカバリのために、
+  streaming アプリケーションの実行に使われる the deployment infrastructure は
+  ドライバ・プロセスを監視し、障害が発生した場合にドライバを再起動させなければいけません。
+  これを実現するには[クラスタ・マネージャ](cluster-overview.html#cluster-manager-types)
+  ごとに異なるツールを使います。
   <!-- /pair -->
     + *Spark Standalone* - A Spark application driver can be submitted to run within the Spark
       Standalone cluster (see
