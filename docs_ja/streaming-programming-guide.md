@@ -10,7 +10,7 @@ description: Spark Streaming programming guide and tutorial for Spark SPARK_VERS
 
 # Overview // 概要
 
-<!-- pair -->
+<!-- en -->
 Spark Streaming is an extension of the core Spark API that enables scalable, high-throughput,
 fault-tolerant stream processing of live data streams.
 Data can be ingested from many sources like Kafka, Flume, Twitter, ZeroMQ, Kinesis, or TCP sockets,
@@ -22,7 +22,7 @@ and live dashboards.
 In fact, you can apply Spark's [machine learning](mllib-guide.html)
  and [graph processing](graphx-programming-guide.html) algorithms
  on data streams.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 Spark Streamingは
 スケーラビリティ、高スループット、耐障害性のある生のデータストリームのストリーム処理を可能にするコアSpark APIの拡張の一つです。
 Kafka, Flume, Twitter, ZeroMQ, Kinesis, TCPソケットなどの多くのソースからデータを取り込むことができ、
@@ -32,7 +32,7 @@ live dashboards に出力できます。
 実際は、Sparkの [machine learning](mllib-guide.html)
 と [graph processing](graphx-programming-guide.html) のアルゴリズムを
 データストリームに対して適用することができます。
-<!-- /pair -->
+<!-- /ja -->
 
 <p style="text-align: center;">
   <img
@@ -43,15 +43,15 @@ live dashboards に出力できます。
   />
 </p>
 
-<!-- pair -->
+<!-- en -->
 Internally, it works as follows. Spark Streaming receives live input data streams and divides
 the data into batches, which are then processed by the Spark engine to generate the final stream of results in batches.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 内部では、次の図のように動きます。
 Spark Streaming は live input data stream を受け取り、
 そのデータを複数の batch に分割し、
 最終的な結果のストリームを生成するために Spark エンジンによって処理されます。
-<!-- /pair -->
+<!-- /ja -->
 
 <p style="text-align: center;">
   <img src="img/streaming-flow.png"
@@ -60,7 +60,7 @@ Spark Streaming は live input data stream を受け取り、
        width="70%" />
 </p>
 
-<!-- pair -->
+<!-- en -->
 Spark Streaming provides a high-level abstraction called *discretized stream* or *DStream*,
 which represents a continuous stream of data.
 DStreams can be created either
@@ -68,7 +68,7 @@ DStreams can be created either
  or by applying high-level operations on other DStreams.
 Internally, a DStream is represented as a sequence of
 [RDDs](api/scala/index.html#org.apache.spark.rdd.RDD).
-<!-- ja -->
+<!-- /en --><!-- ja -->
 Spark Streaming は、データの連続したストリームを表す
 *descretized stream* または *DStream* と呼ばれる
 高レベルな抽象を提供します。
@@ -77,52 +77,52 @@ Kafka, Flume, Kinesis のようなソースからの入力から、
 または他の DStream に対して高レベルの操作を適用することで
 生成できます。
 内部的には、DStream は複数の [RDD](api/scala/index.html#org.apache.spark.rdd.RDD) の連続として表現されます。
-<!-- /pair -->
+<!-- /ja -->
 
-<!-- pair -->
+<!-- en -->
 This guide shows you
  how to start writing Spark Streaming programs with DStreams.
 You can write Spark Streaming programs in Scala, Java or Python (introduced in Spark 1.2), all of which are presented in this guide.
 You will find tabs throughout this guide that let you choose between code snippets of different languages.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 このガイドでは、DStream を使った Spark Streaming プログラム作成の始め方を解説します。
 Spark Streaming プログラムは Scala, Java, Python（Spark 1.2 以降）で
 書くことができ、このガイドではそれらすべてについて例示します。
 このガイドを通じて、タブ選択によりそれぞれの言語でのコードスニペットを見ることができます。
-<!-- /pair -->
+<!-- /ja -->
 
-<!-- pair -->
+<!-- en -->
 **Note:**
 There are a few APIs that are either different or not available in Python.
 Throughout this guide, you will find the tag <span class="badge" style="background-color: grey">Python API</span> highlighting these differences.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 **注意:**
 Python では、＜他の言語と＞異なっているか、利用できない API があります。
 そのような違いがある場合は <span class="badge" style="background-color: grey">Python API</span> というタグでハイライトしています。
-<!-- /pair -->
+<!-- /ja -->
 
 ***************************************************************************************************
 
 # A Quick Example // 最初のサンプル
 
-<!-- pair -->
+<!-- en -->
 Before we go into the details of how to write your own Spark Streaming program,
 let's take a quick look at what a simple Spark Streaming program looks like.
 Let's say we want to count the number of words in text data
  received from a data server listening on a TCP socket.
 All you need to do is as follows.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 Spark Streaming プログラミング作成の詳細に進む前に、
 シンプルな Spark Streaming プログラムがどのようなものか簡単に見てみましょう。
 たとえば、TCP ソケットでリッスンしているデータサーバから受け取った
 テキストデータ中の単語の数を数えたいとします。
 必要なのは下記のようになります。
-<!-- /pair -->
+<!-- /ja -->
 
 <div class="codetabs">
 <div data-lang="scala"  markdown="1" >
 
-<!-- pair -->
+<!-- en -->
 First, we import
  the names of the Spark Streaming classes
  and some implicit conversions from StreamingContext
@@ -131,7 +131,7 @@ into our environment
 [StreamingContext](api/scala/index.html#org.apache.spark.streaming.StreamingContext)
  is the main entry point for all streaming functionality.
 We create a local StreamingContext with two execution threads, and a batch interval of 1 second.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 最初に、
 （DStream のような）必要なクラスに便利なメソッドを追加するために、
 Spark Streaming のクラスの名前と、StreamingContext からいくつかの implicit conversions を
@@ -141,7 +141,7 @@ Spark Streaming のクラスの名前と、StreamingContext からいくつか�
 ローカルの StreamingContext を生成し、
 実行スレッド数を 2 に、
 バッチのインターバルを 1 秒に指定しています。
-<!-- /pair -->
+<!-- /ja -->
 
 {% highlight scala %}
 import org.apache.spark._
@@ -155,53 +155,53 @@ val conf = new SparkConf().setMaster("local[2]").setAppName("NetworkWordCount")
 val ssc = new StreamingContext(conf, Seconds(1))
 {% endhighlight %}
 
-<!-- pair -->
+<!-- en -->
 Using this context, we can create a DStream that represents streaming data from a TCP
 source, specified as hostname (e.g. `localhost`) and port (e.g. `9999`).
-<!-- ja -->
+<!-- /en --><!-- ja -->
 このコンテキストを使い、
 ホスト名（例: `localhost` ）とポート（例: `9999` ）を指定した TCPソース からのストリーミング・データを表す
  DStream を生成できる。
-<!-- /pair -->
+<!-- /ja -->
 
 {% highlight scala %}
 // Create a DStream that will connect to hostname:port, like localhost:9999
 val lines = ssc.socketTextStream("localhost", 9999)
 {% endhighlight %}
 
-<!-- pair -->
+<!-- en -->
 This `lines` DStream represents the stream of data
  that will be received from the data server.
 Each record in this DStream is a line of text.
 Next, we want to split the lines by space characters into words.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 この `lines` DStream は
 データサーバから受信されるだろう
 データのストリームを表しています。
 この DStream 内の各レコードはテキストの行にあたります。
 次に、このテキストの行を空白文字で分割して単語にしたいです。
-<!-- /pair -->
+<!-- /ja -->
 
 {% highlight scala %}
 // Split each line into words
 val words = lines.flatMap(_.split(" "))
 {% endhighlight %}
 
-<!-- pair -->
+<!-- en -->
 `flatMap` is a one-to-many DStream operation
  that creates a new DStream by generating multiple new records
  from each record in the source DStream.
 In this case, each line will be split into multiple words
  and the stream of words is represented as the `words` DStream.
 Next, we want to count these words.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 `flatMap` は
 元の DStream の各レコードから
 複数の新しいレコードを生成することで新しい DStream を生成する
 1 対多の DStream 操作です。
 この場合は、それぞれの行が複数の単語に分割され、単語のストリームが `word` DStream として表されます。
 次に、これらの単語の数を数えたいです。
-<!-- /pair -->
+<!-- /ja -->
 
 {% highlight scala %}
 import org.apache.spark.streaming.StreamingContext._ // not necessary since Spark 1.3
@@ -213,40 +213,40 @@ val wordCounts = pairs.reduceByKey(_ + _)
 wordCounts.print()
 {% endhighlight %}
 
-<!-- pair -->
+<!-- en -->
 The `words` DStream is further mapped (one-to-one transformation)
  to a DStream of `(word, 1)` pairs, which is then reduced to get the frequency of words in each batch of data.
 Finally, `wordCounts.print()` will print a few of the counts generated every second.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 `words` DStream はさらに `(word, 1)` の＜複数の＞ペアからなる DStream に（1 対 1 の変換で） map され、
 データの各 batch における単語の頻度を得るために reduce されます。
 最後に、 `wordCounts.print()` によって各秒ごとに生成された結果のいくつかをプリントします。
-<!-- /pair -->
+<!-- /ja -->
 
-<!-- pair -->
+<!-- en -->
 Note that when these lines are executed,
  Spark Streaming only sets up the computation it will perform when it is started,
  and no real processing has started yet.
 To start the processing after all the transformations have been setup, we finally call
-<!-- ja -->
+<!-- /en --><!-- ja -->
 これらの行が実行される時、 Spark Streaming は、
 それが開始されたときに行われるであろう computation をセットアップするだけであることに注意してください。
 変換のすべてがセットアップされた後、処理を開始させるために次のように呼び出します。
-<!-- /pair -->
+<!-- /ja -->
 
 {% highlight scala %}
 ssc.start()             // Start the computation
 ssc.awaitTermination()  // Wait for the computation to terminate
 {% endhighlight %}
 
-<!-- pair -->
+<!-- en -->
 The complete code can be found in the Spark Streaming example
 [NetworkWordCount]({{site.SPARK_GITHUB_URL}}/blob/master/examples/src/main/scala/org/apache/spark/examples/streaming/NetworkWordCount.scala).
-<!-- ja -->
+<!-- /en --><!-- ja -->
 完全なコードは Spark Streaming のサンプル
  [NetworkWordCount]({{site.SPARK_GITHUB_URL}}/blob/master/examples/src/main/scala/org/apache/spark/examples/streaming/NetworkWordCount.scala)
 を参照してください。
-<!-- /pair -->
+<!-- /ja -->
 <br>
 
 </div>
@@ -254,13 +254,13 @@ The complete code can be found in the Spark Streaming example
 
 <div data-lang="java" markdown="1">
 
-<!-- pair -->
+<!-- en -->
 First, we create a
 [JavaStreamingContext](api/java/index.html?org/apache/spark/streaming/api/java/JavaStreamingContext.html) object,
 which is the main entry point for all streaming
 functionality. We create a local StreamingContext with two execution threads, and a batch interval of 1 second.
-<!-- ja -->
-<!-- /pair -->
+<!-- /en --><!-- ja -->
+<!-- /ja -->
 
 {% highlight java %}
 import org.apache.spark.*;
@@ -282,12 +282,12 @@ source, specified as hostname (e.g. `localhost`) and port (e.g. `9999`).
 JavaReceiverInputDStream<String> lines = jssc.socketTextStream("localhost", 9999);
 {% endhighlight %}
 
-<!-- pair -->
+<!-- en -->
 This `lines` DStream represents the stream of data that will be received from the data
 server. Each record in this stream is a line of text. Then, we want to split the the lines by
 space into words.
-<!-- ja -->
-<!-- /pair -->
+<!-- /en --><!-- ja -->
+<!-- /ja -->
 
 {% highlight java %}
 // Split each line into words
@@ -299,7 +299,7 @@ JavaDStream<String> words = lines.flatMap(
   });
 {% endhighlight %}
 
-<!-- pair -->
+<!-- en -->
 `flatMap` is a DStream operation that creates a new DStream by
 generating multiple new records from each record in the source DStream. In this case,
 each line will be split into multiple words and the stream of words is represented as the
@@ -307,8 +307,8 @@ each line will be split into multiple words and the stream of words is represent
 [FlatMapFunction](api/scala/index.html#org.apache.spark.api.java.function.FlatMapFunction) object.
 As we will discover along the way, there are a number of such convenience classes in the Java API
 that help define DStream transformations.
-<!-- ja -->
-<!-- /pair -->
+<!-- /en --><!-- ja -->
+<!-- /ja -->
 
 Next, we want to count these words.
 
@@ -331,41 +331,41 @@ JavaPairDStream<String, Integer> wordCounts = pairs.reduceByKey(
 wordCounts.print();
 {% endhighlight %}
 
-<!-- pair -->
+<!-- en -->
 The `words` DStream is further mapped (one-to-one transformation) to a DStream of `(word,
 1)` pairs, using a [PairFunction](api/scala/index.html#org.apache.spark.api.java.function.PairFunction)
 object. Then, it is reduced to get the frequency of words in each batch of data,
 using a [Function2](api/scala/index.html#org.apache.spark.api.java.function.Function2) object.
 Finally, `wordCounts.print()` will print a few of the counts generated every second.
-<!-- ja -->
-<!-- /pair -->
+<!-- /en --><!-- ja -->
+<!-- /ja -->
 
-<!-- pair -->
+<!-- en -->
 Note that when these lines are executed, Spark Streaming only sets up the computation it
 will perform after it is started, and no real processing has started yet. To start the processing
 after all the transformations have been setup, we finally call `start` method.
-<!-- ja -->
-<!-- /pair -->
+<!-- /en --><!-- ja -->
+<!-- /ja -->
 
 {% highlight java %}
 jssc.start();              // Start the computation
 jssc.awaitTermination();   // Wait for the computation to terminate
 {% endhighlight %}
 
-<!-- pair -->
+<!-- en -->
 The complete code can be found in the Spark Streaming example
 [JavaNetworkWordCount]({{site.SPARK_GITHUB_URL}}/blob/master/examples/src/main/java/org/apache/spark/examples/streaming/JavaNetworkWordCount.java).
-<!-- ja -->
-<!-- /pair -->
+<!-- /en --><!-- ja -->
+<!-- /ja -->
 <br>
 
 </div>
 <div data-lang="python"  markdown="1" >
 
-<!-- pair -->
+<!-- en -->
 First, we import [StreamingContext](api/python/pyspark.streaming.html#pyspark.streaming.StreamingContext), which is the main entry point for all streaming functionality. We create a local StreamingContext with two execution threads, and batch interval of 1 second.
-<!-- ja -->
-<!-- /pair -->
+<!-- /en --><!-- ja -->
+<!-- /ja -->
 
 {% highlight python %}
 from pyspark import SparkContext
@@ -376,36 +376,36 @@ sc = SparkContext("local[2]", "NetworkWordCount")
 ssc = StreamingContext(sc, 1)
 {% endhighlight %}
 
-<!-- pair -->
+<!-- en -->
 Using this context, we can create a DStream that represents streaming data from a TCP
 source, specified as hostname (e.g. `localhost`) and port (e.g. `9999`).
-<!-- ja -->
-<!-- /pair -->
+<!-- /en --><!-- ja -->
+<!-- /ja -->
 
 {% highlight python %}
 # Create a DStream that will connect to hostname:port, like localhost:9999
 lines = ssc.socketTextStream("localhost", 9999)
 {% endhighlight %}
 
-<!-- pair -->
+<!-- en -->
 This `lines` DStream represents the stream of data that will be received from the data
 server. Each record in this DStream is a line of text. Next, we want to split the lines by
 space into words.
-<!-- ja -->
-<!-- /pair -->
+<!-- /en --><!-- ja -->
+<!-- /ja -->
 
 {% highlight python %}
 # Split each line into words
 words = lines.flatMap(lambda line: line.split(" "))
 {% endhighlight %}
 
-<!-- pair -->
+<!-- en -->
 `flatMap` is a one-to-many DStream operation that creates a new DStream by
 generating multiple new records from each record in the source DStream. In this case,
 each line will be split into multiple words and the stream of words is represented as the
 `words` DStream.  Next, we want to count these words.
-<!-- ja -->
-<!-- /pair -->
+<!-- /en --><!-- ja -->
+<!-- /ja -->
 
 {% highlight python %}
 # Count each word in each batch
@@ -416,55 +416,55 @@ wordCounts = pairs.reduceByKey(lambda x, y: x + y)
 wordCounts.pprint()
 {% endhighlight %}
 
-<!-- pair -->
+<!-- en -->
 The `words` DStream is further mapped (one-to-one transformation) to a DStream of `(word,
 1)` pairs, which is then reduced to get the frequency of words in each batch of data.
 Finally, `wordCounts.pprint()` will print a few of the counts generated every second.
-<!-- ja -->
-<!-- /pair -->
+<!-- /en --><!-- ja -->
+<!-- /ja -->
 
-<!-- pair -->
+<!-- en -->
 Note that when these lines are executed, Spark Streaming only sets up the computation it
 will perform when it is started, and no real processing has started yet. To start the processing
 after all the transformations have been setup, we finally call
-<!-- ja -->
-<!-- /pair -->
+<!-- /en --><!-- ja -->
+<!-- /ja -->
 
 {% highlight python %}
 ssc.start()             # Start the computation
 ssc.awaitTermination()  # Wait for the computation to terminate
 {% endhighlight %}
 
-<!-- pair -->
+<!-- en -->
 The complete code can be found in the Spark Streaming example
 [NetworkWordCount]({{site.SPARK_GITHUB_URL}}/blob/master/examples/src/main/python/streaming/network_wordcount.py).
-<!-- ja -->
-<!-- /pair -->
+<!-- /en --><!-- ja -->
+<!-- /ja -->
 <br>
 
 </div><!-- /python -->
 </div>
 
-<!-- pair -->
+<!-- en -->
 If you have already [downloaded](index.html#downloading) and [built](index.html#building) Spark,
  you can run this example as follows.
 You will first need to run Netcat
  (a small utility found in most Unix-like systems) as a data server by using
-<!-- ja -->
+<!-- /en --><!-- ja -->
 すでに Spark の [ダウンロード](index.html#downloading) と [ビルド](index.html#building) が済んでいれば、
 このサンプルを次のように実行できます。
 次のように netcat（ほとんどの Unix-like なシステムに入っている小さなユーティリティ）をデータサーバとして実行しておく必要があります。
-<!-- /pair -->
+<!-- /ja -->
 
 {% highlight bash %}
 $ nc -lk 9999
 {% endhighlight %}
 
-<!-- pair -->
+<!-- en -->
 Then, in a different terminal, you can start the example by using
-<!-- ja -->
+<!-- /en --><!-- ja -->
 それから、別のターミナルで次のようにサンプルを実行しましょう。
-<!-- /pair -->
+<!-- /ja -->
 
 <div class="codetabs">
 <div data-lang="scala" markdown="1">
@@ -485,15 +485,15 @@ $ ./bin/spark-submit examples/src/main/python/streaming/network_wordcount.py loc
 </div>
 
 
-<!-- pair -->
+<!-- en -->
 Then, any lines typed in the terminal running the netcat server
  will be counted and printed on screen every second.
 It will look something like the following.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 netcat サーバが動いているターミナルに何行か入力すると、
 1 秒ごとにカウントされスクリーンに表示されるでしょう。
 次のようになるでしょう。
-<!-- /pair -->
+<!-- /ja -->
 
 <table width="100%">
     <td>
@@ -567,23 +567,23 @@ Time: 2014-10-14 15:25:21
 
 # Basic Concepts // 基本的なコンセプト
 
-<!-- pair -->
+<!-- en -->
 Next, we move beyond the simple example and elaborate on the basics of Spark Streaming.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 次に、シンプルな例の先に進み、
 Spark Streaming の基礎について詳しく見て行きましょう。
-<!-- /pair -->
+<!-- /ja -->
 
 ## Linking
 
-<!-- pair -->
+<!-- en -->
 Similar to Spark, Spark Streaming is available through Maven Central.
 To write your own Spark Streaming program,
  you will have to add the following dependency to your SBT or Maven project.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 Spark と同様に、Spark Streaming は Maven Central から利用できます。
 Spark Streaming プログラムを書くためには下記の依存性を SBT または Maven プロジェクトに追加します。 
-<!-- /pair -->
+<!-- /ja -->
 
 <div class="codetabs">
 <div data-lang="Maven" markdown="1">
@@ -617,44 +617,44 @@ some of the common ones are as follows.
 <tr><td></td><td></td></tr>
 </table>
 
-<!-- pair -->
+<!-- en -->
 For an up-to-date list, please refer to the
 [Maven repository](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.apache.spark%22%20AND%20v%3A%22{{site.SPARK_VERSION_SHORT}}%22)
 for the full list of supported sources and artifacts.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 アップデートに追随するためには、
 サポートされている sources and artifacts の完全なリストを
 [Maven repository](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.apache.spark%22%20AND%20v%3A%22{{site.SPARK_VERSION_SHORT}}%22)
 で参照してください。
-<!-- /pair -->
+<!-- /ja -->
 
 ***
 
 ## Initializing StreamingContext // StreamingContext の初期化
 
-<!-- pair -->
+<!-- en -->
 To initialize a Spark Streaming program, a **StreamingContext** object has to be created
  which is the main entry point of all Spark Streaming functionality.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 Spark Streaming プログラムを初期化するには、
 すべての Spark Streaming の機能性のメイン・エントリーポイントである
  **StreamingContext** オブジェクトを生成する必要があります。
-<!-- /pair -->
+<!-- /ja -->
 
 <div class="codetabs">
 <div data-lang="scala" markdown="1">
 
-<!-- pair -->
+<!-- en -->
 A [StreamingContext](api/scala/index.html#org.apache.spark.streaming.StreamingContext)
  object can be created from a
  [SparkConf](api/scala/index.html#org.apache.spark.SparkConf)
  object.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 [SparkConf](api/scala/index.html#org.apache.spark.SparkConf)
 オブジェクトから
 [StreamingContext](api/scala/index.html#org.apache.spark.streaming.StreamingContext)
 オブエジェクトが生成できます。
-<!-- /pair -->
+<!-- /ja -->
 
 {% highlight scala %}
 import org.apache.spark._
@@ -664,7 +664,7 @@ val conf = new SparkConf().setAppName(appName).setMaster(master)
 val ssc = new StreamingContext(conf, Seconds(1))
 {% endhighlight %}
 
-<!-- pair -->
+<!-- en -->
 The `appName` parameter is a name for your application to show on the cluster UI.
 `master` is a [Spark, Mesos or YARN cluster URL](submitting-applications.html#master-urls),
 or a special __"local[\*]"__ string to run in local mode. In practice, when running on a cluster,
@@ -672,24 +672,24 @@ you will not want to hardcode `master` in the program,
 but rather [launch the application with `spark-submit`](submitting-applications.html) and
 receive it there. However, for local testing and unit tests, you can pass "local[\*]" to run Spark Streaming
 in-process (detects the number of cores in the local system). Note that this internally creates a [SparkContext](api/scala/index.html#org.apache.spark.SparkContext) (starting point of all Spark functionality) which can be accessed as `ssc.sparkContext`.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 `appName` パラメータはクラスタの UI に表示されるアプリケーション名です。
-<!-- /pair -->
+<!-- /ja -->
 
-<!-- pair -->
+<!-- en -->
 The batch interval must be set
  based on
       the latency requirements of your application
   and available cluster resources.
 See the [Performance Tuning](#setting-the-right-batch-interval) section
  for more details.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 バッチ・インターバルは
 アプリケーションのレイテンシ要求と、利用可能なクラスタのリソースに基づいて設定されなければいけません。
 詳しくは
 [Performance Tuning](#setting-the-right-batch-interval)
 の節を参照してください。
-<!-- /pair -->
+<!-- /ja -->
 
 A `StreamingContext` object can also be created from an existing `SparkContext` object.
 
@@ -704,10 +704,10 @@ val ssc = new StreamingContext(sc, Seconds(1))
 </div><!-- /scala -->
 <div data-lang="java" markdown="1">
 
-<!-- pair -->
+<!-- en -->
 A [JavaStreamingContext](api/java/index.html?org/apache/spark/streaming/api/java/JavaStreamingContext.html) object can be created from a [SparkConf](api/java/index.html?org/apache/spark/SparkConf.html) object.
-<!-- ja -->
-<!-- /pair -->
+<!-- /en --><!-- ja -->
+<!-- /ja -->
 
 {% highlight java %}
 import org.apache.spark.*;
@@ -717,7 +717,7 @@ SparkConf conf = new SparkConf().setAppName(appName).setMaster(master);
 JavaStreamingContext ssc = new JavaStreamingContext(conf, Duration(1000));
 {% endhighlight %}
 
-<!-- pair -->
+<!-- en -->
 The `appName` parameter is a name for your application to show on the cluster UI.
 `master` is a [Spark, Mesos or YARN cluster URL](submitting-applications.html#master-urls),
 or a special __"local[\*]"__ string to run in local mode. In practice, when running on a cluster,
@@ -725,20 +725,20 @@ you will not want to hardcode `master` in the program,
 but rather [launch the application with `spark-submit`](submitting-applications.html) and
 receive it there. However, for local testing and unit tests, you can pass "local[*]" to run Spark Streaming
 in-process. Note that this internally creates a [JavaSparkContext](api/java/index.html?org/apache/spark/api/java/JavaSparkContext.html) (starting point of all Spark functionality) which can be accessed as `ssc.sparkContext`.
-<!-- ja -->
-<!-- /pair -->
+<!-- /en --><!-- ja -->
+<!-- /ja -->
 
-<!-- pair -->
+<!-- en -->
 The batch interval must be set based on the latency requirements of your application
 and available cluster resources. See the [Performance Tuning](#setting-the-right-batch-interval)
 section for more details.
-<!-- ja -->
-<!-- /pair -->
+<!-- /en --><!-- ja -->
+<!-- /ja -->
 
-<!-- pair -->
+<!-- en -->
 A `JavaStreamingContext` object can also be created from an existing `JavaSparkContext`.
-<!-- ja -->
-<!-- /pair -->
+<!-- /en --><!-- ja -->
+<!-- /ja -->
 
 {% highlight java %}
 import org.apache.spark.streaming.api.java.*;
@@ -749,10 +749,10 @@ JavaStreamingContext ssc = new JavaStreamingContext(sc, Durations.seconds(1));
 </div>
 <div data-lang="python" markdown="1">
 
-<!-- pair -->
+<!-- en -->
 A [StreamingContext](api/python/pyspark.streaming.html#pyspark.streaming.StreamingContext) object can be created from a [SparkContext](api/python/pyspark.html#pyspark.SparkContext) object.
-<!-- ja -->
-<!-- /pair -->
+<!-- /en --><!-- ja -->
+<!-- /ja -->
 
 {% highlight python %}
 from pyspark import SparkContext
@@ -762,7 +762,7 @@ sc = SparkContext(master, appName)
 ssc = StreamingContext(sc, 1)
 {% endhighlight %}
 
-<!-- pair -->
+<!-- en -->
 The `appName` parameter is a name for your application to show on the cluster UI.
 `master` is a [Spark, Mesos or YARN cluster URL](submitting-applications.html#master-urls),
 or a special __"local[\*]"__ string to run in local mode. In practice, when running on a cluster,
@@ -770,93 +770,93 @@ you will not want to hardcode `master` in the program,
 but rather [launch the application with `spark-submit`](submitting-applications.html) and
 receive it there. However, for local testing and unit tests, you can pass "local[\*]" to run Spark Streaming
 in-process (detects the number of cores in the local system).
-<!-- ja -->
-<!-- /pair -->
+<!-- /en --><!-- ja -->
+<!-- /ja -->
 
-<!-- pair -->
+<!-- en -->
 The batch interval must be set based on the latency requirements of your application
 and available cluster resources. See the [Performance Tuning](#setting-the-right-batch-interval)
 section for more details.
-<!-- ja -->
-<!-- /pair -->
+<!-- /en --><!-- ja -->
+<!-- /ja -->
 </div><!-- /python -->
 </div>
 
-<!-- pair -->
+<!-- en -->
 After a context is defined, you have to do the following.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 コンテキストを定義したら、次に行うのが下記です。
-<!-- /pair -->
+<!-- /ja -->
 
-1. <!-- pair -->
+1. <!-- en -->
    Define the input sources by creating input DStreams.
-   <!-- ja -->
+   <!-- /en --><!-- ja -->
    入力 DStreams を生成して入力ソースを定義する。
-   <!-- /pair -->
-1. <!-- pair -->
+   <!-- /ja -->
+1. <!-- en -->
    Define the streaming computations by applying transformation and output operations to DStreams.
-   <!-- ja -->
+   <!-- /en --><!-- ja -->
    streaming computations を定義する（DStream に対して変換・出力操作を適用する）。
-   <!-- /pair -->
-1. <!-- pair -->
+   <!-- /ja -->
+1. <!-- en -->
    Start receiving data and processing it using `streamingContext.start()`.
-   <!-- ja -->
+   <!-- /en --><!-- ja -->
    `streamingContext.start()` を使ってデータの受信と処理を開始する。
-   <!-- /pair -->
-1. <!-- pair -->
+   <!-- /ja -->
+1. <!-- en -->
    Wait for the processing to be stopped (manually or due to any error) using `streamingContext.awaitTermination()`.
-   <!-- ja -->
+   <!-- /en --><!-- ja -->
    `streamingContext.awaitTermination()` を使って処理の終了を待つ。
-   <!-- /pair -->
-1. <!-- pair -->
+   <!-- /ja -->
+1. <!-- en -->
    The processing can be manually stopped using `streamingContext.stop()`.
-   <!-- ja -->
+   <!-- /en --><!-- ja -->
    `streamingContext.stop()` を使うと手動で処理を止めることもできる。
-   <!-- /pair -->
+   <!-- /ja -->
 
 ##### Points to remember: // 留意点:
 {:.no_toc}
-- <!-- pair -->
+- <!-- en -->
   Once a context has been started, no new streaming computations can be set up or added to it.
-  <!-- ja -->
+  <!-- /en --><!-- ja -->
   一度コンテキストが開始されると、新しいストリーミングの computations をセットアップしたり
   追加することはできません。
-  <!-- /pair -->
-- <!-- pair -->
+  <!-- /ja -->
+- <!-- en -->
   Once a context has been stopped, it cannot be restarted.
-  <!-- ja -->
+  <!-- /en --><!-- ja -->
   コンテキストを一度停止させると再始動できません。
-  <!-- /pair -->
-- <!-- pair -->
+  <!-- /ja -->
+- <!-- en -->
   Only one StreamingContext can be active in a JVM at the same time.
-  <!-- ja -->
+  <!-- /en --><!-- ja -->
   一つの JVM 内で同時にアクティブにできる StreamingContext は一つだけです。
-  <!-- /pair -->
-- <!-- pair -->
+  <!-- /ja -->
+- <!-- en -->
   stop() on StreamingContext also stops the SparkContext.
   To stop only the StreamingContext,
     set the optional parameter of `stop()` called `stopSparkContext` to false.
-  <!-- ja -->
+  <!-- /en --><!-- ja -->
   StreamingContext 上で stop() を呼び出すと SparkContext も停止します。
   StreamingContext だけを止めたい場合は `stop()` の引数の `stopSparkContext` で false を指定します。
-  <!-- /pair -->
-- <!-- pair -->
+  <!-- /ja -->
+- <!-- en -->
   A SparkContext can be re-used to create multiple StreamingContexts,
     as long as the previous StreamingContext is stopped
       (without stopping the SparkContext)
       before the next StreamingContext is created.
-  <!-- ja -->
+  <!-- /en --><!-- ja -->
   次の StreamingContext を生成する前に（SparkContext を止めずに）
   前の StreamingContext を停止させるようにすれば
   SparkContext を再利用して複数の StreamingContext を生成できます。
-  <!-- /pair -->
+  <!-- /ja -->
 
 
 ***
 
 ## Discretized Streams (DStreams) // 離散ストリーム（DStream）
 
-<!-- pair -->
+<!-- en -->
 **Discretized Stream** or **DStream** is the basic abstraction provided by Spark Streaming.
 It represents a continuous stream of data,
  either
@@ -867,7 +867,7 @@ Internally, a DStream is represented by a continuous series of RDDs,
  distributed dataset
  (see [Spark Programming Guide](programming-guide.html#resilient-distributed-datasets-rdds) for more details).
 Each RDD in a DStream contains data from a certain interval, as shown in the following figure.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 **Discretized Stream** または **DStream** は Spark Streaming が提供する基本的な抽象です。
 DStream は
 ソースから受け取った入力データストリーム、
@@ -878,7 +878,7 @@ RDD の連続によって表されます
 （詳しくは [Spark Programming Guide](programming-guide.html#resilient-distributed-datasets-rdds)
 を参照してください）。
 次の図に示すように、DStream 内の各 RDD は細かい時間区間のデータを含んでいます。
-<!-- /pair -->
+<!-- /ja -->
 
 <p style="text-align: center;">
   <img src="img/streaming-dstream.png"
@@ -887,7 +887,7 @@ RDD の連続によって表されます
        width="70%" />
 </p>
 
-<!-- pair -->
+<!-- en -->
 Any operation applied on a DStream translates to operations on the underlying RDDs.
 For example,
  in the [earlier example](#a-quick-example) of converting a stream of lines to words,
@@ -895,13 +895,13 @@ For example,
  in the `lines` DStream
  to generate the RDDs of the `words` DStream.
 This is shown in the following figure.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 DStream に適用された操作は、その裏側にある RDD への操作に変換されます。
 たとえば、行のストリームを単語に変換する[前掲のサンプル](#a-quick-example)では、
 `words` DStream の RDD を生成するため、
 `lines` DStream の各 RDD に対して `flatMap` という操作を適用しています。
 これを次の図に示しました。
-<!-- /pair -->
+<!-- /ja -->
 
 <p style="text-align: center;">
   <img src="img/streaming-dstream-ops.png"
@@ -911,24 +911,24 @@ DStream に適用された操作は、その裏側にある RDD への操作に�
 </p>
 
 
-<!-- pair -->
+<!-- en -->
 These underlying RDD transformations are computed by the Spark engine.
 The DStream operations
  hide most of these details
  and provide the developer with a higher-level API for convenience.
 These operations are discussed in detail in later sections.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 背後で行われるこれらの RDD 変換は Spark エンジンによって compute されます。
 DStream の操作ではこれらの詳細は隠蔽されており、
 開発者には便宜のため高レベルの API が提供されます。
 これらの操作については後の節で詳しく説明します。
-<!-- /pair -->
+<!-- /ja -->
 
 ***
 
 ## Input DStreams and Receivers // 入力 DStream とレシーバ
 
-<!-- pair -->
+<!-- en -->
 Input DStreams are DStreams
  representing the stream of input data received from streaming sources.
 In the [quick example](#a-quick-example), `lines` was an input DStream
@@ -940,7 +940,7 @@ Every input DStream
  object which
   receives the data from a source
   and stores it in Spark's memory for processing.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 入力 DStream は streaming source から受け取った入力データのストリームを表す DStream です。
 [最初のサンプル](#a-quick-example)では `lines` が入力 DStream であり、
 netcat サーバから受け取ったデータのストリームを表していました。
@@ -951,30 +951,30 @@ netcat サーバから受け取ったデータのストリームを表してい�
 ）オブジェクトに関連付けられています。
 Receiver オブジェクトはソースからデータを受け取り、
 処理のために Spark のメモリに保存します。
-<!-- /pair -->
+<!-- /ja -->
 
-<!-- pair -->
+<!-- en -->
 Spark Streaming provides two categories of built-in streaming sources.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 Spark Streaming は2つのカテゴリのビルトイン streaming sources を提供します。
-<!-- /pair -->
+<!-- /ja -->
 
-<!-- pair -->
+<!-- en -->
 - *Basic sources*: Sources directly available in the StreamingContext API.
   Examples: file systems, socket connections, and Akka actors.
 - *Advanced sources*: Sources like Kafka, Flume, Kinesis, Twitter, etc. are available through
   extra utility classes. These require linking against extra dependencies as discussed in the
   [linking](#linking) section.
-<!-- ja -->
-<!-- /pair -->
+<!-- /en --><!-- ja -->
+<!-- /ja -->
 
-<!-- pair -->
+<!-- en -->
 We are going to discuss some of the sources present in each category later in this section.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 各カテゴリのソースのいくつかについてはこの節の後の方で説明します。
-<!-- /pair -->
+<!-- /ja -->
 
-<!-- pair -->
+<!-- en -->
 Note that, if you want to receive multiple streams of data in parallel
  in your streaming application,
  you can create multiple input DStreams
@@ -988,7 +988,7 @@ Therefore, it is important to remember that
  (or threads, if running locally)
  to process the received data,
  as well as to run the receiver(s).
-<!-- ja -->
+<!-- /en --><!-- ja -->
 複数のストリームを並行に受け取りたい場合、
 複数の入力 DStreams を生成できることに留意してください
 （[Performance Tuning](#level-of-parallelism-in-data-receiving) のセクションで詳しく説明します）。
@@ -1001,12 +1001,12 @@ Spark Streaming アプリケーションに割り当てられた複数のコア�
 受け取ったデータを処理するためには Spark Streaming アプリケーションに
 十分なコア（ローカルで動作させる場合はスレッド）
 を割り当てる必要があることを覚えておくことが重要です。
-<!-- /pair -->
+<!-- /ja -->
 
 ##### Points to remember
 {:.no_toc}
 
-- <!-- pair -->
+- <!-- en -->
   When running a Spark Streaming program locally, do not use "local" or "local[1]" as the master URL.
   Either of these means that only one thread will be used for running tasks locally.
   If you are using a input DStream based on a receiver
@@ -1017,7 +1017,7 @@ Spark Streaming アプリケーションに割り当てられた複数のコア�
    where *n* > number of receivers to run
   (see [Spark Properties](configuration.html#spark-properties)
    for information on how to set the master).
-  <!-- ja -->
+  <!-- /en --><!-- ja -->
   ローカルで動かす場合、 "local" や "local[1]" を master URL として使わないでください。
   そのように指定した場合、ローカルでのタスク実行に使われるスレッドが 1 つだけであることを意味します。
   （たとえば、ソケット、Kafka, Flume などの）レシーバに基づいた入力 DStream を使っている場合、
@@ -1027,16 +1027,16 @@ Spark Streaming アプリケーションに割り当てられた複数のコア�
   必ず *n* > レシーバ数 となるように "local[*n*]" を指定してください
   （master の設定方法については
   [Spark Properties](configuration.html#spark-properties) を参照してください）。
-  <!-- /pair -->
+  <!-- /ja -->
 
-- <!-- pair -->
+- <!-- en -->
   Extending the logic to running on a cluster, the number of cores allocated to the Spark Streaming
   application must be more than the number of receivers.
   Otherwise the system will receive data, but not be able to process it.
-  <!-- ja -->
+  <!-- /en --><!-- ja -->
   Spark Streaming アプリケーションに割り当てるコア数はレシーバの数より大きくなければいけません。
   そうでなければ、システムはデータを受け取ることはできても処理することができません。
-  <!-- /pair -->
+  <!-- /ja -->
 
 ### Basic Sources
 {:.no_toc}
@@ -1130,12 +1130,12 @@ and add it to the classpath.
 
 Some of these advanced sources are as follows.
 
-- <!-- pair -->
+- <!-- en -->
   **Kafka:** Spark Streaming {{site.SPARK_VERSION_SHORT}} is compatible with Kafka 0.8.2.1. See the [Kafka Integration Guide](streaming-kafka-integration.html) for more details.
-  <!-- ja -->
+  <!-- /en --><!-- ja -->
   **Kafka:** Spark Streaming {{site.SPARK_VERSION_SHORT}} は Kafka 0.8.2.1 と互換性があります。
   詳しくは [Kafka Integration Guide](streaming-kafka-integration.html) を参照してください。
-  <!-- /pair -->
+  <!-- /ja -->
 
 - **Flume:** Spark Streaming {{site.SPARK_VERSION_SHORT}} is compatible with Flume 1.6.0. See the [Flume Integration Guide](streaming-flume-integration.html) for more details.
 
@@ -1179,13 +1179,13 @@ The details of how to write a reliable receiver are discussed in the
 
 ## Transformations on DStreams // DStream に対する変換操作
 
-<!-- pair -->
+<!-- en -->
 Similar to that of RDDs, transformations allow the data from the input DStream to be modified.
 DStreams support many of the transformations available on normal Spark RDD's.
 Some of the common ones are as follows.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 RDD と同様に、変換操作によって入力 DStream を加工できます。
-<!-- /pair -->
+<!-- /ja -->
 
 <table class="table">
 <tr><th style="width:25%">Transformation</th><th>Meaning</th></tr>
@@ -1643,7 +1643,7 @@ For the Python API, see [DStream](api/python/pyspark.streaming.html#pyspark.stre
 
 ## Output Operations on DStreams // DStream に対する出力操作
 
-<!-- pair -->
+<!-- en -->
 Output operations allow DStream's data to be pushed out
  to external systems like a database or a file systems.
 Since the output operations actually allow the transformed data
@@ -1651,13 +1651,13 @@ Since the output operations actually allow the transformed data
  they trigger the actual execution of all the DStream transformations
  (similar to actions for RDDs).
 Currently, the following output operations are defined:
-<!-- ja -->
+<!-- /en --><!-- ja -->
 出力操作によってDStream のデータをデータベースやファイルシステムのような外部システムへ出力できます。
 （RDD に対するアクションと同様に）
 出力操作によって
 変換されたデータが外部のシステムに実際に消費されるようになるため、
 すべての DStream の変換の実際の実行は出力操作によってトリガーされます。
-<!-- /pair -->
+<!-- /ja -->
 
 <table class="table">
 <tr><th style="width:30%">Output Operation</th><th>Meaning</th></tr>
@@ -1697,16 +1697,16 @@ Currently, the following output operations are defined:
 <tr>
   <td> <b>foreachRDD</b>(<i>func</i>) </td>
   <td>
-  <!-- pair -->
+  <!-- en -->
   The most generic output operator
     that applies a function, <i>func</i>, to each RDD generated from the stream.
   This function should push the data in each RDD to an external system, such as saving the RDD to
   files, or writing it over the network to a database. Note that the function <i>func</i> is executed
   in the driver process running the streaming application, and will usually have RDD actions in it
   that will force the computation of the streaming RDDs.
-  <!-- ja -->
+  <!-- /en --><!-- ja -->
   最も汎用的な出力操作です。ストリームから生成された各 RDD に <i>func</i> を適用します。
-  <!-- /pair -->
+  <!-- /ja -->
   </td>
 </tr>
 <tr><td></td><td></td></tr>
@@ -1715,32 +1715,32 @@ Currently, the following output operations are defined:
 ### Design Patterns for using foreachRDD // foreachRDD のデザインパターン
 {:.no_toc}
 
-<!-- pair -->
+<!-- en -->
 `dstream.foreachRDD` is a powerful primitive
   that allows data to be sent out to external systems.
 However, it is important to understand how to use this primitive correctly and efficiently.
 Some of the common mistakes to avoid are as follows.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 `dstream.foreachRDD` はデータを外部システムに送ることができる強力な primitive です。
 しかし、正しく、効果的に使うためにどうすればよいか知っておく必要があります。
 よくある間違いをいくつか挙げましょう。
-<!-- /pair -->
+<!-- /ja -->
 
-<!-- pair -->
+<!-- en -->
 Often writing data to external system requires creating a connection object
  (e.g. TCP connection to a remote server) and using it to send data to a remote system.
 For this purpose, a developer may inadvertently try
  creating a connection object at the Spark driver,
  and then try to use it in a Spark worker to save records in the RDDs.
 For example (in Scala),
-<!-- ja -->
+<!-- /en --><!-- ja -->
 多くの場合、外部システムへの出力は
 コネクション・オブジェクト（たとえば、リモートのサーバへの TCP コネクション）
 の生成を必要とします。
 この目的のために、開発者は不注意にドライバでコネクション・オブジェクトを生成し、
 RDD 中のレコードを保存するためにそのオブジェクトをワーカで使おうとするかもしれません。
 たとえば（Scala の場合）、
-<!-- /pair -->
+<!-- /ja -->
 
 <div class="codetabs">
 <div data-lang="scala" markdown="1">
@@ -1765,7 +1765,7 @@ dstream.foreachRDD(sendRecord)
 </div>
 </div>
 
-<!-- pair -->
+<!-- en -->
 This is incorrect
  as this requires the connection object to be serialized and sent from the driver to the worker.
 Such connection objects are rarely transferrable across machines.
@@ -1773,7 +1773,7 @@ This error may manifest as serialization errors (connection object not serializa
  initialization errors (connection object needs to be initialized at the workers),
  etc.
 The correct solution is to create the connection object at the worker.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 コネクション・オブジェクトをシリアライズして
 ドライバからワーカへ送信しなければならなくなるため、
 これは正しくありません。
@@ -1782,17 +1782,17 @@ The correct solution is to create the connection object at the worker.
 シリアライズのエラー（connection object not serializable）や
 初期化エラー（connection object needs to be initialized at the workers）
 といったエラーが発生するでしょう。
-<!-- /pair -->
+<!-- /ja -->
 
-<!-- pair -->
+<!-- en -->
 However, this can lead to another common mistake
  - creating a new connection for every record.
 For example,
-<!-- ja -->
+<!-- /en --><!-- ja -->
 しかし、レコードごとにコネクションを新たに生成しようとするのも
 別のよくある間違いです。
 たとえば、
-<!-- /pair -->
+<!-- /ja -->
 
 <div class="codetabs">
 <div data-lang="scala" markdown="1">
@@ -1818,7 +1818,7 @@ dstream.foreachRDD(lambda rdd: rdd.foreach(sendRecord))
 </div>
 </div>
 
-<!-- pair -->
+<!-- en -->
 Typically, creating a connection object has time and resource overheads.
 Therefore, creating and destroying a connection object for each record
  can incur unnecessarily high overheads
@@ -1826,7 +1826,7 @@ Therefore, creating and destroying a connection object for each record
 A better solution is to use `rdd.foreachPartition`
  - create a single connection object
  and send all the records in a RDD partition using that connection.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 一般的に、コネクション・オブジェクトの生成は時間とリソースのオーバーヘッドを伴います。
 そのため、レコードごとにオブジェクトの生成と破棄を行うと、
 不要な高いオーバーヘッドを生じ、
@@ -1834,7 +1834,7 @@ A better solution is to use `rdd.foreachPartition`
 もっと良い解決法は `rdd.foreachPartition` を使うこと
 ―― 単一のコネクション・オブジェクトを生成し、
 そのオブジェクトをつかって RDD パーティション内のすべてのレコードを送信することです。
-<!-- /pair -->
+<!-- /ja -->
 
 <div class="codetabs">
 <div data-lang="scala" markdown="1">
@@ -1861,18 +1861,18 @@ dstream.foreachRDD(lambda rdd: rdd.foreachPartition(sendPartition))
 </div>
 </div>
 
-<!-- pair -->
+<!-- en -->
 This amortizes the connection creation overheads over many records.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 これは
 多くのレコードで生じていた
 コネクション生成のオーバーヘッドを減らします。
-<!-- /pair -->
+<!-- /ja -->
 
-<!-- pair -->
+<!-- en -->
 Finally, this can be further optimized
  by reusing connection objects across multiple RDDs/batches.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 最終的に、
 複数の RDD/batch にまたがってコネクション・オブジェクトを再利用することで
 さらに最適化できます。
@@ -1880,7 +1880,7 @@ One can maintain a static pool of connection objects
  than can be reused as RDDs of multiple batches
  are pushed to the external system,
  thus further reducing the overheads.
-<!-- /pair -->
+<!-- /ja -->
 
 <div class="codetabs">
 <div data-lang="scala" markdown="1">
@@ -1911,21 +1911,21 @@ dstream.foreachRDD(lambda rdd: rdd.foreachPartition(sendPartition))
 </div>
 </div>
 
-<!-- pair -->
+<!-- en -->
 Note that the connections in the pool should be
  lazily created on demand
  and timed out if not used for a while.
 This achieves the most efficient sending of data to external systems.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 プール中のコネクションは必要になったときに遅延生成され、
 しばらくするとタイムアウトすべき点に注意してください。
 これにより外部のシステムへの送信がもっとも効率的になります。
-<!-- /pair -->
+<!-- /ja -->
 
 
 ##### Other points to remember:
 {:.no_toc}
-- <!-- pair -->
+- <!-- en -->
   DStreams are executed lazily by the output operations,
    just like RDDs are lazily executed by RDD actions.
   Specifically, RDD actions inside the DStream output operations
@@ -1934,7 +1934,7 @@ This achieves the most efficient sending of data to external systems.
    or has output operations like `dstream.foreachRDD()` without any RDD action inside them,
    then nothing will get executed.
   The system will simply receive the data and discard it.
-  <!-- ja -->
+  <!-- /en --><!-- ja -->
   RDD が RDD actions によって遅延実行されるのとちょうど同じように、
   DStream は出力操作によって遅延実行されます。
   具体的には、 DStream 出力操作の内部の RDD actions は
@@ -1942,15 +1942,15 @@ This achieves the most efficient sending of data to external systems.
   そのため、アプリケーションが出力操作を使っていない場合、
   または `dstream.foreachRDD()` のような、その内部に RDD action を持たない出力操作を使っている場合は
   何も実行されません。
-  <!-- /pair -->
+  <!-- /ja -->
 
-- <!-- pair -->
+- <!-- en -->
   By default, output operations are executed one-at-a-time.
   And they are executed in the order they are defined in the application.
-  <!-- ja -->
+  <!-- /en --><!-- ja -->
   デフォルトでは、出力操作は 1 つずつ実行されます。
   また、アプリケーションで定義された順番で実行されます。
-  <!-- /pair -->
+  <!-- /ja -->
 
 ***
 
@@ -2118,7 +2118,7 @@ information on different persistence levels can be found in the [Spark Programmi
 
 ## Checkpointing // チェックポイント
 
-<!-- pair -->
+<!-- en -->
 A streaming application must operate 24/7
  and hence must be resilient to failures unrelated to the application logic
  (e.g., system failures, JVM crashes, etc.).
@@ -2127,46 +2127,46 @@ For this to be possible,
  to a fault-tolerant storage system
  such that it can recover from failures.
 There are two types of data that are checkpointed.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 ストリーミング・アプリケーションは連続稼働させなければならないため、
 アプリケーション・ロジックと関係のない失敗（システムエラー、 JVM のクラッシュなど）
 に対して resilient でなければいけません。
 これを可能にするために、失敗時にリカバーできるように
  Spark Streaming は 十分な情報を耐障害性のあるストレージ・システムに *チェックポイント処理* する必要があります。
 チェックポイント処理されるデータには 2 種類あります。
-<!-- /pair -->
+<!-- /ja -->
 
-- <!-- pair -->
+- <!-- en -->
   *Metadata checkpointing* - Saving of the information
   defining the streaming computation
   to fault-tolerant storage like HDFS.
   This is used to recover from failure of the node
   running the driver of the streaming application (discussed in detail later).
   Metadata includes:
-  <!-- ja -->
+  <!-- /en --><!-- ja -->
   *メタデータのチェックポイント* - 
   HDFS のような耐障害性のあるストレージに
   streaming computation を定義している情報を保存します。
   これは streaming アプリケーションのドライバを実行している
   ノードの障害からのリカバリを行うのに使われます（後のほうで詳しく説明します）。
   メタデータには次のものが含まれます:
-  <!-- /pair -->
-  +  <!-- pair -->
+  <!-- /ja -->
+  +  <!-- en -->
      *Configuration* - The configuration that was used to create the streaming application.
-     <!-- ja -->
+     <!-- /en --><!-- ja -->
      *設定* - streaming アプリケーションを生成するのに使われた設定
-     <!-- /pair -->
-  +  <!-- pair -->
+     <!-- /ja -->
+  +  <!-- en -->
      *DStream operations* - The set of DStream operations that define the streaming application.
-     <!-- ja -->
+     <!-- /en --><!-- ja -->
      *DStream の操作* - streaming アプリケーションを定義する DStream の操作のセット
-     <!-- /pair -->
-  +  <!-- pair -->
+     <!-- /ja -->
+  +  <!-- en -->
      *Incomplete batches* - Batches whose jobs are queued but have not completed yet.
-     <!-- ja -->
+     <!-- /en --><!-- ja -->
      *完了していないバッチ* - ジョブがキューに入れられたが完了していないバッチ
-     <!-- /pair -->
-- <!-- pair -->
+     <!-- /ja -->
+- <!-- en -->
   *Data checkpointing* - Saving of the generated RDDs to reliable storage.
   This is necessary in some *stateful* transformations that combine data across multiple batches.
   In such transformations, the generated RDDs depend on RDDs of previous batches,
@@ -2174,7 +2174,7 @@ There are two types of data that are checkpointed.
   To avoid such unbounded increases in recovery time (proportional to dependency chain),
   intermediate RDDs of stateful transformations are periodically
   *checkpointed* to reliable storage (e.g. HDFS) to cut off the dependency chains.
-  <!-- ja -->
+  <!-- /en --><!-- ja -->
   *データのチェックポイント処理* - 生成された RDD を信頼性のあるストレージに保存します。
   これは複数の batches にまたがってデータを結合する *ステートフルな* 変換操作で必要になる場合があります。
   そのような変換処理では、前のバッチの RDD に依存して RDD が生成されるため、
@@ -2183,45 +2183,45 @@ There are two types of data that are checkpointed.
   依存チェーンを断ち切るために
   変換操作の中間 RDD を
   定期的に信頼性のあるストレージ（たとえば HDFS）へ *チェックポイント処理* します。
-  <!-- /pair -->
+  <!-- /ja -->
 
-<!-- pair -->
+<!-- en -->
 To summarize, metadata checkpointing is primarily needed for recovery from driver failures,
 whereas data or RDD checkpointing is necessary even for basic functioning
  if stateful transformations are used.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 まとめると、
 メタデータのチェックポイント処理は主にドライバの障害からのリカバリのために必要です。
 一方、
 ステートフルな変換処理が使われている場合は
 basic functioning であることを考慮しても
 データまたは RDD のチェックポイント処理が必要になります。
-<!-- /pair -->
+<!-- /ja -->
 
 #### When to enable Checkpointing
 {:.no_toc}
 
-<!-- pair -->
+<!-- en -->
 Checkpointing must be enabled for applications with any of the following requirements:
-<!-- ja -->
+<!-- /en --><!-- ja -->
 チェックポイント処理は
 次の要求のいずれかとともにあるアプリケーションに対して
 有効にならなければならない:
-<!-- /pair -->
+<!-- /ja -->
 
 - *Usage of stateful transformations* - If either `updateStateByKey` or `reduceByKeyAndWindow`
   (with inverse function) is used in the application,
   then the checkpoint directory must be provided to allow for periodic RDD checkpointing.
-- <!-- pair -->
+- <!-- en -->
   *Recovering from failures of the driver running the application* - 
   Metadata checkpoints are used to recover with progress information.
-  <!-- ja -->
+  <!-- /en --><!-- ja -->
   *アプリケーションを実行しているドライバの障害からのリカバリ* - 
   メタデータのチェックポイントは
   progress information とともにリカバリのために使われる。
-  <!-- /pair -->
+  <!-- /ja -->
 
-<!-- pair -->
+<!-- en -->
 Note that simple streaming applications
  without the aforementioned stateful transformations
  can be run without enabling checkpointing.
@@ -2232,7 +2232,7 @@ This is often acceptable
  and many run Spark Streaming applications in this way.
 Support for non-Hadoop environments is expected to improve
  in the future.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 ここで留意すべきは、
 前述のステートフルな変換操作のないシンプルな streaming アプリケーションは
 チェックポイント処理を有効にしなくても実行できるということです。
@@ -2242,12 +2242,12 @@ Support for non-Hadoop environments is expected to improve
 これはしばしば許容できますし、
 多くは Spark Streaming アプリケーションをこの方法で実行します。
 将来的には、非 Hadoop 環境の対応が改善されることが期待されます。
-<!-- /pair -->
+<!-- /ja -->
 
 #### How to configure Checkpointing // チェックポイント処理の設定方法
 {:.no_toc}
 
-<!-- pair -->
+<!-- en -->
 Checkpointing can be enabled
  by setting a directory
  in a fault-tolerant, reliable file system (e.g., HDFS, S3, etc.)
@@ -2257,7 +2257,7 @@ This will allow you to use the aforementioned stateful transformations.
 Additionally,
  if you want to make the application recover from driver failures,
  you should rewrite your streaming application to have the following behavior.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 チェックポイント情報が保存される、
 耐障害性があり信頼性のあるファイルシステム（HDFS, S3 など）内の
 ディレクトリを設定することで
@@ -2266,36 +2266,36 @@ Additionally,
 これにより、前述のステートフルな変換操作を使えるようになります。
 加えて、ドライバの障害からアプリケーションをリカバリしたい場合は、
 streaming アプリケーションが次の振る舞いを持つように書きなおすべきです。
-<!-- /pair -->
+<!-- /ja -->
 
-  + <!-- pair -->
+  + <!-- en -->
     When the program is being started for the first time,
     it will create a new StreamingContext, set up all the streams and then call start().
-    <!-- ja -->
+    <!-- /en --><!-- ja -->
     初回のプログラム始動時に
     新しい StreamingContext を生成し、すべてのストリームをセットアップし、それから start() を呼ぶ。
-    <!-- /pair -->
-  + <!-- pair -->
+    <!-- /ja -->
+  + <!-- en -->
     When the program is being restarted after failure,
     it will re-create a StreamingContext
     from the checkpoint data in the checkpoint directory.
-    <!-- ja -->
+    <!-- /en --><!-- ja -->
     障害の後でプログラムを再始動する際に、
     チェックポイント・ディレクトリ内のチェックポイント・データから
     StreamingContext を再生成する。
-    <!-- /pair -->
+    <!-- /ja -->
 
 <div class="codetabs">
 <div data-lang="scala" markdown="1">
 
-<!-- pair -->
+<!-- en -->
 This behavior is made simple by using `StreamingContext.getOrCreate`.
 This is used as follows.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 このふるまいは
 `StreamingContext.getOrCreate` を使うことで簡単にできます。
 次のように使います。
-<!-- /pair -->
+<!-- /ja -->
 
 {% highlight scala %}
 // Function to create and setup a new StreamingContext
@@ -2319,7 +2319,7 @@ context.start()
 context.awaitTermination()
 {% endhighlight %}
 
-<!-- pair -->
+<!-- en -->
 If the `checkpointDirectory` exists, then the context will be recreated from the checkpoint data.
 If the directory does not exist (i.e., running for the first time),
  then the function `functionToCreateContext` will be called
@@ -2327,7 +2327,7 @@ If the directory does not exist (i.e., running for the first time),
 See the Scala example
 [RecoverableNetworkWordCount]({{site.SPARK_GITHUB_URL}}/tree/master/examples/src/main/scala/org/apache/spark/examples/streaming/RecoverableNetworkWordCount.scala).
 This example appends the word counts of network data into a file.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 `checkpointDirectory` が存在している場合、
 コンテキストはチェックポイント・データから再生成されます。
 ディレクトリが存在していない場合（つまり、初回の実行の場合）、
@@ -2337,7 +2337,7 @@ Scala のサンプル
 [RecoverableNetworkWordCount]({{site.SPARK_GITHUB_URL}}/tree/master/examples/src/main/scala/org/apache/spark/examples/streaming/RecoverableNetworkWordCount.scala)
 を参照してください。
 このサンプルではネットワークのデータのワード・カウントをファイルに追記しています。
-<!-- /pair -->
+<!-- /ja -->
 
 </div>
 <div data-lang="java" markdown="1">
@@ -2415,7 +2415,7 @@ You can also explicitly create a `StreamingContext` from the checkpoint data and
 </div>
 </div>
 
-<!-- pair -->
+<!-- en -->
 In addition to using `getOrCreate`
  one also needs to ensure that
  the driver process gets restarted automatically on failure.
@@ -2423,15 +2423,15 @@ This can only be done by the deployment infrastructure
  that is used to run the application.
 This is further discussed in the
 [Deployment](#deploying-applications) section.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 `getOrCreate` を使うことに加えて、
 障害の際にドライバ・プロセスが自動的に再始動されることが保証されている必要もあります。
 これは、アプリケーションの実行に使われるデプロイのインフラによってのみなされ得ます。
 これについては
 [デプロイ](#deploying-applications) の節でさらに説明します。
-<!-- /pair -->
+<!-- /ja -->
 
-<!-- pair -->
+<!-- en -->
 Note that checkpointing of RDDs incurs the cost of saving to reliable storage.
 This may cause an increase in the processing time of those batches where RDDs get checkpointed.
 Hence, the interval of checkpointing needs to be set carefully.
@@ -2445,7 +2445,7 @@ For stateful transformations that require RDD checkpointing,
  that is at least 10 seconds.
 It can be set by using `dstream.checkpoint(checkpointInterval)`.
 Typically, a checkpoint interval of 5 - 10 sliding intervals of a DStream is a good setting to try.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 ここで留意すべきなのは
 RDD のチェックポイント処理によって
 信頼性のあるストレージへ保存するコストが発生してしまうということです。
@@ -2460,36 +2460,36 @@ RDD のチェックポイント処理が必要なステートフルな変換の�
 デフォルトの間隔は多様なバッチの間隔で、少なくとも 10 秒です。
 それは `dstream.checkpoint(checkpointInterval)` を使うことで設定できます。
 Typically, a checkpoint interval of 5 - 10 sliding intervals of a DStream is a good setting to try.
-<!-- /pair -->
+<!-- /ja -->
 
 ***
 
 ## Deploying Applications // アプリケーションのデプロイ
 
-<!-- pair -->
+<!-- en -->
 This section discusses the steps to deploy a Spark Streaming application.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 この節では Spark Streaming アプリケーションをデプロイするためのステップについて説明します。
-<!-- /pair -->
+<!-- /ja -->
 
 ### Requirements
 {:.no_toc}
 
-<!-- pair -->
+<!-- en -->
 To run a Spark Streaming applications, you need to have the following.
-<!-- ja -->
+<!-- /en --><!-- ja -->
 Spark Streaming アプリケーションを実行するには次のものが必要です。
-<!-- /pair -->
+<!-- /ja -->
 
-- <!-- pair -->
+- <!-- en -->
   *Cluster with a cluster manager* - This is the general requirement of any Spark application,
   and discussed in detail in the [deployment guide](cluster-overview.html).
-  <!-- ja -->
+  <!-- /en --><!-- ja -->
   *クラスタとクラスタ・マネージャ* - これは Spark アプリケーション一般に必要なもので、
   [デプロイ・ガイド](cluster-overview.html) でくわしく説明します。
-  <!-- /pair -->
+  <!-- /ja -->
 
-- <!-- pair -->
+- <!-- en -->
   *Package the application JAR* - You have to compile your streaming application into a JAR.
   If you are using [`spark-submit`](submitting-applications.html) to start the application,
   then you will not need to provide Spark and Spark Streaming in the JAR.
@@ -2499,7 +2499,7 @@ Spark Streaming アプリケーションを実行するには次のものが必�
   For example, an application using `TwitterUtils`
   will have to include `spark-streaming-twitter_{{site.SCALA_BINARY_VERSION}}`
   and all its transitive dependencies in the application JAR.
-  <!-- ja -->
+  <!-- /en --><!-- ja -->
   *アプリケーション JAR のパッケージング* - 
   streaming アプリケーションをコンパイルして JAR にする必要があります。
   アプリケーションを始動するのに [`spark-submit`](submitting-applications.html) 
@@ -2509,40 +2509,40 @@ Spark Streaming アプリケーションを実行するには次のものが必�
   たとえば `TwitterUtils` を使っているアプリケーションは
    `spark-streaming-twitter_{{site.SCALA_BINARY_VERSION}}`
   と all its transitive dependencies を JAR に含めておく必要があるでしょう。
-  <!-- /pair -->
+  <!-- /ja -->
 
-- <!-- pair -->
+- <!-- en -->
   *Configuring sufficient memory for the executors* - Since the received data must be stored in
   memory, the executors must be configured with sufficient memory to hold the received data.
   Note that if you are doing 10 minute window operations,
   the system has to keep at least last 10 minutes of data in memory.
   So the memory requirements for the application depends on the operations used in it.
-  <!-- ja -->
+  <!-- /en --><!-- ja -->
   *エグゼキュータに十分なメモリを設定する* - 受け取ったデータは
   メモリに保存しなければならないため、
   エグゼキュータには受け取ったデータを保持するための十分なメモリが設定されなければいけません。
   ここで留意すべきなのは、10 分のウィンドウ操作を行なっている場合、
   システムは最後の少なくとも 10 分間のデータをメモリに保持していなければならないということです。
   つまり、アプリケーションに対するメモリ要求はその中で使われている操作に依存しています。
-  <!-- /pair -->
+  <!-- /ja -->
 
-- <!-- pair -->
+- <!-- en -->
   *Configuring checkpointing* - If the stream application requires it,
   then a directory in the Hadoop API compatible fault-tolerant storage (e.g. HDFS, S3, etc.)
   must be configured as the checkpoint directory
   and the streaming application written in a way that checkpoint information
   can be used for failure recovery.
   See the [checkpointing](#checkpointing) section for more details.
-  <!-- ja -->
+  <!-- /en --><!-- ja -->
   *チェックポイント処理の設定* - stream アプリケーション がそれを要求する場合、
   Hadoop API と互換性を持ち耐障害性のあるストレージ（例: HDFS, S3 など）にあるディレクトリを
   チェックポイント・ディレクトリとして設定しなければならず、
   障害からのリカバリのためにチェックポイント情報を使うことができるように
   streaming アプリケーションを書いておかなければいけません。
   くわしくは[チェックポイント処理](#checkpointing)の節を参照してください。
-  <!-- /pair -->
+  <!-- /ja -->
 
-- <!-- pair -->
+- <!-- en -->
   *Configuring automatic restart of the application driver* - To automatically recover
   from a driver failure, the deployment infrastructure
   that is used to run the streaming application
@@ -2550,14 +2550,14 @@ Spark Streaming アプリケーションを実行するには次のものが必�
   and relaunch the driver if it fails.
   Different [cluster managers](cluster-overview.html#cluster-manager-types)
   have different tools to achieve this.
-  <!-- ja -->
+  <!-- /en --><!-- ja -->
   *アプリケーション・ドライバの自動再起動の設定* -
   ドライバの障害からのリカバリのために、
   streaming アプリケーションの実行に使われる the deployment infrastructure は
   ドライバ・プロセスを監視し、障害が発生した場合にドライバを再起動させなければいけません。
   これを実現するには[クラスタ・マネージャ](cluster-overview.html#cluster-manager-types)
   ごとに異なるツールを使います。
-  <!-- /pair -->
+  <!-- /ja -->
     + *Spark Standalone* - A Spark application driver can be submitted to run within the Spark
       Standalone cluster (see
       [cluster deploy mode](spark-standalone.html#launching-spark-applications)), that is, the
@@ -2571,7 +2571,7 @@ Spark Streaming アプリケーションを実行するには次のものが必�
     + *Mesos* - [Marathon](https://github.com/mesosphere/marathon) has been used to achieve this
       with Mesos.
 
-- <!-- pair -->
+- <!-- en -->
   *Configuring write ahead logs* - Since Spark 1.2,
   we have introduced _write ahead logs_ for achieving strong
   fault-tolerance guarantees. If enabled,  all the data received from a receiver gets written into
@@ -2586,11 +2586,11 @@ Spark Streaming アプリケーションを実行するには次のものが必�
   received data within Spark be disabled when the write ahead log is enabled as the log is already
   stored in a replicated storage system. This can be done by setting the storage level for the
   input stream to `StorageLevel.MEMORY_AND_DISK_SER`.
-  <!-- ja -->
+  <!-- /en --><!-- ja -->
   TODO
-  <!-- /pair -->
+  <!-- /ja -->
 
-- <!-- pair -->
+- <!-- en -->
   *Setting the max receiving rate* - If the cluster resources is not large enough for the streaming
   application to process data as fast as it is being received, the receivers can be rate limited
   by setting a maximum rate limit in terms of records / sec.
@@ -2601,9 +2601,9 @@ Spark Streaming アプリケーションを実行するには次のものが必�
   rate limits and dynamically adjusts them if the processing conditions change. This backpressure
   can be enabled by setting the [configuration parameter](configuration.html#spark-streaming)
   `spark.streaming.backpressure.enabled` to `true`.
-  <!-- ja -->
+  <!-- /en --><!-- ja -->
   TODO
-  <!-- /pair -->
+  <!-- /ja -->
 
 ### Upgrading Application Code
 {:.no_toc}
@@ -2670,15 +2670,15 @@ and it is likely to be improved upon (i.e., more information reported) in the fu
 
 # Performance Tuning // パフォーマンス・チューニング
 
-<!-- pair -->
+<!-- en -->
 Getting the best performance out of a Spark Streaming application on a cluster
  requires a bit of tuning.
 This section explains a number of the parameters and configurations that can be tuned to
 improve the performance of you application. At a high level, you need to consider two things:
-<!-- ja -->
+<!-- /en --><!-- ja -->
 クラスタ上の Spark Streaming アプリケーションから最良のパフォーマンスを引き出すためには
 ちょっとしたチューニングが必要です。
-<!-- /pair -->
+<!-- /ja -->
 
 1. Reducing the processing time of each batch of data by efficiently using cluster resources.
 
@@ -2856,12 +2856,12 @@ consistent batch processing times. Make sure you set the CMS GC on both the driv
 
 # Fault-tolerance Semantics // 耐障害性のセマンティクス
 
-<!-- pair -->
+<!-- en -->
 In this section, we will discuss the behavior of Spark Streaming applications
  in the event of failures. 
-<!-- ja -->
+<!-- /en --><!-- ja -->
 この節では失敗イベント発生時の Spark Streaming アプリケーションのふるまいについて説明します。
-<!-- /pair -->
+<!-- /ja -->
 
 ## Background
 {:.no_toc}
