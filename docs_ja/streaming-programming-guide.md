@@ -2566,19 +2566,27 @@ Spark Streaming アプリケーションを実行するには次のものが必�
       and relaunch it if the driver fails either due to non-zero exit code,
       or due to failure of the node running the driver. See *cluster mode* and *supervise* in the
       [Spark Standalone guide](spark-standalone.html) for more details.
-    + *YARN* - Yarn supports a similar mechanism for automatically restarting an application.
+    + <!-- en -->
+      *YARN* - Yarn supports a similar mechanism for automatically restarting an application.
       Please refer to YARN documentation for more details.
+      <!-- /en --><!-- ja -->
+      *YARN* - YARN はアプリケーションの自動再起動のための同様のメカニズムをサポートしています。
+      くわしくは YARN のドキュメントを参照してください。
+      <!-- /ja -->
     + *Mesos* - [Marathon](https://github.com/mesosphere/marathon) has been used to achieve this
       with Mesos.
 
 - <!-- en -->
   *Configuring write ahead logs* - Since Spark 1.2,
-  we have introduced _write ahead logs_ for achieving strong
-  fault-tolerance guarantees. If enabled,  all the data received from a receiver gets written into
-  a write ahead log in the configuration checkpoint directory. This prevents data loss on driver
-  recovery, thus ensuring zero data loss (discussed in detail in the
-  [Fault-tolerance Semantics](#fault-tolerance-semantics) section). This can be enabled by setting
-  the [configuration parameter](configuration.html#spark-streaming)
+  we have introduced _write ahead logs_
+  for achieving strong fault-tolerance guarantees.
+  If enabled,  all the data received from a receiver
+  gets written into a write ahead log in the configuration checkpoint directory.
+  This prevents data loss on driver recovery,
+  thus ensuring zero data loss (discussed in detail in the
+  [Fault-tolerance Semantics](#fault-tolerance-semantics) section).
+  This can be enabled by setting the
+  [configuration parameter](configuration.html#spark-streaming)
   `spark.streaming.receiver.writeAheadLog.enable` to `true`. However, these stronger semantics may
   come at the cost of the receiving throughput of individual receivers. This can be corrected by
   running [more receivers in parallel](#level-of-parallelism-in-data-receiving)
@@ -2587,22 +2595,65 @@ Spark Streaming アプリケーションを実行するには次のものが必�
   stored in a replicated storage system. This can be done by setting the storage level for the
   input stream to `StorageLevel.MEMORY_AND_DISK_SER`.
   <!-- /en --><!-- ja -->
-  TODO
+  *ライト・アヘッド・ログの設定* - Spark 1.2 から
+  強い障害耐性を実現するために _ライト・アヘッド・ログ_ が導入されました。
+  有効にした場合、
+  レシーバから受け取ったすべてのデータは
+  設定されたチェックポイント・ディレクトリ内のライト・アヘッド・ログに書き込まれます。
+  これはドライバ・リカバリでのデータ損失を防ぎ、
+  したがってデータ損失がないことを保証します
+  （[障害耐性](#fault-tolerance-semantics)の節でくわしく説明します）。
+  [設定パラメータ](configuration.html#spark-streaming)
+  `spark.streaming.receiver.writeAheadLog.enable` を `true` にすることで
+  これを有効にできます。
+  しかし、これらの強いセマンティクスは
+  個々のレシーバの受信スループットのコストを発生させるかもしれません。
+  これは
+  集約のスループットを大きくするために
+  [より多くのレシーバを並行に](#level-of-parallelism-in-data-receiving)
+  実行することで正すことができます。
+  さらに、
+  ライト・アヘッド・ログを有効にしている場合、
+  ログはすでに replicated storage system 内に保存されているため
+  Spark 内の受信データのレプリケーションを無効にすること
+  が推奨されます。
+  これは 
+  入力ストリームの保存レベルを
+  `StorageLevel.MEMORY_AND_DISK_SER` 
+  にすることで行えます。
   <!-- /ja -->
 
 - <!-- en -->
-  *Setting the max receiving rate* - If the cluster resources is not large enough for the streaming
-  application to process data as fast as it is being received, the receivers can be rate limited
+  *Setting the max receiving rate* - If the cluster resources is not large enough
+  for the streaming application to process data as fast as it is being received,
+  the receivers can be rate limited
   by setting a maximum rate limit in terms of records / sec.
   See the [configuration parameters](configuration.html#spark-streaming)
   `spark.streaming.receiver.maxRate` for receivers and `spark.streaming.kafka.maxRatePerPartition`
-  for Direct Kafka approach. In Spark 1.5, we have introduced a feature called *backpressure* that
-  eliminate the need to set this rate limit, as Spark Streaming automatically figures out the
-  rate limits and dynamically adjusts them if the processing conditions change. This backpressure
-  can be enabled by setting the [configuration parameter](configuration.html#spark-streaming)
+  for Direct Kafka approach.
+  In Spark 1.5, we have introduced a feature called *backpressure* that
+  eliminate the need to set this rate limit,
+  as Spark Streaming automatically figures out the rate limits
+  and dynamically adjusts them if the processing conditions change.
+  This backpressure can be enabled by setting the
+  [configuration parameter](configuration.html#spark-streaming)
   `spark.streaming.backpressure.enabled` to `true`.
   <!-- /en --><!-- ja -->
-  TODO
+  *最大受信レートの設定* - streaming アプリケーションが受け取っているのと同じくらい速く
+  データを処理できる程度にクラスタのリソースが十分に大きくない場合、
+  レシーバはレコード／秒の単位でレートを制限できる。
+  [設定パラメータ](configuration.html#spark-streaming)
+  レシーバ用の `spark.streaming.receiver.maxRate`
+  と Direct Kafka approach 用の `spark.streaming.kafka.maxRatePerPartition`
+  を参照してください。
+  Spark 1.5 では *バックプレッシャー* と呼ばれる機能を導入しました。
+  これはこのレート制限をセットする必要を削減するもので、
+  Spark Streaming は自動的にレート制限を理解し、
+  処理の状況が変わった場合に動的にそれらを調節します。
+  このバックプレッシャーは
+  [設定パラメータ](configuration.html#spark-streaming)
+  `spark.streaming.backpressure.enabled` を `true` にすることで
+  有効にできます。
   <!-- /ja -->
 
 ### Upgrading Application Code
