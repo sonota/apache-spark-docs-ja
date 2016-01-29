@@ -33,8 +33,13 @@ To write a Spark application, you need to add a Maven dependency on Spark. Spark
     artifactId = spark-core_{{site.SCALA_BINARY_VERSION}}
     version = {{site.SPARK_VERSION}}
 
-In addition, if you wish to access an HDFS cluster, you need to add a dependency on
-`hadoop-client` for your version of HDFS.
+<!-- en -->
+In addition, if you wish to access an HDFS cluster,
+ you need to add a dependency on `hadoop-client` for your version of HDFS.
+<!-- /en --><!-- ja -->
+加えて、 HDFS クラスタにアクセスしたい場合、
+HDFS のバージョン向けの `hadoop-client` への依存性を追加する必要があります。
+<!-- /ja -->
 
     groupId = org.apache.hadoop
     artifactId = hadoop-client
@@ -64,8 +69,13 @@ To write a Spark application in Java, you need to add a dependency on Spark. Spa
     artifactId = spark-core_{{site.SCALA_BINARY_VERSION}}
     version = {{site.SPARK_VERSION}}
 
+<!-- en -->
 In addition, if you wish to access an HDFS cluster, you need to add a dependency on
 `hadoop-client` for your version of HDFS.
+<!-- /en --><!-- ja -->
+加えて、 HDFS クラスタにアクセスしたい場合、
+HDFS のバージョン向けの `hadoop-client` への依存性を追加する必要があります。
+<!-- /ja -->
 
     groupId = org.apache.hadoop
     artifactId = hadoop-client
@@ -90,10 +100,19 @@ To run Spark applications in Python, use the `bin/spark-submit` script located i
 This script will load Spark's Java/Scala libraries and allow you to submit applications to a cluster.
 You can also use `bin/pyspark` to launch an interactive Python shell.
 
+<!-- en -->
 If you wish to access HDFS data, you need to use a build of PySpark linking
 to your version of HDFS.
 [Prebuilt packages](http://spark.apache.org/downloads.html) are also available on the Spark homepage
 for common HDFS versions.
+<!-- /en --><!-- ja -->
+HDFS のデータにアクセスしたい場合、
+HDFS のバージョンにリンクしている PySpark のビルドを使う必要があります。
+一般的な HDFS のバージョン向けに、
+Spark ホームページの
+[ビルド済みパッケージ](http://spark.apache.org/downloads.html)
+を利用することもできます。
+<!-- /ja -->
 
 Finally, you need to import some Spark classes into your program. Add the following line:
 
