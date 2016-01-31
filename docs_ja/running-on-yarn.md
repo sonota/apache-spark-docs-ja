@@ -16,9 +16,33 @@ containers used by the application use the same configuration. If the configurat
 Java system properties or environment variables not managed by YARN, they should also be set in the
 Spark application's configuration (driver, executors, and the AM when running in client mode).
 
-There are two deploy modes that can be used to launch Spark applications on YARN. In `cluster` mode, the Spark driver runs inside an application master process which is managed by YARN on the cluster, and the client can go away after initiating the application. In `client` mode, the driver runs in the client process, and the application master is only used for requesting resources from YARN.
+<!-- en -->
+There are two deploy modes that can be used to launch Spark applications on YARN.
+In `cluster` mode,
+ the Spark driver runs inside an application master process
+  which is managed by YARN on the cluster,
+ and the client can go away after initiating the application.
+In `client` mode, the driver runs in the client process,
+ and the application master is only used for requesting resources from YARN.
+<!-- /en --><!-- ja -->
+YARN 上で Spark アプリケーションを起動するために使えるモードが 2 つあります。
+`cluster` モードでは、 Spark のドライバは
+クラスタ上で YARN に管理されるアプリケーションのマスター・プロセス内で実行され、
+クライアントはアプリケーションの初期化後になくなることができます。
+`client` モードでは、ドライバはクライアントのプロセス内で実行され、
+アプリケーション・マスタは YARN からリソースを要求するためだけに使われます。
+<!-- /ja -->
 
-Unlike [Spark standalone](spark-standalone.html) and [Mesos](running-on-mesos.html) modes, in which the master's address is specified in the `--master` parameter, in YARN mode the ResourceManager's address is picked up from the Hadoop configuration. Thus, the `--master` parameter is `yarn`.
+<!-- en -->
+Unlike [Spark standalone](spark-standalone.html) and [Mesos](running-on-mesos.html) modes,
+ in which the master's address is specified in the `--master` parameter,
+ in YARN mode the ResourceManager's address is picked up from the Hadoop configuration.
+Thus, the `--master` parameter is `yarn`.
+<!-- /en --><!-- ja -->
+マスタのアドレスが `--master` パラメータで指定される
+[Spark スタンドアロン](spark-standalone.html) や [Mesos](running-on-mesos.html) モードと異なり、
+YARN モードでは ResourceManager のアドレスは Hadoop の設定からピックアップされます。
+<!-- /ja -->
 
 To launch a Spark application in `cluster` mode:
 
@@ -66,11 +90,45 @@ Most of the configs are the same for Spark on YARN as for other deployment modes
 
 # Debugging your Application
 
-In YARN terminology, executors and application masters run inside "containers". YARN has two modes for handling container logs after an application has completed. If log aggregation is turned on (with the `yarn.log-aggregation-enable` config), container logs are copied to HDFS and deleted on the local machine. These logs can be viewed from anywhere on the cluster with the `yarn logs` command.
+<!-- en -->
+In YARN terminology, executors and application masters run inside "containers".
+YARN has two modes for handling container logs after an application has completed.
+If log aggregation is turned on (with the `yarn.log-aggregation-enable` config),
+ container logs are copied to HDFS and deleted on the local machine.
+These logs can be viewed from anywhere on the cluster with the `yarn logs` command.
+<!-- /en --><!-- ja -->
+YARN の用語でいうと、エグゼキュータとアプリケーション・マスタは「コンテナ」の中で実行されます。
+YARN には、アプリケーションの完了後にコンテナのログをハンドリングするためのモードが 2 つあります。
+（`yarn.log-aggregation-enable` の設定で）ログの集約を有効にしている場合、
+コンテナのログは HDFS にコピーされ、ローカルのマシンからは削除されます。
+これらのログは `yarn logs` コマンドでクラスタ上のどこからでも見ることができます。
+<!-- /ja -->
 
     yarn logs -applicationId <app ID>
 
-will print out the contents of all log files from all containers from the given application. You can also view the container log files directly in HDFS using the HDFS shell or API. The directory where they are located can be found by looking at your YARN configs (`yarn.nodemanager.remote-app-log-dir` and `yarn.nodemanager.remote-app-log-dir-suffix`). The logs are also available on the Spark Web UI under the Executors Tab. You need to have both the Spark history server and the MapReduce history server running and configure `yarn.log.server.url` in `yarn-site.xml` properly. The log URL on the Spark history server UI will redirect you to the MapReduce history server to show the aggregated logs.
+<!-- en -->
+will print out the contents of all log files from all containers from the given application.
+You can also view the container log files directly in HDFS using the HDFS shell or API.
+The directory where they are located
+ can be found by looking at your YARN configs
+ (`yarn.nodemanager.remote-app-log-dir` and `yarn.nodemanager.remote-app-log-dir-suffix`).
+The logs are also available on the Spark Web UI under the Executors Tab.
+You need to
+ have both the Spark history server and the MapReduce history server running
+ and configure `yarn.log.server.url` in `yarn-site.xml` properly.
+The log URL on the Spark history server UI
+ will redirect you to the MapReduce history server to show the aggregated logs.
+<!-- /en --><!-- ja -->
+このコマンドを実行すると、指定されたアプリケーションの全てのコンテナのすべてのログファイルの内容を表示します。
+HDFS のシェルや API を使って HDFS 内のログファイルを直接見ることもできます。
+それらが置かれているディレクトリは YARN で設定されています
+（`yarn.nodemanager.remote-app-log-dir` と `yarn.nodemanager.remote-app-log-dir-suffix`）。
+それらのログは Spark の Web UI の Executors タブでも参照できます。
+Spark ヒストリー・サーバと MapReduce ヒストリー・サーバが稼働しており、
+`yarn-site.xml` 内の `yarn.log.server.url` が適切に設定されている必要があります。
+Spark ヒストリー・サーバの UI におけるログの URL は、
+集約されたログを表示するために、あなたを MapReduce ヒストリー・サーバにリダイレクトするでしょう。
+<!-- /ja -->
 
 When log aggregation isn't turned on, logs are retained locally on each machine under `YARN_APP_LOGS_DIR`, which is usually configured to `/tmp/logs` or `$HADOOP_HOME/logs/userlogs` depending on the Hadoop version and installation. Viewing logs for a container requires going to the host that contains them and looking in this directory.  Subdirectories organize log files by application ID and container ID. The logs are also available on the Spark Web UI under the Executors Tab and doesn't require running the MapReduce history server.
 
