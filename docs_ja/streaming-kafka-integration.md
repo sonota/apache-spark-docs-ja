@@ -78,7 +78,22 @@ This new receiver-less "direct" approach has been introduced in Spark 1.3 to ens
 
 This approach has the following advantages over the receiver-based approach (i.e. Approach 1).
 
-- *Simplified Parallelism:* No need to create multiple input Kafka streams and union them. With `directStream`, Spark Streaming will create as many RDD partitions as there are Kafka partitions to consume, which will all read data from Kafka in parallel. So there is a one-to-one mapping between Kafka and RDD partitions, which is easier to understand and tune.
+- <!-- en -->
+  *Simplified Parallelism:* No need to create multiple input Kafka streams and union them.
+  With `directStream`, Spark Streaming will create
+  as many RDD partitions as there are Kafka partitions to consume,
+  which will all read data from Kafka in parallel.
+  So there is a one-to-one mapping between Kafka and RDD partitions,
+  which is easier to understand and tune.
+  <!-- /en --><!-- ja -->
+  *簡素化された並列性:*
+  複数の入力 Kafka ストリームを生成しそれらを統合する必要がありません。
+  `directStream` を使った場合、 Spark Streaming は
+  consume すべき Kafka のパーティションと同じ数の RDD パーティションを生成するでしょう。
+  それらの RDD パーティションは Kafka から並行にすべてのデータを読み込むでしょう。
+  つまり、Kafka と RDD パーティションの間には 1 対 1 のマッピングが存在することになるため
+  理解しやすく、チューニングしやすいです。
+  <!-- /ja -->
 
 - *Efficiency:* Achieving zero-data loss in the first approach required the data to be stored in a Write Ahead Log, which further replicated the data. This is actually inefficient as the data effectively gets replicated twice - once by Kafka, and a second time by the Write Ahead Log. This second approach eliminates the problem as there is no receiver, and hence no need for Write Ahead Logs. As long as you have sufficient Kafka retention, messages can be recovered from Kafka.
 
@@ -187,7 +202,25 @@ Next, we discuss how to use this approach in your streaming application.
 
 	You can use this to update Zookeeper yourself if you want Zookeeper-based Kafka monitoring tools to show progress of the streaming application.
 
-	Note that the typecast to HasOffsetRanges will only succeed if it is done in the first method called on the directKafkaStream, not later down a chain of methods. You can use transform() instead of foreachRDD() as your first method call in order to access offsets, then call further Spark methods. However, be aware that the one-to-one mapping between RDD partition and Kafka partition does not remain after any methods that shuffle or repartition, e.g. reduceByKey() or window().
+    <!-- en -->
+	Note that the typecast to HasOffsetRanges will only succeed
+    if it is done in the first method called on the directKafkaStream,
+    not later down a chain of methods.
+    You can use transform() instead of foreachRDD() as your first method call
+    in order to access offsets, then call further Spark methods.
+    However, be aware that
+    the one-to-one mapping between RDD partition and Kafka partition
+    does not remain after any methods that shuffle or repartition,
+    e.g. reduceByKey() or window().
+    <!-- /en --><!-- ja -->
+    HasOffsetRanges への型キャストはそれが directKafkaStream 上の最初のメソッドでなされた場合のみ成功し、
+    メソッドチェーンの後方では成功しないでしょう。
+    最初のメソッド呼び出しとして foreachRDD() ではなく transform() を使うことができます。
+    ただし、
+    RDD パーティションとカフカのパーティション間の 1 対 1 のマッピングは
+    shuffle または repartition の後のメソッド（例: reduceByKey(), window()）
+    には残らないことに留意してください。
+    <!-- /ja -->
 
 	Another thing to note is that since this approach does not use Receivers, the standard receiver-related (that is, [configurations](configuration.html) of the form `spark.streaming.receiver.*` ) will not apply to the input DStreams created by this approach (will apply to other input DStreams though). Instead, use the [configurations](configuration.html) `spark.streaming.kafka.*`. An important one is `spark.streaming.kafka.maxRatePerPartition` which is the maximum rate (in messages per second) at which each Kafka partition will be read by this direct API.
 
