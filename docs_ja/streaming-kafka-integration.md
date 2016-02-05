@@ -95,7 +95,25 @@ This approach has the following advantages over the receiver-based approach (i.e
   理解しやすく、チューニングしやすいです。
   <!-- /ja -->
 
-- *Efficiency:* Achieving zero-data loss in the first approach required the data to be stored in a Write Ahead Log, which further replicated the data. This is actually inefficient as the data effectively gets replicated twice - once by Kafka, and a second time by the Write Ahead Log. This second approach eliminates the problem as there is no receiver, and hence no need for Write Ahead Logs. As long as you have sufficient Kafka retention, messages can be recovered from Kafka.
+- <!-- en -->
+  *Efficiency:* Achieving zero-data loss in the first approach
+  required the data to be stored in a Write Ahead Log,
+  which further replicated the data.
+  This is actually inefficient as the data effectively gets replicated twice - 
+  once by Kafka, and a second time by the Write Ahead Log.
+  This second approach eliminates the problem as there is no receiver,
+  and hence no need for Write Ahead Logs.
+  As long as you have sufficient Kafka retention, messages can be recovered from Kafka.
+  <!-- /en --><!-- ja -->
+  *効率:* 1 つ目のアプローチにおける zero-data loss の実現には
+  データがライト・アヘッド・ログに保存されている必要があり、
+  それは追加的にデータを複製しました。
+  データは効率的に 2 回複製される（Kafka で複製され、ライト・アヘッド・ログで複製される）
+  ので、これは実際のところ非効率です。
+  この 2 つ目のアプローチはレシーバをなくすことでこの問題を取り除き、
+  したがってライト・アヘッド・ログも必要ありません。
+  Kafka の retension が十分にある限り、メッセージは Kafka から復旧できます。
+  <!-- /ja -->
 
 - *Exactly-once semantics:* The first approach uses Kafka's high level API to store consumed offsets in Zookeeper. This is traditionally the way to consume data from Kafka. While this approach (in combination with write ahead logs) can ensure zero data loss (i.e. at-least once semantics), there is a small chance some records may get consumed twice under some failures. This occurs because of inconsistencies between data reliably received by Spark Streaming and offsets tracked by Zookeeper. Hence, in this second approach, we use simple Kafka API that does not use Zookeeper. Offsets are tracked by Spark Streaming within its checkpoints. This eliminates inconsistencies between Spark Streaming and Zookeeper/Kafka, and so each record is received by Spark Streaming effectively exactly once despite failures. In order to achieve exactly-once semantics for output of your results, your output operation that saves the data to an external data store must be either idempotent, or an atomic transaction that saves results and offsets (see [Semantics of output operations](streaming-programming-guide.html#semantics-of-output-operations) in the main programming guide for further information).
 
@@ -222,6 +240,27 @@ Next, we discuss how to use this approach in your streaming application.
     には残らないことに留意してください。
     <!-- /ja -->
 
-	Another thing to note is that since this approach does not use Receivers, the standard receiver-related (that is, [configurations](configuration.html) of the form `spark.streaming.receiver.*` ) will not apply to the input DStreams created by this approach (will apply to other input DStreams though). Instead, use the [configurations](configuration.html) `spark.streaming.kafka.*`. An important one is `spark.streaming.kafka.maxRatePerPartition` which is the maximum rate (in messages per second) at which each Kafka partition will be read by this direct API.
+    <!-- en -->
+	Another thing to note is that since this approach does not use Receivers,
+    the standard receiver-related (that is, [configurations](configuration.html)
+    of the form `spark.streaming.receiver.*` )
+    will not apply to the input DStreams created by this approach
+    (will apply to other input DStreams though).
+    Instead, use the [configurations](configuration.html) `spark.streaming.kafka.*`.
+    An important one is `spark.streaming.kafka.maxRatePerPartition`
+    which is the maximum rate (in messages per second)
+    at which each Kafka partition will be read by this direct API.
+    <!-- /en --><!-- ja -->
+    他に留意しなければならないのは、
+    このアプローチは Receivers を使わないため、
+    標準的なレシーバ関連のもの
+    （つまり `spark.streaming.receiver.*` の形の[設定](configuration.html)）
+    はこのアプローチで生成された入力 DStream には適用されないということです
+    （他の入力 DStream に対しては適用されますが）。
+    代わりに、設定 `spark.streaming.kafka.*` を使ってください。
+    重要なものの 1 つは `spark.streaming.kafka.maxRatePerPartition` で、
+    これは最大レート（メッセージ数 / 秒）で、
+    ダイレクト API はこのレートで Kafka のパーティションを読み込みます。
+    <!-- /ja -->
 
 3. **Deploying:** This is same as the first approach, for Scala, Java and Python.
