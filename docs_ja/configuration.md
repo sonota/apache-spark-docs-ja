@@ -840,13 +840,31 @@ Apart from these, the following properties are also available, and may be useful
 </tr>
 <tr>
   <td><code>spark.executor.cores</code></td>
-  <td>1 in YARN mode, all the available cores on the worker in standalone mode.</td>
   <td>
+    <!-- en -->
+    1 in YARN mode, all the available cores on the worker in standalone mode.
+    <!-- /en --><!-- ja -->
+    YARN モードでは 1、スタンドアロンモードではワーカ上の利用できるすべてのコア。
+    <!-- /ja -->
+  </td>
+  <td>
+    <!-- en -->
     The number of cores to use on each executor. For YARN and standalone mode only.
 
-    In standalone mode, setting this parameter allows an application to run multiple executors on
-    the same worker, provided that there are enough cores on that worker. Otherwise, only one
-    executor per application will run on each worker.
+    In standalone mode, setting this parameter allows an application
+     to run multiple executors on the same worker,
+     provided that there are enough cores on that worker.
+    Otherwise, only one executor per application will run on each worker.
+    <!-- /en --><!-- ja -->
+    各エグゼキュータ上で使用するコアの数。
+    YARN モードとスタンドアロンモードのみ。
+
+    スタンドアロンモードでは、
+    ワーカ上に十分なコアがある場合、
+    このパラメータを設定することにより
+    アプリケーションは同一ワーカ上で複数のエグゼキュータを実行できるようになる。
+    そうでなければ、各ワーカ上でアプリケーションあたり 1 エグゼキュータのみが実行される。
+    <!-- /ja -->
   </td>
 </tr>
 <tr>
@@ -1517,13 +1535,26 @@ Apart from these, the following properties are also available, and may be useful
   <td><code>spark.streaming.backpressure.enabled</code></td>
   <td>false</td>
   <td>
+    <!-- en -->
     Enables or disables Spark Streaming's internal backpressure mechanism (since 1.5).
-    This enables the Spark Streaming to control the receiving rate based on the
-    current batch scheduling delays and processing times so that the system receives
-    only as fast as the system can process. Internally, this dynamically sets the
-    maximum receiving rate of receivers. This rate is upper bounded by the values
-    <code>spark.streaming.receiver.maxRate</code> and <code>spark.streaming.kafka.maxRatePerPartition</code>
-    if they are set (see below).
+    This enables the Spark Streaming to control the receiving rate
+     based on the current batch scheduling delays and processing times
+     so that the system receives only as fast as the system can process.
+    Internally, this dynamically sets the maximum receiving rate of receivers.
+    This rate is upper bounded by the values
+     <code>spark.streaming.receiver.maxRate</code>
+     and <code>spark.streaming.kafka.maxRatePerPartition</code>
+     if they are set (see below).
+    <!-- /en --><!-- ja -->
+    Spark Streaming の内部の backpressure 機構を有効または無効にする（1.5 以降）。
+    システムが処理できるのと同程度の速度で受信するようにするため、
+    現在のバッチの scheduling delays と processing times に基づいて
+    受信レートを制御できるようにする。
+    内部的には、レシーバの最大受信レートを動的にセットしている。
+    <code>spark.streaming.receiver.maxRate</code>
+    と <code>spark.streaming.kafka.maxRatePerPartition</code>
+    が設定されていれば、それが上限となる（下記参照）。
+    <!-- /ja -->
   </td>
 </tr>
 <tr>
