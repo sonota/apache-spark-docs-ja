@@ -3055,13 +3055,28 @@ The following table summarizes the semantics under failures:
 {:.no_toc}
 In Spark 1.3, we have introduced a new Kafka Direct API, which can ensure that all the Kafka data is received by Spark Streaming exactly once. Along with this, if you implement exactly-once output operation, you can achieve end-to-end exactly-once guarantees. This approach (experimental as of Spark {{site.SPARK_VERSION_SHORT}}) is further discussed in the [Kafka Integration Guide](streaming-kafka-integration.html).
 
-## Semantics of output operations
+## Semantics of output operations // 出力操作のセマンティクス
 {:.no_toc}
+
+<!-- en -->
 Output operations (like `foreachRDD`) have _at-least once_ semantics, that is, 
-the transformed data may get written to an external entity more than once in
-the event of a worker failure. While this is acceptable for saving to file systems using the
-`saveAs***Files` operations (as the file will simply get overwritten with the same data),
-additional effort may be necessary to achieve exactly-once semantics. There are two approaches.
+the transformed data may get written to an external entity
+ more than once in the event of a worker failure.
+While this is acceptable for saving to file systems
+ using the `saveAs***Files` operations
+ (as the file will simply get overwritten with the same data),
+ additional effort may be necessary to achieve exactly-once semantics.
+There are two approaches.
+<!-- /en --><!-- ja -->
+`foreachRDD` のような出力操作は _at-least once_ セマンティクスで動作します――
+つまり、
+ワーカで障害が起こった場合、
+変換されたデータは 2 回以上外部に書き込まれる場合があるでしょう。
+`saveAs***Files` を使ってファイルシステムに保存する場合は（同じ内容で上書きされるため）
+これが許容できる一方、
+exactly-once セマンティクスを実現するためにはさらに工夫が必要になります。
+そのためのアプローチが 2 つあります。
+<!-- /ja -->
 
 - *Idempotent updates*: Multiple attempts always write the same data. For example, `saveAs***Files` always writes the same data to the generated files.
 
