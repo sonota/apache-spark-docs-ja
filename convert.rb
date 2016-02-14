@@ -69,39 +69,39 @@ end
 def parse(src)
   nodes = []
   ss = StringScanner.new(src)
-  pos_from = ss.pos
-  pos_prev = ss.pos
+  pos_match_end = ss.pos
+  pos_match_begin = ss.pos
   pos_last_bol = ss.pos
 
   while not ss.eos?
     # マッチを行う前に開始位置を保存
-    pos_prev = ss.pos
+    pos_match_begin = ss.pos
 
     case
     when ss.bol?
       pos_last_bol = ss.pos
       case
       when ss.scan( /(\#+)(.+) \/\/ (.+)$/ )
-        nodes << byteslice(ss.string, pos_from, pos_prev)
+        nodes << byteslice(ss.string, pos_match_end, pos_match_begin)
         nodes << HeadingNode.new(ss.matched.strip)
-        pos_from = ss.pos
+        pos_match_end = ss.pos
       when ss.scan( /<!-- en -->.+?<!-- \/ja -->/m )
-        nodes << byteslice(ss.string, pos_from, pos_prev)
+        nodes << byteslice(ss.string, pos_match_end, pos_match_begin)
         nodes << ParagraphNode.new(ss.matched, 0)
-        pos_from = ss.pos
+        pos_match_end = ss.pos
       else
         ss.pos += 1
       end
     when ss.scan( /<!-- en -->.+?<!-- \/ja -->/m )
-      nodes << byteslice(ss.string, pos_from, pos_prev)
-      col = pos_prev - pos_last_bol
+      nodes << byteslice(ss.string, pos_match_end, pos_match_begin)
+      col = pos_match_begin - pos_last_bol
       nodes << ParagraphNode.new(ss.matched, col)
-      pos_from = ss.pos
+      pos_match_end = ss.pos
     else
       ss.pos += 1
     end
   end
-  nodes << byteslice(ss.string, pos_from, ss.string.bytesize)
+  nodes << byteslice(ss.string, pos_match_end, ss.string.bytesize)
 
   nodes.reject{|node| node.is_a?(String) && node.empty? }
 end
