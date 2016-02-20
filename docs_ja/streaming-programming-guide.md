@@ -3078,12 +3078,43 @@ exactly-once セマンティクスを実現するためにはさらに工夫が�
 そのためのアプローチが 2 つあります。
 <!-- /ja -->
 
-- *Idempotent updates*: Multiple attempts always write the same data. For example, `saveAs***Files` always writes the same data to the generated files.
+- <!-- en -->
+  *Idempotent updates*: Multiple attempts always write the same data.
+  For example, `saveAs***Files` always writes the same data to the generated files.
+  <!-- /en --><!-- ja -->
+  *冪等な更新*: 複数の試みが常に同じデータを書き込む。
+  例えば、`saveAs***Files` が生成されたファイルに常に同じデータを書き込む。
+  <!-- /ja -->
 
-- *Transactional updates*: All updates are made transactionally so that updates are made exactly once atomically. One way to do this would be the following.
+- <!-- en -->
+  *Transactional updates*: All updates are made transactionally
+  so that updates are made exactly once atomically.
+  One way to do this would be the following.
+  <!-- /en --><!-- ja -->
+  *トランザクションを使った更新*: 
+  更新が exactly once でアトミックになるように、すべての更新をトランザクションを使ったものにする。
+  これを使った方法は次のようになる。
+  <!-- /ja -->
 
-    - Use the batch time (available in `foreachRDD`) and the partition index of the RDD to create an identifier. This identifier uniquely identifies a blob data in the streaming application.
-    - Update external system with this blob transactionally (that is, exactly once, atomically) using the identifier. That is, if the identifier is not already committed, commit the partition data and the identifier atomically. Else, if this was already committed, skip the update.
+    - <!-- en -->Use the batch time (available in `foreachRDD`)
+      and the partition index of the RDD to create an identifier.
+      This identifier uniquely identifies a blob data in the streaming application.
+      <!-- /en --><!-- ja -->
+      識別子を生成するために
+      batch time（`foreachRDD` 内で利用可能）とパーティションのインデックスを使う。
+      この識別子はストリーミングアプリケーション内の blob データを一意に識別する。
+      <!-- /ja -->
+    - <!-- en -->Update external system with this blob transactionally
+      (that is, exactly once, atomically) using the identifier.
+      That is, if the identifier is not already committed,
+      commit the partition data and the identifier atomically.
+      Else, if this was already committed, skip the update.
+      <!-- /en --><!-- ja -->
+      この blob を使って外部システムを transactionally に（つまり、exactly once でアトミックに）更新する。
+      つまり、識別子がすでにコミットされていなければ
+      パーティションのデータと識別子をアトミックにコミットする。
+      そうでなく、すでにコミットされている場合は更新をスキップする。
+      <!-- /ja -->
 
           dstream.foreachRDD { (rdd, time) =>
             rdd.foreachPartition { partitionIterator =>
