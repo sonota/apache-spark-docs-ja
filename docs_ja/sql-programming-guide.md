@@ -7,8 +7,9 @@ title: Spark SQL and DataFrames
 * This will become a table of contents (this text will be scraped).
 {:toc}
 
-# Overview
+# Overview // 概観
 
+<!-- en -->
 Spark SQL is a Spark module for structured data processing. Unlike the basic Spark RDD API, the interfaces provided
 by Spark SQL provide Spark with more information about the structure of both the data and the computation being performed. Internally,
 Spark SQL uses this extra information to perform extra optimizations. There are several ways to
@@ -16,11 +17,27 @@ interact with Spark SQL including SQL, the DataFrames API and the Datasets API. 
 the same execution engine is used, independent of which API/language you are using to express the
 computation. This unification means that developers can easily switch back and forth between the
 various APIs based on which provides the most natural way to express a given transformation.
+<!-- /en --><!-- ja -->
+Spark SQL は構造化データ処理のための Spark のモジュールです。
+基本的な Spark の RDD API とは異なり、 Spark SQL によって提供されるインターフェイスは、
+データと、実行される計算の両方の構造についての情報を伴って Spark を提供します。
+内部的には、 Spark SQL は追加の最適化を行うためにこの追加情報を使います。
+Spark SQL と対話するには SQL, DataFrames API, Datasets API を含むいくつかの方法があります。
+結果を計算する時には同じ実行エンジンが使われ、その計算を表現するのにどの
+API/言語が使われているかとは独立しています。
+この unification は、与えられた変換を表現するのに最も自然な方法を提供するのが
+どれかに基づいて開発者が簡単にさまざまな API を切り替えられることを意味します。
+<!-- /ja -->
 
+<!-- en -->
 All of the examples on this page use sample data included in the Spark distribution and can be run in
 the `spark-shell`, `pyspark` shell, or `sparkR` shell.
+<!-- /en --><!-- ja -->
+このページの例はすべて Spark distribution に含まれるサンプルデータを使っており、
+spark-shell, pyspark shell, sparkR shell 内で実行できます。
+<!-- /ja -->
 
-## SQL
+## SQL // SQL
 
 One use of Spark SQL is to execute SQL queries written using either a basic SQL syntax or HiveQL.
 Spark SQL can also be used to read data from an existing Hive installation. For more on how to
@@ -60,9 +77,16 @@ in a future release.
 <div class="codetabs">
 <div data-lang="scala"  markdown="1">
 
+<!-- en -->
 The entry point into all functionality in Spark SQL is the
 [`SQLContext`](api/scala/index.html#org.apache.spark.sql.SQLContext) class, or one of its
 descendants. To create a basic `SQLContext`, all you need is a SparkContext.
+<!-- /en --><!-- ja -->
+Spark SQL のすべての機能へのエントリーポイントが
+[`SQLContext`](api/scala/index.html#org.apache.spark.sql.SQLContext) クラスまたはその子孫です。
+基本的な `SQLContext` を生成するのに必要なのは
+SparkContext だけです。
+<!-- /ja -->
 
 {% highlight scala %}
 val sc: SparkContext // An existing SparkContext.
@@ -112,23 +136,57 @@ sqlContext <- sparkRSQL.init(sc)
 </div>
 </div>
 
-In addition to the basic `SQLContext`, you can also create a `HiveContext`, which provides a
-superset of the functionality provided by the basic `SQLContext`. Additional features include
-the ability to write queries using the more complete HiveQL parser, access to Hive UDFs, and the
-ability to read data from Hive tables. To use a `HiveContext`, you do not need to have an
-existing Hive setup, and all of the data sources available to a `SQLContext` are still available.
+<!-- en -->
+In addition to the basic `SQLContext`, you can also create a `HiveContext`,
+ which provides a superset of the functionality provided by the basic `SQLContext`.
+Additional features include
+ the ability to write queries using the more complete HiveQL parser,
+ access to Hive UDFs, and the ability to read data from Hive tables.
+To use a `HiveContext`, you do not need to have an existing Hive setup,
+ and all of the data sources available to a `SQLContext` are still available.
 `HiveContext` is only packaged separately to avoid including all of Hive's dependencies in the default
-Spark build. If these dependencies are not a problem for your application then using `HiveContext`
-is recommended for the 1.3 release of Spark. Future releases will focus on bringing `SQLContext` up
-to feature parity with a `HiveContext`.
+ Spark build.
+If these dependencies are not a problem for your application
+ then using `HiveContext` is recommended for the 1.3 release of Spark.
+Future releases will focus on bringing `SQLContext` up to feature parity with a `HiveContext`.
+<!-- /en --><!-- ja -->
+基本的な `SQLContext` に加えて、 `HiveContext` も生成することができます。
+これは基本的な `SQLContext` によって提供される機能の superset を提供します。
+追加の機能には、
+より完全な HiveQL パーサを使った write queries、
+Hive UDF へのアクセス、
+Hive テーブルからの読み込み
+が含まれます。
+`HiveContext` を使うためには、既存の Hive setup を持っている必要はなく、
+`SQLContext` で使えるデータソースもすべて利用できます。
+デフォルトの Spark のビルドに入っている Hive のすべての依存物を含むのを避けるため、
+`HiveContext` は分離された状態でパッケージされているのみとなっています。
+これらの依存物がアプリケーションにとって問題にならない場合、
+`HiveContext` の使用は Spark 1.3 のために推奨されます。
+Future releases will focus on bringing `SQLContext` up to feature parity with a `HiveContext`.
+<!-- /ja -->
 
-The specific variant of SQL that is used to parse queries can also be selected using the
-`spark.sql.dialect` option. This parameter can be changed using either the `setConf` method on
-a `SQLContext` or by using a `SET key=value` command in SQL. For a `SQLContext`, the only dialect
-available is "sql" which uses a simple SQL parser provided by Spark SQL. In a `HiveContext`, the
-default is "hiveql", though "sql" is also available. Since the HiveQL parser is much more complete,
-this is recommended for most use cases.
-
+<!-- en -->
+The specific variant of SQL that is used to parse queries
+ can also be selected using the `spark.sql.dialect` option.
+This parameter can be changed using either
+ the `setConf` method on a `SQLContext`
+ or by using a `SET key=value` command in SQL.
+For a `SQLContext`, the only dialect available is "sql"
+ which uses a simple SQL parser provided by Spark SQL.
+In a `HiveContext`, the default is "hiveql", though "sql" is also available.
+Since the HiveQL parser is much more complete,
+ this is recommended for most use cases.
+<!-- /en --><!-- ja -->
+クエリをパースするのに使われる SQL の特定の変種は
+ `spark.sql.dialect` オプションを使って選択できます。
+このパラメータは `SQLContext` 上で `setConf` メソッドを使うか、
+または SQL 内で `SET key=value` コマンドを使うことで変更できます。
+`SQLContext` にとって、利用可能な唯一の dialect は "sql" であり、
+これは Spark SQL が提供するシンプルな SQL パーサを使います。
+`HiveContext` 内では "sql" を使うこともできますが、デフォルトは "hiveql" です。
+HiveQL パーサはより完全であるため、これはほとんどのユースケースで推奨されます。
+<!-- /ja -->
 
 ## Creating DataFrames
 
