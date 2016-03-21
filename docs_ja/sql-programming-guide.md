@@ -39,23 +39,62 @@ spark-shell, pyspark shell, sparkR shell 内で実行できます。
 
 ## SQL // SQL
 
-One use of Spark SQL is to execute SQL queries written using either a basic SQL syntax or HiveQL.
-Spark SQL can also be used to read data from an existing Hive installation. For more on how to
-configure this feature, please refer to the [Hive Tables](#hive-tables) section. When running
-SQL from within another programming language the results will be returned as a [DataFrame](#DataFrames).
-You can also interact with the SQL interface using the [command-line](#running-the-spark-sql-cli)
-or over [JDBC/ODBC](#running-the-thrift-jdbcodbc-server).
+<!-- en -->
+One use of Spark SQL is to execute SQL queries
+ written using either a basic SQL syntax or HiveQL.
+Spark SQL can also be used to read data
+ from an existing Hive installation.
+For more on how to configure this feature,
+ please refer to the [Hive Tables](#hive-tables) section.
+When running SQL from within another programming language
+ the results will be returned as a [DataFrame](#DataFrames).
+You can also interact with the SQL interface
+ using the [command-line](#running-the-spark-sql-cli)
+ or over [JDBC/ODBC](#running-the-thrift-jdbcodbc-server).
+<!-- /en --><!-- ja -->
+Spark SQL の用途の 1 つは
+基本的な SQL 文法または HiveQL で書かれた SQL クエリの実行です。
+既存の Hive installation からデータを読み込むために
+ Spark SQL を使うこともできます。
+この機能の設定方法についての詳細は
+ [Hive テーブル](#hive-tables) の節を参照してください。
+他のプログラミング言語から SQL を実行した場合
+ [DataFrame](#DataFrames) として結果が返されます。
+[コマンドライン](#running-the-spark-sql-cli)を使って、
+ または [JDBC/ODBC](#running-the-thrift-jdbcodbc-server)
+ 越しに SQL インターフェイスで対話することもできます。
+<!-- /ja -->
 
-## DataFrames
+## DataFrames // DataFrames
 
-A DataFrame is a distributed collection of data organized into named columns. It is conceptually
-equivalent to a table in a relational database or a data frame in R/Python, but with richer
-optimizations under the hood. DataFrames can be constructed from a wide array of [sources](#data-sources) such
+<!-- en -->
+A DataFrame is a distributed collection of data organized into named columns.
+It is conceptually equivalent to a table in a relational database
+ or a data frame in R/Python, but with richer optimizations under the hood.
+DataFrames can be constructed from a wide array of [sources](#data-sources) such
 as: structured data files, tables in Hive, external databases, or existing RDDs.
+<!-- /en --><!-- ja -->
+DataFrame は名前付きカラムの形に組織化されたデータの分散コレクションです。
+概念的にはリレーショナル・データベースのテーブル
+または R/Python のデータフレームと同等ですが、
+内部ではよりリッチな最適化を伴っています。
+DataFrames は
+構造化されたデータファイル、 Hive にあるデーブル、外部のデータベース、既存の RDD
+などの幅広い[ソース](#data-sources)から組み立てることができます。
+<!-- /ja -->
 
+<!-- en -->
 The DataFrame API is available in [Scala](api/scala/index.html#org.apache.spark.sql.DataFrame),
 [Java](api/java/index.html?org/apache/spark/sql/DataFrame.html),
 [Python](api/python/pyspark.sql.html#pyspark.sql.DataFrame), and [R](api/R/index.html).
+<!-- /en --><!-- ja -->
+DataFrame API は
+[Scala](api/scala/index.html#org.apache.spark.sql.DataFrame)、
+[Java](api/java/index.html?org/apache/spark/sql/DataFrame.html)、
+[Python](api/python/pyspark.sql.html#pyspark.sql.DataFrame)、
+[R](api/R/index.html)
+ から利用できます。
+<!-- /ja -->
 
 ## Datasets
 
@@ -638,18 +677,44 @@ SQLContext sqlContext = new org.apache.spark.sql.SQLContext(sc);
 </div>
 </div>
 
-## Interoperating with RDDs
+## Interoperating with RDDs // RDD との相互運用
 
-Spark SQL supports two different methods for converting existing RDDs into DataFrames. The first
-method uses reflection to infer the schema of an RDD that contains specific types of objects. This
-reflection based approach leads to more concise code and works well when you already know the schema
+<!-- en -->
+Spark SQL supports two different methods for converting existing RDDs into DataFrames.
+The first method uses reflection to infer the schema of an RDD
+ that contains specific types of objects.
+This reflection based approach leads to more concise code and works well
+ when you already know the schema
 while writing your Spark application.
+<!-- /en --><!-- ja -->
+Spark SQL は既存の RDD を DataFrames に変換するために2つの異なる方法をサポートしています。
+1つ目の方法は、オブジェクトの特定の型を含む RDD のスキーマを推測するためにリフレクションを使うものです。
+Spark アプリケーションを書いている間に当該スキーマをすでに知っている場合、
+このリフレクションベースのアプローチを使うと
+コードがより簡潔になり、うまく動作します。
+<!-- /ja -->
 
-The second method for creating DataFrames is through a programmatic interface that allows you to
-construct a schema and then apply it to an existing RDD. While this method is more verbose, it allows
-you to construct DataFrames when the columns and their types are not known until runtime.
+<!-- en -->
+The second method for creating DataFrames is
+ through a programmatic interface
+ that allows you to construct a schema
+ and then apply it to an existing RDD.
+While this method is more verbose,
+ it allows you to construct DataFrames
+ when the columns and their types are not known until runtime.
+<!-- /en --><!-- ja -->
+DataFrames 生成のための 2つ目の方法は
+programmatic なインターフェイスを通じて行うもので、
+これによりスキーマを組み立て、
+既存の RDD に適用できるようになります。
+この方法はより冗長ですが、
+列とその型が実行時まで分からない場合でも
+DataFrames を組み立てることができます。
+<!-- /ja -->
+
 
 ### Inferring the Schema Using Reflection
+
 <div class="codetabs">
 
 <div data-lang="scala"  markdown="1">
@@ -986,13 +1051,31 @@ for name in names.collect():
 </div>
 
 
-# Data Sources
+# Data Sources // データソース
 
+<!-- en -->
 Spark SQL supports operating on a variety of data sources through the `DataFrame` interface.
-A DataFrame can be operated on as normal RDDs and can also be registered as a temporary table.
-Registering a DataFrame as a table allows you to run SQL queries over its data. This section
-describes the general methods for loading and saving data using the Spark Data Sources and then
-goes into specific options that are available for the built-in data sources.
+A DataFrame
+ can be operated on as normal RDDs
+ and can also be registered as a temporary table.
+Registering a DataFrame as a table allows you
+ to run SQL queries over its data.
+This section
+ describes the general methods for loading and saving data
+  using the Spark Data Sources
+ and then goes into specific options
+  that are available for the built-in data sources.
+<!-- /en --><!-- ja -->
+Spark SQL は、`DataFrame` インターフェイスを通じた
+さまざまなデータソース上での操作をサポートしています。
+DataFrame は通常の RDD として操作でき、
+また一時テーブルとして登録することもできます。
+DataFrame をテーブルとして登録することで
+そのデータに対して SQL クエリを実行できるようになります。
+この節では、
+Spark Data Sources を使ってデータをロード・セーブする一般的な方法を説明し、
+それから組み込みのデータソースに対して利用可能な個別のオプションに進みます。
+<!-- /ja -->
 
 ## Generic Load/Save Functions
 
@@ -2127,10 +2210,19 @@ OPTIONS (
  * Some databases, such as H2, convert all names to upper case. You'll need to use upper case to refer to those names in Spark SQL.
 
 
-# Performance Tuning
+# Performance Tuning // パフォーマンス・チューニング
 
-For some workloads it is possible to improve performance by either caching data in memory, or by
-turning on some experimental options.
+<!-- en -->
+For some workloads
+ it is possible to improve performance
+  by either caching data in memory,
+  or by turning on some experimental options.
+<!-- /en --><!-- ja -->
+いくつかの workloads について、
+メモリにデータをキャッシュするか、
+いくつかの実験的なオプションを有効にすることで
+パフォーマンスを改善することができます。
+<!-- /ja -->
 
 ## Caching Data In Memory
 
@@ -2196,11 +2288,22 @@ that these options will be deprecated in future release as more optimizations ar
   </tr>
 </table>
 
-# Distributed SQL Engine
+# Distributed SQL Engine // 分散 SQL エンジン
 
-Spark SQL can also act as a distributed query engine using its JDBC/ODBC or command-line interface.
-In this mode, end-users or applications can interact with Spark SQL directly to run SQL queries,
-without the need to write any code.
+<!-- en -->
+Spark SQL can also act as a distributed query engine
+ using its JDBC/ODBC or command-line interface.
+In this mode, end-users or applications
+ can interact with Spark SQL directly to run SQL queries,
+ without the need to write any code.
+<!-- /en --><!-- ja -->
+Spark SQL は
+JDBC/ODBC またはコマンドラインインターフェイスを使って
+分散クエリエンジンとして動かすこともできます。
+このモードでは、
+エンドユーザまたはアプリケーションは
+SQL クエリを実行するために コードを書くことなしに Spark SQL と直接対話することができます。
+<!-- /ja -->
 
 ## Running the Thrift JDBC/ODBC server
 
@@ -2275,7 +2378,7 @@ Configuration of Hive is done by placing your `hive-site.xml`, `core-site.xml` a
 You may run `./bin/spark-sql --help` for a complete list of all available
 options.
 
-# Migration Guide
+# Migration Guide // 移行ガイド
 
 ## Upgrading From Spark SQL 1.5 to 1.6
 
@@ -2523,12 +2626,20 @@ Several caching related features are not supported yet:
 * RDD reloading
 * In-memory cache write through policy
 
-## Compatibility with Apache Hive
+## Compatibility with Apache Hive // Apache Hive との互換性
 
+<!-- en -->
 Spark SQL is designed to be compatible with the Hive Metastore, SerDes and UDFs.
 Currently Hive SerDes and UDFs are based on Hive 1.2.1,
-and Spark SQL can be connected to different versions of Hive Metastore
-(from 0.12.0 to 1.2.1. Also see [Interacting with Different Versions of Hive Metastore] (#interacting-with-different-versions-of-hive-metastore)).
+ and Spark SQL can be connected to different versions of Hive Metastore
+(from 0.12.0 to 1.2.1. Also see [Interacting with Different Versions of Hive Metastore](#interacting-with-different-versions-of-hive-metastore)).
+<!-- /en --><!-- ja -->
+Spark SQL は Hive metastore, SerDe, UDF と互換性を持つようにデザインされています。
+現在は Hive SerDe と UDF は Hive 1.2.1 に基づいており、
+Spark SQL は異なるバージョンの Hive metasore に接続できます（
+0.12.0 から 1.2.1 まで。
+[異なるバージョンの Hive Metastore との対話](#interacting-with-different-versions-of-hive-metastore) も参照してください）。
+<!-- /ja -->
 
 #### Deploying in Existing Hive Warehouses
 
@@ -2629,7 +2740,7 @@ releases of Spark SQL.
   Hive can optionally merge the small files into fewer large files to avoid overflowing the HDFS
   metadata. Spark SQL does not support that.
 
-# Reference
+# Reference // リファレンス
 
 ## Data Types
 
