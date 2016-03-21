@@ -188,11 +188,25 @@ Since the HiveQL parser is much more complete,
 HiveQL パーサはより完全であるため、これはほとんどのユースケースで推奨されます。
 <!-- /ja -->
 
-## Creating DataFrames
+## Creating DataFrames // DataFrames の生成
 
-With a `SQLContext`, applications can create `DataFrame`s from an <a href='#interoperating-with-rdds'>existing `RDD`</a>, from a Hive table, or from <a href='#data-sources'>data sources</a>.
+<!-- en -->
+With a `SQLContext`, applications can create `DataFrame`s
+ from an <a href='#interoperating-with-rdds'>existing `RDD`</a>,
+ from a Hive table,
+ or from <a href='#data-sources'>data sources</a>.
+<!-- /en --><!-- ja -->
+`SQLContext` を使って、
+<a href='#interoperating-with-rdds'>既存の `RDD`</a>、
+ Hive テーブル、<a href='#data-sources'>データソース</a>
+から `DataFrame` を生成することができます。
+<!-- /ja -->
 
+<!-- en -->
 As an example, the following creates a `DataFrame` based on the content of a JSON file:
+<!-- /en --><!-- ja -->
+次の例では JSON ファイルの内容に基づいた `DataFrame` を生成しています:
+<!-- /ja -->
 
 <div class="codetabs">
 <div data-lang="scala"  markdown="1">
@@ -249,11 +263,27 @@ showDF(df)
 </div>
 
 
-## DataFrame Operations
+## DataFrame Operations // DataFrame の操作
 
-DataFrames provide a domain-specific language for structured data manipulation in [Scala](api/scala/index.html#org.apache.spark.sql.DataFrame), [Java](api/java/index.html?org/apache/spark/sql/DataFrame.html), [Python](api/python/pyspark.sql.html#pyspark.sql.DataFrame) and [R](api/R/DataFrame.html).
+<!-- en -->
+DataFrames provide a domain-specific language for structured data manipulation
+ in [Scala](api/scala/index.html#org.apache.spark.sql.DataFrame),
+ [Java](api/java/index.html?org/apache/spark/sql/DataFrame.html),
+ [Python](api/python/pyspark.sql.html#pyspark.sql.DataFrame)
+ and [R](api/R/DataFrame.html).
+<!-- /en --><!-- ja -->
+[Scala](api/scala/index.html#org.apache.spark.sql.DataFrame),
+ [Java](api/java/index.html?org/apache/spark/sql/DataFrame.html),
+ [Python](api/python/pyspark.sql.html#pyspark.sql.DataFrame),
+ [R](api/R/DataFrame.html)
+において、DataFrames は構造化データの操作のための DSL を提供しています。
+<!-- /ja -->
 
+<!-- en -->
 Here we include some basic examples of structured data processing using DataFrames:
+<!-- /en --><!-- ja -->
+これは DataFrames を使った構造化データ処理の基本的な例です:
+<!-- /ja -->
 
 <div class="codetabs">
 <div data-lang="scala"  markdown="1">
@@ -304,9 +334,31 @@ df.groupBy("age").count().show()
 // 30   1
 {% endhighlight %}
 
-For a complete list of the types of operations that can be performed on a DataFrame refer to the [API Documentation](api/scala/index.html#org.apache.spark.sql.DataFrame).
+<!-- en -->
+For a complete list of the types of operations that can be performed on a DataFrame
+ refer to the [API Documentation](api/scala/index.html#org.apache.spark.sql.DataFrame).
+<!-- /en --><!-- ja -->
+DataFrame 上で実行できる操作のタイプ
+の完全なリストについては
+[API Documentation](api/scala/index.html#org.apache.spark.sql.DataFrame)
+を参照してください。
+<!-- /ja -->
 
-In addition to simple column references and expressions, DataFrames also have a rich library of functions including string manipulation, date arithmetic, common math operations and more. The complete list is available in the [DataFrame Function Reference](api/scala/index.html#org.apache.spark.sql.functions$).
+<!-- en -->
+In addition to simple column references and expressions,
+ DataFrames also have a rich library of functions
+ including string manipulation, date arithmetic, common math operations and more.
+The complete list is available in the
+ [DataFrame Function Reference](api/scala/index.html#org.apache.spark.sql.functions$).
+<!-- /en --><!-- ja -->
+シンプルな列の参照と expressions に加えて、
+DataFrames には
+文字列操作、日付の演算、一般的な数学の操作など
+を含む関数の
+豊富なライブラリも備わっています。
+完全なリストは [DataFrame 関数リファレンス](api/scala/index.html#org.apache.spark.sql.functions$)
+にあります。
+<!-- /ja -->
 
 
 </div>
@@ -482,9 +534,16 @@ In addition to simple column references and expressions, DataFrames also have a 
 
 </div>
 
-## Running SQL Queries Programmatically
+## Running SQL Queries Programmatically // プログラムを利用して SQL クエリを実行する
 
-The `sql` function on a `SQLContext` enables applications to run SQL queries programmatically and returns the result as a `DataFrame`.
+<!-- en -->
+The `sql` function on a `SQLContext` enables applications
+ to run SQL queries programmatically and returns the result as a `DataFrame`.
+<!-- /en --><!-- ja -->
+`SQLContext` 上で `sql` 関数を使うことで
+アプリケーションがプログラムを利用して SQL クエリを実行し、
+`DataFrame` として結果を返すことができます。
+<!-- /ja -->
 
 <div class="codetabs">
 <div data-lang="scala"  markdown="1">
@@ -519,14 +578,35 @@ df <- sql(sqlContext, "SELECT * FROM table")
 </div>
 
 
-## Creating Datasets
+## Creating Datasets // Datasets の生成
 
-Datasets are similar to RDDs, however, instead of using Java Serialization or Kryo they use
-a specialized [Encoder](api/scala/index.html#org.apache.spark.sql.Encoder) to serialize the objects
-for processing or transmitting over the network. While both encoders and standard serialization are
-responsible for turning an object into bytes, encoders are code generated dynamically and use a format
-that allows Spark to perform many operations like filtering, sorting and hashing without deserializing
-the bytes back into an object.
+<!-- en -->
+Datasets are similar to RDDs, however,
+ instead of using Java Serialization or Kryo they use a specialized
+ [Encoder](api/scala/index.html#org.apache.spark.sql.Encoder)
+ to serialize the objects for processing or transmitting over the network.
+While both encoders and standard serialization are responsible
+  for turning an object into bytes,
+ encoders
+  are code generated dynamically
+  and use a format that allows Spark to perform many operations like
+    filtering,
+    sorting
+    and hashing
+   without deserializing the bytes back into an object.
+<!-- /en --><!-- ja -->
+Datasets は RDDs に似ていますが、
+処理やネットワーク越しの送信のためにオブジェクトをシリアライズするために
+Java Serialization や Kryo を使う代わりに、
+より特化した [エンコーダ](api/scala/index.html#org.apache.spark.sql.Encoder)
+を使います。
+エンコーダと標準のシリアライゼーションは両方とも
+オブジェクトをバイト列に変換することに責任を持つ一方、
+エンコーダは動的にコード生成され、
+ バイト列をデシリアライズしてオブジェクトに戻すことなしに
+ フィルタリング、ソート、ハッシュ化などの 
+ 多くの操作が行えるようなフォーマットを使います。
+<!-- /ja -->
 
 <div class="codetabs">
 <div data-lang="scala"  markdown="1">
