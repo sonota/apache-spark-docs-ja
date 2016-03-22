@@ -96,18 +96,44 @@ DataFrame API は
  から利用できます。
 <!-- /ja -->
 
-## Datasets
+## Datasets // Datasets
 
-A Dataset is a new experimental interface added in Spark 1.6 that tries to provide the benefits of
-RDDs (strong typing, ability to use powerful lambda functions) with the benefits of Spark SQL's
-optimized execution engine. A Dataset can be [constructed](#creating-datasets) from JVM objects and then manipulated
-using functional transformations (map, flatMap, filter, etc.).
+<!-- en -->
+A Dataset is a new experimental interface added in Spark 1.6
+ that tries to provide the benefits of RDDs
+ (strong typing, ability to use powerful lambda functions)
+ with the benefits of Spark SQL's optimized execution engine.
+A Dataset can be
+ [constructed](#creating-datasets) from JVM objects
+ and then manipulated using functional transformations (map, flatMap, filter, etc.).
+<!-- /en --><!-- ja -->
+Dataset は
+Spark 1.6 で加えられた
+新しい実験的なインターフェイスであり、
+ Spark SQL の最適化された実行エンジンの利点とともに
+ RDD の利点（強い型、強力なラムダ関数を使う能力）を提供しようと試みています。
+Dataset は JVM オブジェクトから
+[組み立てる](#creating-datasets)ことができ、
+関数的な変換（map, flatMap, filter など）を使って操作することができます。
+<!-- /ja -->
 
-The unified Dataset API can be used both in [Scala](api/scala/index.html#org.apache.spark.sql.Dataset) and
-[Java](api/java/index.html?org/apache/spark/sql/Dataset.html). Python does not yet have support for
-the Dataset API, but due to its dynamic nature many of the benefits are already available (i.e. you can
-access the field of a row by name naturally `row.columnName`). Full python support will be added
-in a future release.
+<!-- en -->
+The unified Dataset API can be used both in
+ [Scala](api/scala/index.html#org.apache.spark.sql.Dataset)
+ and [Java](api/java/index.html?org/apache/spark/sql/Dataset.html).
+Python does not yet have support for the Dataset API,
+ but due to its dynamic nature many of the benefits are already available
+ (i.e. you can access the field of a row by name naturally `row.columnName`).
+Full python support will be added in a future release.
+<!-- /en --><!-- ja -->
+統一された Dataset API が
+ [Scala](api/scala/index.html#org.apache.spark.sql.Dataset) と
+ [Java](api/java/index.html?org/apache/spark/sql/Dataset.html)
+ の両方で使えます。
+Python はまだ Dataset API をサポートしていませんが、動的な性質により多くの利点がすでに利用可能です
+（すなわち、 `row.columnName` のように自然に行内のフィールドにアクセスできます）。
+完全な Python のサポートは将来のリリースで追加されるでしょう。
+<!-- /ja -->
 
 # Getting Started
 
@@ -713,18 +739,34 @@ DataFrames を組み立てることができます。
 <!-- /ja -->
 
 
-### Inferring the Schema Using Reflection
+### Inferring the Schema Using Reflection // リフレクションを使ったスキーマの推測
 
 <div class="codetabs">
 
 <div data-lang="scala"  markdown="1">
 
-The Scala interface for Spark SQL supports automatically converting an RDD containing case classes
-to a DataFrame. The case class
-defines the schema of the table. The names of the arguments to the case class are read using
-reflection and become the names of the columns. Case classes can also be nested or contain complex
-types such as Sequences or Arrays. This RDD can be implicitly converted to a DataFrame and then be
-registered as a table. Tables can be used in subsequent SQL statements.
+<!-- en -->
+The Scala interface for Spark SQL
+ supports automatically converting an RDD containing case classes to a DataFrame.
+The case class defines the schema of the table.
+The names of the arguments to the case class
+ are read using reflection
+ and become the names of the columns.
+Case classes can also be nested or contain complex types such as Sequences or Arrays.
+This RDD can
+ be implicitly converted to a DataFrame
+ and then be registered as a table.
+Tables can be used in subsequent SQL statements.
+<!-- /en --><!-- ja -->
+Spark SQL の Scala インターフェイスは
+ケースクラスを含む RDD の DataFrame への自動変換をサポートしています。
+ケースクラスはテーブルのスキーマを定義します。
+ケースクラスへの引数の名前が
+リフレクションによって読まれ、列名になります。
+ケースクラスはネストされるか、または Sequences や Arrays のような複合型を含むことができます。
+この RDD は暗黙的に DataFrame へ変換でき、それからテーブルとして登録されます。
+テーブルはその後の SQL 文で使うことができます。
+<!-- /ja -->
 
 {% highlight scala %}
 // sc is an existing SparkContext.
@@ -868,24 +910,47 @@ for teenName in teenNames.collect():
 
 </div>
 
-### Programmatically Specifying the Schema
+### Programmatically Specifying the Schema // プログラムによるスキーマの指定
 
 <div class="codetabs">
 
 <div data-lang="scala"  markdown="1">
 
-When case classes cannot be defined ahead of time (for example,
-the structure of records is encoded in a string, or a text dataset will be parsed
-and fields will be projected differently for different users),
+<!-- en -->
+When case classes cannot be defined ahead of time
+ (for example, the structure of records is encoded in a string,
+ or a text dataset will be parsed and fields will be projected differently for different users),
 a `DataFrame` can be created programmatically with three steps.
+<!-- /en --><!-- ja -->
+ケースクラスが前もって定義できない場合
+（たとえば、レコードの構造が文字列内にエンコードされていたり、
+パースされたテキスト・データセットのフィールドのマッピング方式が使用者によって異なる場合など）、
+プログラムによって 3 つのステップで `DataFrame` を生成できます。
+<!-- /ja -->
 
-1. Create an RDD of `Row`s from the original RDD;
-2. Create the schema represented by a `StructType` matching the structure of
-`Row`s in the RDD created in Step 1.
-3. Apply the schema to the RDD of `Row`s via `createDataFrame` method provided
-by `SQLContext`.
+1. <!-- en -->Create an RDD of `Row`s from the original RDD;
+   <!-- /en --><!-- ja -->
+   オリジナルの RDD から `Row`s の RDD を生成する。
+   <!-- /ja -->
+2. <!-- en -->Create the schema
+   represented by a `StructType` matching the structure of `Row`s in the RDD created in Step 1.
+   <!-- /en --><!-- ja -->
+   ステップ 1 で生成された RDD 内の `Row`s の構造にマッチする
+   `StructType` によって表されるスキーマを生成する。
+   <!-- /ja -->
+3. <!-- en -->Apply the schema to the RDD of `Row`s
+   via `createDataFrame` method provided by `SQLContext`.
+   <!-- /en --><!-- ja -->
+   `SQLContext` が提供する `createDataFrame` を使って
+   `Row`s の RDD にスキーマを適用する。
+   <!-- /ja -->
 
+<!-- en -->
 For example:
+<!-- /en --><!-- ja -->
+コードの例:
+<!-- /ja -->
+
 {% highlight scala %}
 // sc is an existing SparkContext.
 val sqlContext = new org.apache.spark.sql.SQLContext(sc)
@@ -1077,10 +1142,17 @@ Spark Data Sources を使ってデータをロード・セーブする一般的�
 それから組み込みのデータソースに対して利用可能な個別のオプションに進みます。
 <!-- /ja -->
 
-## Generic Load/Save Functions
+## Generic Load/Save Functions // 汎用的な Load/Save 関数
 
-In the simplest form, the default data source (`parquet` unless otherwise configured by
-`spark.sql.sources.default`) will be used for all operations.
+<!-- en -->
+In the simplest form, the default data source
+ (`parquet` unless otherwise configured by `spark.sql.sources.default`)
+ will be used for all operations.
+<!-- /en --><!-- ja -->
+最もシンプルな形では、デフォルトのデータソース
+（`spark.sql.sources.default` で設定されていなければ `parquet`）
+がすべての操作で使われます。
+<!-- /ja -->
 
 <div class="codetabs">
 <div data-lang="scala"  markdown="1">
@@ -1271,12 +1343,24 @@ By default `saveAsTable` will create a "managed table", meaning that the locatio
 be controlled by the metastore. Managed tables will also have their data deleted automatically
 when a table is dropped.
 
-## Parquet Files
+## Parquet Files // Parquet ファイル
 
-[Parquet](http://parquet.io) is a columnar format that is supported by many other data processing systems.
-Spark SQL provides support for both reading and writing Parquet files that automatically preserves the schema
-of the original data. When writing Parquet files, all columns are automatically converted to be nullable for 
-compatibility reasons.
+<!-- en -->
+[Parquet](http://parquet.io) is a columnar format
+ that is supported by many other data processing systems.
+Spark SQL provides support for both reading and writing Parquet files
+ that automatically preserves the schema of the original data.
+When writing Parquet files,
+ all columns are automatically converted to be nullable
+ for compatibility reasons.
+<!-- /en --><!-- ja -->
+[Parquet](http://parquet.io) は columnar フォーマットであり、
+多くの他のデータ処理システムでサポートされています。
+Spark SQL は Parquet ファイルの読み書きをサポートしており、
+その際、オリジナルデータのスキーマは自動的に保存されます。
+Parquet ファイルへの書き込みでは、互換性の理由により、
+すべての列が nullable へと自動的に変換されます。
+<!-- /ja -->
 
 ### Loading Data Programmatically
 
@@ -1905,21 +1989,55 @@ SELECT * FROM jsonTable
 
 </div>
 
-## Hive Tables
+## Hive Tables // Hive テーブル
 
+<!-- en -->
 Spark SQL also supports reading and writing data stored in [Apache Hive](http://hive.apache.org/).
 However, since Hive has a large number of dependencies, it is not included in the default Spark assembly.
 Hive support is enabled by adding the `-Phive` and `-Phive-thriftserver` flags to Spark's build.
-This command builds a new assembly jar that includes Hive. Note that this Hive assembly jar must also be present
-on all of the worker nodes, as they will need access to the Hive serialization and deserialization libraries
-(SerDes) in order to access data stored in Hive.
+This command builds a new assembly jar that includes Hive.
+Note that this Hive assembly jar must also be present on all of the worker nodes,
+ as they will need access to the Hive serialization and deserialization libraries (SerDes)
+ in order to access data stored in Hive.
+<!-- /en --><!-- ja -->
+Spark SQL は [Apache Hive](http://hive.apache.org/) に保存されたデータの
+読み書きもサポートしています。
+しかし、 Hive は非常に多くの依存性を持つため、
+Spark のデフォルトのパッケージには含まれていません。
+Spark のビルド時に `-Phive` と `-Phive-thriftserver` フラグを追加することで
+ Hive のサポートが有効になります。
+このコマンドは Hive を含む新しい aeembly jar をビルドします。
+Hive に保存されたデータにアクセスするには
+ Hive の serialization/deserialization ライブラリ（SerDe）にアクセスする必要があるため、
+この Hive assembly jar は
+すべてのワーカーノードにも存在していなければならない
+点に注意してください。
+<!-- /ja -->
 
-Configuration of Hive is done by placing your `hive-site.xml`, `core-site.xml` (for security configuration),
- `hdfs-site.xml` (for HDFS configuration) file in `conf/`. Please note when running
-the query on a YARN cluster (`cluster` mode), the `datanucleus` jars under the `lib_managed/jars` directory
-and `hive-site.xml` under `conf/` directory need to be available on the driver and all executors launched by the
-YARN cluster. The convenient way to do this is adding them through the `--jars` option and `--file` option of the
+<!-- en -->
+Configuration of Hive is done by placing your `hive-site.xml`,
+ `core-site.xml` (for security configuration),
+ `hdfs-site.xml` (for HDFS configuration)
+ file in `conf/`.
+Please note when running the query on a YARN cluster (`cluster` mode),
+ the `datanucleus` jars under the `lib_managed/jars` directory
+  and `hive-site.xml` under `conf/` directory
+  need to be available
+ on the driver
+  and all executors launched by the YARN cluster.
+The convenient way to do this is adding them through the `--jars` option and `--file` option of the
 `spark-submit` command.
+<!-- /en --><!-- ja -->
+Hive の設定は `conf/` ディレクトリに
+ `hive-site.xml`、
+ `core-site.xml` （セキュリティの設定のため）、
+ `hdfs-site.xml` （HDFS の設定のため）
+を置くことでなされます。
+YARN クラスタ上でクエリを実行する場合（`cluster` モードの場合）、
+ドライバと YARN クラスタにより起動されたすべてのエグゼキュータにおいて
+`lib_managed/jars` ディレクトリ配下に `datanucleus` jar が、
+`conf/` ディレクトリ配下に `hive-site.xml` が存在している必要があります。
+<!-- /ja -->
 
 
 <div class="codetabs">
