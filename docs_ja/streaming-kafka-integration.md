@@ -115,7 +115,32 @@ This approach has the following advantages over the receiver-based approach (i.e
   Kafka の retension が十分にある限り、メッセージは Kafka から復旧できます。
   <!-- /ja -->
 
-- *Exactly-once semantics:* The first approach uses Kafka's high level API to store consumed offsets in Zookeeper. This is traditionally the way to consume data from Kafka. While this approach (in combination with write ahead logs) can ensure zero data loss (i.e. at-least once semantics), there is a small chance some records may get consumed twice under some failures. This occurs because of inconsistencies between data reliably received by Spark Streaming and offsets tracked by Zookeeper. Hence, in this second approach, we use simple Kafka API that does not use Zookeeper. Offsets are tracked by Spark Streaming within its checkpoints. This eliminates inconsistencies between Spark Streaming and Zookeeper/Kafka, and so each record is received by Spark Streaming effectively exactly once despite failures. In order to achieve exactly-once semantics for output of your results, your output operation that saves the data to an external data store must be either idempotent, or an atomic transaction that saves results and offsets (see [Semantics of output operations](streaming-programming-guide.html#semantics-of-output-operations) in the main programming guide for further information).
+- <!-- en -->
+  *Exactly-once semantics:* The first approach uses Kafka's high level API to store consumed offsets in Zookeeper. This is traditionally the way to consume data from Kafka. While this approach (in combination with write ahead logs) can ensure zero data loss (i.e. at-least once semantics), there is a small chance some records may get consumed twice under some failures. This occurs because of inconsistencies between data reliably received by Spark Streaming and offsets tracked by Zookeeper. Hence, in this second approach, we use simple Kafka API that does not use Zookeeper. Offsets are tracked by Spark Streaming within its checkpoints. This eliminates inconsistencies between Spark Streaming and Zookeeper/Kafka, and so each record is received by Spark Streaming effectively exactly once despite failures. In order to achieve exactly-once semantics for output of your results, your output operation that saves the data to an external data store must be either idempotent, or an atomic transaction that saves results and offsets (see [Semantics of output operations](streaming-programming-guide.html#semantics-of-output-operations) in the main programming guide for further information).
+  <!-- /en --><!-- ja -->
+  *exactly-once セマンティクス:* 1つ目のアプローチは
+  consume されたオフセットを Zookeeper に保存するために Kafka の高レベル API を使っています。
+  これは伝統的には Kafka からデータを consume する方法です。
+  このアプローチ（ライト・アヘッド・ログと組み合わせる）が
+  zero data loss（すなわち、 at-least once セマンティクス）を
+  保証する一方、
+  いくつかの障害の下ではレコードが 2 回 consume される機会が少しあります。
+  これは
+  Spark Streaming によって確実に受信されたデータと
+  ZooKeeper によって管理されているオフセットとの間の
+  不一致によって発生します。
+  したがって、この 2 つ目のアプローチでは、ZooKeeper を使わない simple Kafka API を使います。
+  オフセットは Spark Streaming のチェックポイントによって管理されます。
+  これは
+  Spark Streaming と ZooKeeper/Kafka との間の不一致を取り除き、
+  各レコードは障害が起こっても効果的に確実に一度だけ Spark Streaming によって受信されます。
+  結果の出力において exactly once セマンティクスを実現するためには、
+  外部のデータストアにデータを保存する出力操作は、冪当になっているか、
+  または結果とオフセットをアトミックに保存するトランザクションになっていなければなりません
+  （さらなる情報のためには、メインのプログラミングガイド内の
+  [出力操作のセマンティクス](streaming-programming-guide.html#semantics-of-output-operations)
+  を参照してください）。
+  <!-- /ja -->
 
 Note that one disadvantage of this approach is that it does not update offsets in Zookeeper, hence Zookeeper-based Kafka monitoring tools will not show progress. However, you can access the offsets processed by this approach in each batch and update Zookeeper yourself (see below).
 
