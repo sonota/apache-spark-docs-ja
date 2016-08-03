@@ -959,14 +959,11 @@ Spark Streaming provides two categories of built-in streaming sources.
 Spark Streaming は2つのカテゴリのビルトイン streaming sources を提供します。
 <!-- /ja -->
 
-<!-- en -->
 - *Basic sources*: Sources directly available in the StreamingContext API.
   Examples: file systems, socket connections, and Akka actors.
 - *Advanced sources*: Sources like Kafka, Flume, Kinesis, Twitter, etc. are available through
   extra utility classes. These require linking against extra dependencies as discussed in the
   [linking](#linking) section.
-<!-- /en --><!-- ja -->
-<!-- /ja -->
 
 <!-- en -->
 We are going to discuss some of the sources present in each category later in this section.
