@@ -5,10 +5,22 @@ title: Overview
 description: Apache Spark SPARK_VERSION_SHORT documentation homepage
 ---
 
+<!-- en -->
 Apache Spark is a fast and general-purpose cluster computing system.
 It provides high-level APIs in Java, Scala, Python and R,
 and an optimized engine that supports general execution graphs.
 It also supports a rich set of higher-level tools including [Spark SQL](sql-programming-guide.html) for SQL and structured data processing, [MLlib](mllib-guide.html) for machine learning, [GraphX](graphx-programming-guide.html) for graph processing, and [Spark Streaming](streaming-programming-guide.html).
+<!-- /en --><!-- ja -->
+Apache Sparkは高速で汎用目的のクラスターコンピューティングシステムです。
+Java、Scala、Python、Rにおける高レベルのAPIと
+汎用的な実行グラフをサポートする最適化されたエンジンを提供します。
+また、
+ SQLと構造化データの処理のための [Spark SQL](sql-programming-guide.html)、
+ 機械学習のための [MLlib](mllib-guide.html)、
+ グラフ処理のための [GraphX](graphx-programming-guide.html)、
+ [Spark Streaming](streaming-programming-guide.html)
+を含む高レベルのツールのリッチなセットをサポートしています。
+<!-- /ja -->
 
 # Downloading
 
