@@ -5,6 +5,7 @@ BUILD_DIR="build"
 rm -rf $BUILD_DIR
 
 cp -r docs_orig $BUILD_DIR
+cp -r docs_ja/css $BUILD_DIR
 
 ruby convert.rb
 

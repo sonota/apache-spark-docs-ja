@@ -121,6 +121,7 @@ end
 
 Dir.glob("docs_ja/*") do |path|
   next if /~$/ =~ path
+  next if File.directory? path
   src = File.read(path)
 
   open(File.join(BUILD_DIR, File.basename(path)), "w") do |f|
