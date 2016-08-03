@@ -287,3 +287,12 @@ label[for="nav-trigger"]:hover {
   }
 
 }
+
+[lang=en] {
+  opacity: 0.4;
+}
+
+[lang=ja] em {
+  font-style: normal;
+  font-weight: bold;
+}
