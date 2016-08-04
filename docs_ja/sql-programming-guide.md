@@ -40,17 +40,12 @@ spark-shell, pyspark shell, sparkR shell 内で実行できます。
 ## SQL // SQL
 
 <!-- en -->
-One use of Spark SQL is to execute SQL queries
- written using either a basic SQL syntax or HiveQL.
-Spark SQL can also be used to read data
- from an existing Hive installation.
-For more on how to configure this feature,
- please refer to the [Hive Tables](#hive-tables) section.
-When running SQL from within another programming language
- the results will be returned as a [DataFrame](#DataFrames).
-You can also interact with the SQL interface
- using the [command-line](#running-the-spark-sql-cli)
- or over [JDBC/ODBC](#running-the-thrift-jdbcodbc-server).
+One use of Spark SQL is to execute SQL queries written using either a basic SQL syntax or HiveQL.
+Spark SQL can also be used to read data from an existing Hive installation. For more on how to
+configure this feature, please refer to the [Hive Tables](#hive-tables) section. When running
+SQL from within another programming language the results will be returned as a [DataFrame](#DataFrames).
+You can also interact with the SQL interface using the [command-line](#running-the-spark-sql-cli)
+or over [JDBC/ODBC](#running-the-thrift-jdbcodbc-server).
 <!-- /en --><!-- ja -->
 Spark SQL の用途の 1 つは
 基本的な SQL 文法または HiveQL で書かれた SQL クエリの実行です。
@@ -68,10 +63,9 @@ Spark SQL の用途の 1 つは
 ## DataFrames // DataFrames
 
 <!-- en -->
-A DataFrame is a distributed collection of data organized into named columns.
-It is conceptually equivalent to a table in a relational database
- or a data frame in R/Python, but with richer optimizations under the hood.
-DataFrames can be constructed from a wide array of [sources](#data-sources) such
+A DataFrame is a distributed collection of data organized into named columns. It is conceptually
+equivalent to a table in a relational database or a data frame in R/Python, but with richer
+optimizations under the hood. DataFrames can be constructed from a wide array of [sources](#data-sources) such
 as: structured data files, tables in Hive, external databases, or existing RDDs.
 <!-- /en --><!-- ja -->
 DataFrame は名前付きカラムの形に組織化されたデータの分散コレクションです。
@@ -99,13 +93,10 @@ DataFrame API は
 ## Datasets // Datasets
 
 <!-- en -->
-A Dataset is a new experimental interface added in Spark 1.6
- that tries to provide the benefits of RDDs
- (strong typing, ability to use powerful lambda functions)
- with the benefits of Spark SQL's optimized execution engine.
-A Dataset can be
- [constructed](#creating-datasets) from JVM objects
- and then manipulated using functional transformations (map, flatMap, filter, etc.).
+A Dataset is a new experimental interface added in Spark 1.6 that tries to provide the benefits of
+RDDs (strong typing, ability to use powerful lambda functions) with the benefits of Spark SQL's
+optimized execution engine. A Dataset can be [constructed](#creating-datasets) from JVM objects and then manipulated
+using functional transformations (map, flatMap, filter, etc.).
 <!-- /en --><!-- ja -->
 Dataset は
 Spark 1.6 で加えられた
@@ -118,13 +109,11 @@ Dataset は JVM オブジェクトから
 <!-- /ja -->
 
 <!-- en -->
-The unified Dataset API can be used both in
- [Scala](api/scala/index.html#org.apache.spark.sql.Dataset)
- and [Java](api/java/index.html?org/apache/spark/sql/Dataset.html).
-Python does not yet have support for the Dataset API,
- but due to its dynamic nature many of the benefits are already available
- (i.e. you can access the field of a row by name naturally `row.columnName`).
-Full python support will be added in a future release.
+The unified Dataset API can be used both in [Scala](api/scala/index.html#org.apache.spark.sql.Dataset) and
+[Java](api/java/index.html?org/apache/spark/sql/Dataset.html). Python does not yet have support for
+the Dataset API, but due to its dynamic nature many of the benefits are already available (i.e. you can
+access the field of a row by name naturally `row.columnName`). Full python support will be added
+in a future release.
 <!-- /en --><!-- ja -->
 統一された Dataset API が
  [Scala](api/scala/index.html#org.apache.spark.sql.Dataset) と
@@ -202,18 +191,15 @@ sqlContext <- sparkRSQL.init(sc)
 </div>
 
 <!-- en -->
-In addition to the basic `SQLContext`, you can also create a `HiveContext`,
- which provides a superset of the functionality provided by the basic `SQLContext`.
-Additional features include
- the ability to write queries using the more complete HiveQL parser,
- access to Hive UDFs, and the ability to read data from Hive tables.
-To use a `HiveContext`, you do not need to have an existing Hive setup,
- and all of the data sources available to a `SQLContext` are still available.
+In addition to the basic `SQLContext`, you can also create a `HiveContext`, which provides a
+superset of the functionality provided by the basic `SQLContext`. Additional features include
+the ability to write queries using the more complete HiveQL parser, access to Hive UDFs, and the
+ability to read data from Hive tables. To use a `HiveContext`, you do not need to have an
+existing Hive setup, and all of the data sources available to a `SQLContext` are still available.
 `HiveContext` is only packaged separately to avoid including all of Hive's dependencies in the default
- Spark build.
-If these dependencies are not a problem for your application
- then using `HiveContext` is recommended for the 1.3 release of Spark.
-Future releases will focus on bringing `SQLContext` up to feature parity with a `HiveContext`.
+Spark build. If these dependencies are not a problem for your application then using `HiveContext`
+is recommended for the 1.3 release of Spark. Future releases will focus on bringing `SQLContext` up
+to feature parity with a `HiveContext`.
 <!-- /en --><!-- ja -->
 基本的な `SQLContext` に加えて、 `HiveContext` も生成することができます。
 これは基本的な `SQLContext` によって提供される機能の superset を提供します。
@@ -231,35 +217,11 @@ Hive テーブルからの読み込み
 Future releases will focus on bringing `SQLContext` up to feature parity with a `HiveContext`.
 <!-- /ja -->
 
-<!-- en -->
-The specific variant of SQL that is used to parse queries
- can also be selected using the `spark.sql.dialect` option.
-This parameter can be changed using either
- the `setConf` method on a `SQLContext`
- or by using a `SET key=value` command in SQL.
-For a `SQLContext`, the only dialect available is "sql"
- which uses a simple SQL parser provided by Spark SQL.
-In a `HiveContext`, the default is "hiveql", though "sql" is also available.
-Since the HiveQL parser is much more complete,
- this is recommended for most use cases.
-<!-- /en --><!-- ja -->
-クエリをパースするのに使われる SQL の特定の変種は
- `spark.sql.dialect` オプションを使って選択できます。
-このパラメータは `SQLContext` 上で `setConf` メソッドを使うか、
-または SQL 内で `SET key=value` コマンドを使うことで変更できます。
-`SQLContext` にとって、利用可能な唯一の dialect は "sql" であり、
-これは Spark SQL が提供するシンプルな SQL パーサを使います。
-`HiveContext` 内では "sql" を使うこともできますが、デフォルトは "hiveql" です。
-HiveQL パーサはより完全であるため、これはほとんどのユースケースで推奨されます。
-<!-- /ja -->
 
 ## Creating DataFrames // DataFrames の生成
 
 <!-- en -->
-With a `SQLContext`, applications can create `DataFrame`s
- from an <a href='#interoperating-with-rdds'>existing `RDD`</a>,
- from a Hive table,
- or from <a href='#data-sources'>data sources</a>.
+With a `SQLContext`, applications can create `DataFrame`s from an <a href='#interoperating-with-rdds'>existing `RDD`</a>, from a Hive table, or from <a href='#data-sources'>data sources</a>.
 <!-- /en --><!-- ja -->
 `SQLContext` を使って、
 <a href='#interoperating-with-rdds'>既存の `RDD`</a>、
@@ -317,7 +279,7 @@ df.show()
 {% highlight r %}
 sqlContext <- SQLContext(sc)
 
-df <- jsonFile(sqlContext, "examples/src/main/resources/people.json")
+df <- read.json(sqlContext, "examples/src/main/resources/people.json")
 
 # Displays the content of the DataFrame to stdout
 showDF(df)
@@ -331,11 +293,7 @@ showDF(df)
 ## DataFrame Operations // DataFrame の操作
 
 <!-- en -->
-DataFrames provide a domain-specific language for structured data manipulation
- in [Scala](api/scala/index.html#org.apache.spark.sql.DataFrame),
- [Java](api/java/index.html?org/apache/spark/sql/DataFrame.html),
- [Python](api/python/pyspark.sql.html#pyspark.sql.DataFrame)
- and [R](api/R/DataFrame.html).
+DataFrames provide a domain-specific language for structured data manipulation in [Scala](api/scala/index.html#org.apache.spark.sql.DataFrame), [Java](api/java/index.html?org/apache/spark/sql/DataFrame.html), [Python](api/python/pyspark.sql.html#pyspark.sql.DataFrame) and [R](api/R/DataFrame.html).
 <!-- /en --><!-- ja -->
 [Scala](api/scala/index.html#org.apache.spark.sql.DataFrame),
  [Java](api/java/index.html?org/apache/spark/sql/DataFrame.html),
@@ -400,8 +358,7 @@ df.groupBy("age").count().show()
 {% endhighlight %}
 
 <!-- en -->
-For a complete list of the types of operations that can be performed on a DataFrame
- refer to the [API Documentation](api/scala/index.html#org.apache.spark.sql.DataFrame).
+For a complete list of the types of operations that can be performed on a DataFrame refer to the [API Documentation](api/scala/index.html#org.apache.spark.sql.DataFrame).
 <!-- /en --><!-- ja -->
 DataFrame 上で実行できる操作のタイプ
 の完全なリストについては
@@ -410,11 +367,7 @@ DataFrame 上で実行できる操作のタイプ
 <!-- /ja -->
 
 <!-- en -->
-In addition to simple column references and expressions,
- DataFrames also have a rich library of functions
- including string manipulation, date arithmetic, common math operations and more.
-The complete list is available in the
- [DataFrame Function Reference](api/scala/index.html#org.apache.spark.sql.functions$).
+In addition to simple column references and expressions, DataFrames also have a rich library of functions including string manipulation, date arithmetic, common math operations and more. The complete list is available in the [DataFrame Function Reference](api/scala/index.html#org.apache.spark.sql.functions$).
 <!-- /en --><!-- ja -->
 シンプルな列の参照と expressions に加えて、
 DataFrames には
@@ -548,7 +501,7 @@ In addition to simple column references and expressions, DataFrames also have a 
 sqlContext <- sparkRSQL.init(sc)
 
 # Create the DataFrame
-df <- jsonFile(sqlContext, "examples/src/main/resources/people.json")
+df <- read.json(sqlContext, "examples/src/main/resources/people.json")
 
 # Show the content of the DataFrame
 showDF(df)
@@ -602,8 +555,7 @@ In addition to simple column references and expressions, DataFrames also have a 
 ## Running SQL Queries Programmatically // プログラムを利用して SQL クエリを実行する
 
 <!-- en -->
-The `sql` function on a `SQLContext` enables applications
- to run SQL queries programmatically and returns the result as a `DataFrame`.
+The `sql` function on a `SQLContext` enables applications to run SQL queries programmatically and returns the result as a `DataFrame`.
 <!-- /en --><!-- ja -->
 `SQLContext` 上で `sql` 関数を使うことで
 アプリケーションがプログラムを利用して SQL クエリを実行し、
@@ -646,19 +598,12 @@ df <- sql(sqlContext, "SELECT * FROM table")
 ## Creating Datasets // Datasets の生成
 
 <!-- en -->
-Datasets are similar to RDDs, however,
- instead of using Java Serialization or Kryo they use a specialized
- [Encoder](api/scala/index.html#org.apache.spark.sql.Encoder)
- to serialize the objects for processing or transmitting over the network.
-While both encoders and standard serialization are responsible
-  for turning an object into bytes,
- encoders
-  are code generated dynamically
-  and use a format that allows Spark to perform many operations like
-    filtering,
-    sorting
-    and hashing
-   without deserializing the bytes back into an object.
+Datasets are similar to RDDs, however, instead of using Java Serialization or Kryo they use
+a specialized [Encoder](api/scala/index.html#org.apache.spark.sql.Encoder) to serialize the objects
+for processing or transmitting over the network. While both encoders and standard serialization are
+responsible for turning an object into bytes, encoders are code generated dynamically and use a format
+that allows Spark to perform many operations like filtering, sorting and hashing without deserializing
+the bytes back into an object.
 <!-- /en --><!-- ja -->
 Datasets は RDDs に似ていますが、
 処理やネットワーク越しの送信のためにオブジェクトをシリアライズするために
@@ -706,11 +651,9 @@ SQLContext sqlContext = new org.apache.spark.sql.SQLContext(sc);
 ## Interoperating with RDDs // RDD との相互運用
 
 <!-- en -->
-Spark SQL supports two different methods for converting existing RDDs into DataFrames.
-The first method uses reflection to infer the schema of an RDD
- that contains specific types of objects.
-This reflection based approach leads to more concise code and works well
- when you already know the schema
+Spark SQL supports two different methods for converting existing RDDs into DataFrames. The first
+method uses reflection to infer the schema of an RDD that contains specific types of objects. This
+reflection based approach leads to more concise code and works well when you already know the schema
 while writing your Spark application.
 <!-- /en --><!-- ja -->
 Spark SQL は既存の RDD を DataFrames に変換するために2つの異なる方法をサポートしています。
@@ -721,13 +664,9 @@ Spark アプリケーションを書いている間に当該スキーマをす�
 <!-- /ja -->
 
 <!-- en -->
-The second method for creating DataFrames is
- through a programmatic interface
- that allows you to construct a schema
- and then apply it to an existing RDD.
-While this method is more verbose,
- it allows you to construct DataFrames
- when the columns and their types are not known until runtime.
+The second method for creating DataFrames is through a programmatic interface that allows you to
+construct a schema and then apply it to an existing RDD. While this method is more verbose, it allows
+you to construct DataFrames when the columns and their types are not known until runtime.
 <!-- /en --><!-- ja -->
 DataFrames 生成のための 2つ目の方法は
 programmatic なインターフェイスを通じて行うもので、
@@ -746,17 +685,12 @@ DataFrames を組み立てることができます。
 <div data-lang="scala"  markdown="1">
 
 <!-- en -->
-The Scala interface for Spark SQL
- supports automatically converting an RDD containing case classes to a DataFrame.
-The case class defines the schema of the table.
-The names of the arguments to the case class
- are read using reflection
- and become the names of the columns.
-Case classes can also be nested or contain complex types such as Sequences or Arrays.
-This RDD can
- be implicitly converted to a DataFrame
- and then be registered as a table.
-Tables can be used in subsequent SQL statements.
+The Scala interface for Spark SQL supports automatically converting an RDD containing case classes
+to a DataFrame. The case class
+defines the schema of the table. The names of the arguments to the case class are read using
+reflection and become the names of the columns. Case classes can also be nested or contain complex
+types such as Sequences or Arrays. This RDD can be implicitly converted to a DataFrame and then be
+registered as a table. Tables can be used in subsequent SQL statements.
 <!-- /en --><!-- ja -->
 Spark SQL の Scala インターフェイスは
 ケースクラスを含む RDD の DataFrame への自動変換をサポートしています。
@@ -781,7 +715,7 @@ case class Person(name: String, age: Int)
 
 // Create an RDD of Person objects and register it as a table.
 val people = sc.textFile("examples/src/main/resources/people.txt").map(_.split(",")).map(p => Person(p(0), p(1).trim.toInt)).toDF()
-people.registerTempTable("people")
+people.createOrReplaceTempView("people")
 
 // SQL statements can be run by using the sql methods provided by sqlContext.
 val teenagers = sqlContext.sql("SELECT name, age FROM people WHERE age >= 13 AND age <= 19")
@@ -857,7 +791,7 @@ JavaRDD<Person> people = sc.textFile("examples/src/main/resources/people.txt").m
 
 // Apply a schema to an RDD of JavaBeans and register it as a table.
 DataFrame schemaPeople = sqlContext.createDataFrame(people, Person.class);
-schemaPeople.registerTempTable("people");
+schemaPeople.createOrReplaceTempView("people");
 
 // SQL can be run over RDDs that have been registered as tables.
 DataFrame teenagers = sqlContext.sql("SELECT name FROM people WHERE age >= 13 AND age <= 19")
@@ -895,7 +829,7 @@ people = parts.map(lambda p: Row(name=p[0], age=int(p[1])))
 
 # Infer the schema, and register the DataFrame as a table.
 schemaPeople = sqlContext.createDataFrame(people)
-schemaPeople.registerTempTable("people")
+schemaPeople.createOrReplaceTempView("people")
 
 # SQL can be run over DataFrames that have been registered as a table.
 teenagers = sqlContext.sql("SELECT name FROM people WHERE age >= 13 AND age <= 19")
@@ -917,9 +851,9 @@ for teenName in teenNames.collect():
 <div data-lang="scala"  markdown="1">
 
 <!-- en -->
-When case classes cannot be defined ahead of time
- (for example, the structure of records is encoded in a string,
- or a text dataset will be parsed and fields will be projected differently for different users),
+When case classes cannot be defined ahead of time (for example,
+the structure of records is encoded in a string, or a text dataset will be parsed
+and fields will be projected differently for different users),
 a `DataFrame` can be created programmatically with three steps.
 <!-- /en --><!-- ja -->
 ケースクラスが前もって定義できない場合
@@ -978,8 +912,8 @@ val rowRDD = people.map(_.split(",")).map(p => Row(p(0), p(1).trim))
 // Apply the schema to the RDD.
 val peopleDataFrame = sqlContext.createDataFrame(rowRDD, schema)
 
-// Register the DataFrames as a table.
-peopleDataFrame.registerTempTable("people")
+// Creates a temporary view using the DataFrame.
+peopleDataFrame.createOrReplaceTempView("people")
 
 // SQL statements can be run by using the sql methods provided by sqlContext.
 val results = sqlContext.sql("SELECT name FROM people")
@@ -1028,7 +962,7 @@ JavaRDD<String> people = sc.textFile("examples/src/main/resources/people.txt");
 String schemaString = "name age";
 
 // Generate the schema based on the string of schema
-List<StructField> fields = new ArrayList<StructField>();
+List<StructField> fields = new ArrayList<>();
 for (String fieldName: schemaString.split(" ")) {
   fields.add(DataTypes.createStructField(fieldName, DataTypes.StringType, true));
 }
@@ -1046,10 +980,10 @@ JavaRDD<Row> rowRDD = people.map(
 // Apply the schema to the RDD.
 DataFrame peopleDataFrame = sqlContext.createDataFrame(rowRDD, schema);
 
-// Register the DataFrame as a table.
-peopleDataFrame.registerTempTable("people");
+// Creates a temporary view using the DataFrame.
+peopleDataFrame.createOrReplaceTempView("people");
 
-// SQL can be run over RDDs that have been registered as tables.
+// SQL can be run over a temporary view created using DataFrames.
 DataFrame results = sqlContext.sql("SELECT name FROM people");
 
 // The results of SQL queries are DataFrames and support all the normal RDD operations.
@@ -1099,8 +1033,8 @@ schema = StructType(fields)
 # Apply the schema to the RDD.
 schemaPeople = sqlContext.createDataFrame(people, schema)
 
-# Register the DataFrame as a table.
-schemaPeople.registerTempTable("people")
+# Creates a temporary view using the DataFrame
+schemaPeople.createOrReplaceTempView("people")
 
 # SQL can be run over DataFrames that have been registered as a table.
 results = sqlContext.sql("SELECT name FROM people")
@@ -1120,21 +1054,15 @@ for name in names.collect():
 
 <!-- en -->
 Spark SQL supports operating on a variety of data sources through the `DataFrame` interface.
-A DataFrame
- can be operated on as normal RDDs
- and can also be registered as a temporary table.
-Registering a DataFrame as a table allows you
- to run SQL queries over its data.
-This section
- describes the general methods for loading and saving data
-  using the Spark Data Sources
- and then goes into specific options
-  that are available for the built-in data sources.
+A DataFrame can be operated on as normal RDDs and can also be used to create a temporary view.
+Registering a DataFrame as a table allows you to run SQL queries over its data. This section
+describes the general methods for loading and saving data using the Spark Data Sources and then
+goes into specific options that are available for the built-in data sources.
 <!-- /en --><!-- ja -->
 Spark SQL は、`DataFrame` インターフェイスを通じた
 さまざまなデータソース上での操作をサポートしています。
 DataFrame は通常の RDD として操作でき、
-また一時テーブルとして登録することもできます。
+また一時ビューとして使うこともできます。
 DataFrame をテーブルとして登録することで
 そのデータに対して SQL クエリを実行できるようになります。
 この節では、
@@ -1145,9 +1073,8 @@ Spark Data Sources を使ってデータをロード・セーブする一般的�
 ## Generic Load/Save Functions // 汎用的な Load/Save 関数
 
 <!-- en -->
-In the simplest form, the default data source
- (`parquet` unless otherwise configured by `spark.sql.sources.default`)
- will be used for all operations.
+In the simplest form, the default data source (`parquet` unless otherwise configured by
+`spark.sql.sources.default`) will be used for all operations.
 <!-- /en --><!-- ja -->
 最もシンプルな形では、デフォルトのデータソース
 （`spark.sql.sources.default` で設定されていなければ `parquet`）
@@ -1189,8 +1116,8 @@ df.select("name", "favorite_color").write.save("namesAndFavColors.parquet")
 <div data-lang="r"  markdown="1">
 
 {% highlight r %}
-df <- loadDF(sqlContext, "people.parquet")
-saveDF(select(df, "name", "age"), "namesAndAges.parquet")
+df <- read.df(sqlContext, "examples/src/main/resources/users.parquet")
+write.df(select(df, "name", "favorite_color"), "namesAndFavColors.parquet")
 {% endhighlight %}
 
 </div>
@@ -1239,8 +1166,8 @@ df.select("name", "age").write.save("namesAndAges.parquet", format="parquet")
 
 {% highlight r %}
 
-df <- loadDF(sqlContext, "people.json", "json")
-saveDF(select(df, "name", "age"), "namesAndAges.parquet", "parquet")
+df <- read.df(sqlContext, "examples/src/main/resources/people.json", "json")
+write.df(select(df, "name", "age"), "namesAndAges.parquet", "parquet")
 
 {% endhighlight %}
 
@@ -1346,13 +1273,10 @@ when a table is dropped.
 ## Parquet Files // Parquet ファイル
 
 <!-- en -->
-[Parquet](http://parquet.io) is a columnar format
- that is supported by many other data processing systems.
-Spark SQL provides support for both reading and writing Parquet files
- that automatically preserves the schema of the original data.
-When writing Parquet files,
- all columns are automatically converted to be nullable
- for compatibility reasons.
+[Parquet](http://parquet.io) is a columnar format that is supported by many other data processing systems.
+Spark SQL provides support for both reading and writing Parquet files that automatically preserves the schema
+of the original data. When writing Parquet files, all columns are automatically converted to be nullable for 
+compatibility reasons.
 <!-- /en --><!-- ja -->
 [Parquet](http://parquet.io) は columnar フォーマットであり、
 多くの他のデータ処理システムでサポートされています。
@@ -1384,8 +1308,8 @@ people.write.parquet("people.parquet")
 // The result of loading a Parquet file is also a DataFrame.
 val parquetFile = sqlContext.read.parquet("people.parquet")
 
-//Parquet files can also be registered as tables and then used in SQL statements.
-parquetFile.registerTempTable("parquetFile")
+// Parquet files can also be used to create a temporary view and then used in SQL statements.
+parquetFile.createOrReplaceTempView("parquetFile")
 val teenagers = sqlContext.sql("SELECT name FROM parquetFile WHERE age >= 13 AND age <= 19")
 teenagers.map(t => "Name: " + t(0)).collect().foreach(println)
 {% endhighlight %}
@@ -1406,8 +1330,8 @@ schemaPeople.write().parquet("people.parquet");
 // The result of loading a parquet file is also a DataFrame.
 DataFrame parquetFile = sqlContext.read().parquet("people.parquet");
 
-// Parquet files can also be registered as tables and then used in SQL statements.
-parquetFile.registerTempTable("parquetFile");
+// Parquet files can also be used to create a temporary view and then used in SQL statements.
+parquetFile.createOrReplaceTempView("parquetFile");
 DataFrame teenagers = sqlContext.sql("SELECT name FROM parquetFile WHERE age >= 13 AND age <= 19");
 List<String> teenagerNames = teenagers.javaRDD().map(new Function<Row, String>() {
   public String call(Row row) {
@@ -1432,8 +1356,8 @@ schemaPeople.write.parquet("people.parquet")
 # The result of loading a parquet file is also a DataFrame.
 parquetFile = sqlContext.read.parquet("people.parquet")
 
-# Parquet files can also be registered as tables and then used in SQL statements.
-parquetFile.registerTempTable("parquetFile");
+# Parquet files can also be used to create a temporary view and then used in SQL statements.
+parquetFile.createOrReplaceTempView("parquetFile");
 teenagers = sqlContext.sql("SELECT name FROM parquetFile WHERE age >= 13 AND age <= 19")
 teenNames = teenagers.map(lambda p: "Name: " + p.name)
 for teenName in teenNames.collect():
@@ -1450,17 +1374,18 @@ for teenName in teenNames.collect():
 schemaPeople # The DataFrame from the previous example.
 
 # DataFrames can be saved as Parquet files, maintaining the schema information.
-saveAsParquetFile(schemaPeople, "people.parquet")
+write.parquet(schemaPeople, "people.parquet")
 
 # Read in the Parquet file created above. Parquet files are self-describing so the schema is preserved.
 # The result of loading a parquet file is also a DataFrame.
-parquetFile <- parquetFile(sqlContext, "people.parquet")
+parquetFile <- read.parquet(sqlContext, "people.parquet")
 
-# Parquet files can also be registered as tables and then used in SQL statements.
-registerTempTable(parquetFile, "parquetFile");
+# Parquet files can also be used to create a temporary view and then used in SQL statements.
+registerTempTable(parquetFile, "parquetFile")
 teenagers <- sql(sqlContext, "SELECT name FROM parquetFile WHERE age >= 13 AND age <= 19")
-teenNames <- map(teenagers, function(p) { paste("Name:", p$name)})
-for (teenName in collect(teenNames)) {
+schema <- structType(structField("name", "string"))
+teenNames <- dapply(df, function(p) { cbind(paste("Name:", p$name)) }, schema)
+for (teenName in collect(teenNames)$name) {
   cat(teenName, "\n")
 }
 {% endhighlight %}
@@ -1630,14 +1555,14 @@ df3.printSchema()
 # sqlContext from the previous example is used in this example.
 
 # Create a simple DataFrame, stored into a partition directory
-saveDF(df1, "data/test_table/key=1", "parquet", "overwrite")
+write.df(df1, "data/test_table/key=1", "parquet", "overwrite")
 
 # Create another DataFrame in a new partition directory,
 # adding a new column and dropping an existing column
-saveDF(df2, "data/test_table/key=2", "parquet", "overwrite")
+write.df(df2, "data/test_table/key=2", "parquet", "overwrite")
 
 # Read the partitioned table
-df3 <- loadDF(sqlContext, "data/test_table", "parquet", mergeSchema="true")
+df3 <- read.df(sqlContext, "data/test_table", "parquet", mergeSchema="true")
 printSchema(df3)
 
 # The final schema consists of all 3 columns in the Parquet files together
@@ -1677,7 +1602,7 @@ Hive metastore Parquet table to a Spark SQL Parquet table. The reconciliation ru
 1. The reconciled schema contains exactly those fields defined in Hive metastore schema.
 
    - Any fields that only appear in the Parquet schema are dropped in the reconciled schema.
-   - Any fileds that only appear in the Hive metastore schema are added as nullable field in the
+   - Any fields that only appear in the Hive metastore schema are added as nullable field in the
      reconciled schema.
 
 #### Metadata Refreshing
@@ -1779,37 +1704,6 @@ Configuration of Parquet can be done using the `setConf` method on `SQLContext` 
   </td>
 </tr>
 <tr>
-  <td><code>spark.sql.parquet.output.committer.class</code></td>
-  <td><code>org.apache.parquet.hadoop.<br />ParquetOutputCommitter</code></td>
-  <td>
-    <p>
-      The output committer class used by Parquet. The specified class needs to be a subclass of
-      <code>org.apache.hadoop.<br />mapreduce.OutputCommitter</code>. Typically, it's also a
-      subclass of <code>org.apache.parquet.hadoop.ParquetOutputCommitter</code>.
-    </p>
-    <p>
-      <b>Note:</b>
-      <ul>
-        <li>
-          This option is automatically ignored if <code>spark.speculation</code> is turned on.
-        </li>
-        <li>
-          This option must be set via Hadoop <code>Configuration</code> rather than Spark
-          <code>SQLConf</code>.
-        </li>
-        <li>
-          This option overrides <code>spark.sql.sources.<br />outputCommitterClass</code>.
-        </li>
-      </ul>
-    </p>
-    <p>
-      Spark SQL comes with a builtin
-      <code>org.apache.spark.sql.<br />parquet.DirectParquetOutputCommitter</code>, which can be more
-      efficient then the default Parquet output committer when writing data to S3.
-    </p>
-  </td>
-</tr>
-<tr>
   <td><code>spark.sql.parquet.mergeSchema</code></td>
   <td><code>false</code></td>
   <td>
@@ -1845,11 +1739,11 @@ val people = sqlContext.read.json(path)
 // The inferred schema can be visualized using the printSchema() method.
 people.printSchema()
 // root
-//  |-- age: integer (nullable = true)
+//  |-- age: long (nullable = true)
 //  |-- name: string (nullable = true)
 
-// Register this DataFrame as a table.
-people.registerTempTable("people")
+// Creates a temporary view using the DataFrame
+people.createOrReplaceTempView("people")
 
 // SQL statements can be run by using the sql methods provided by sqlContext.
 val teenagers = sqlContext.sql("SELECT name FROM people WHERE age >= 13 AND age <= 19")
@@ -1883,11 +1777,11 @@ DataFrame people = sqlContext.read().json("examples/src/main/resources/people.js
 // The inferred schema can be visualized using the printSchema() method.
 people.printSchema();
 // root
-//  |-- age: integer (nullable = true)
+//  |-- age: long (nullable = true)
 //  |-- name: string (nullable = true)
 
-// Register this DataFrame as a table.
-people.registerTempTable("people");
+// Creates a temporary view using the DataFrame
+people.createOrReplaceTempView("people");
 
 // SQL statements can be run by using the sql methods provided by sqlContext.
 DataFrame teenagers = sqlContext.sql("SELECT name FROM people WHERE age >= 13 AND age <= 19");
@@ -1921,11 +1815,11 @@ people = sqlContext.read.json("examples/src/main/resources/people.json")
 # The inferred schema can be visualized using the printSchema() method.
 people.printSchema()
 # root
-#  |-- age: integer (nullable = true)
+#  |-- age: long (nullable = true)
 #  |-- name: string (nullable = true)
 
-# Register this DataFrame as a table.
-people.registerTempTable("people")
+# Creates a temporary view using the DataFrame.
+people.createOrReplaceTempView("people")
 
 # SQL statements can be run by using the sql methods provided by `sqlContext`.
 teenagers = sqlContext.sql("SELECT name FROM people WHERE age >= 13 AND age <= 19")
@@ -1955,12 +1849,12 @@ sqlContext <- sparkRSQL.init(sc)
 # The path can be either a single text file or a directory storing text files.
 path <- "examples/src/main/resources/people.json"
 # Create a DataFrame from the file(s) pointed to by path
-people <- jsonFile(sqlContext, path)
+people <- read.json(sqlContext, path)
 
 # The inferred schema can be visualized using the printSchema() method.
 printSchema(people)
 # root
-#  |-- age: integer (nullable = true)
+#  |-- age: long (nullable = true)
 #  |-- name: string (nullable = true)
 
 # Register this DataFrame as a table.
@@ -1995,10 +1889,9 @@ SELECT * FROM jsonTable
 Spark SQL also supports reading and writing data stored in [Apache Hive](http://hive.apache.org/).
 However, since Hive has a large number of dependencies, it is not included in the default Spark assembly.
 Hive support is enabled by adding the `-Phive` and `-Phive-thriftserver` flags to Spark's build.
-This command builds a new assembly jar that includes Hive.
-Note that this Hive assembly jar must also be present on all of the worker nodes,
- as they will need access to the Hive serialization and deserialization libraries (SerDes)
- in order to access data stored in Hive.
+This command builds a new assembly directory that includes Hive. Note that this Hive assembly directory must also be present
+on all of the worker nodes, as they will need access to the Hive serialization and deserialization libraries
+(SerDes) in order to access data stored in Hive.
 <!-- /en --><!-- ja -->
 Spark SQL は [Apache Hive](http://hive.apache.org/) に保存されたデータの
 読み書きもサポートしています。
@@ -2006,37 +1899,23 @@ Spark SQL は [Apache Hive](http://hive.apache.org/) に保存されたデータ
 Spark のデフォルトのパッケージには含まれていません。
 Spark のビルド時に `-Phive` と `-Phive-thriftserver` フラグを追加することで
  Hive のサポートが有効になります。
-このコマンドは Hive を含む新しい aeembly jar をビルドします。
+このコマンドは Hive を含む新しい aeembly ディレクトリをビルドします。
 Hive に保存されたデータにアクセスするには
  Hive の serialization/deserialization ライブラリ（SerDe）にアクセスする必要があるため、
-この Hive assembly jar は
+この Hive assembly ディレクトリは
 すべてのワーカーノードにも存在していなければならない
 点に注意してください。
 <!-- /ja -->
 
 <!-- en -->
-Configuration of Hive is done by placing your `hive-site.xml`,
- `core-site.xml` (for security configuration),
- `hdfs-site.xml` (for HDFS configuration)
- file in `conf/`.
-Please note when running the query on a YARN cluster (`cluster` mode),
- the `datanucleus` jars under the `lib_managed/jars` directory
-  and `hive-site.xml` under `conf/` directory
-  need to be available
- on the driver
-  and all executors launched by the YARN cluster.
-The convenient way to do this is adding them through the `--jars` option and `--file` option of the
-`spark-submit` command.
+Configuration of Hive is done by placing your `hive-site.xml`, `core-site.xml` (for security configuration),
+`hdfs-site.xml` (for HDFS configuration) file in `conf/`.
+
 <!-- /en --><!-- ja -->
 Hive の設定は `conf/` ディレクトリに
  `hive-site.xml`、
  `core-site.xml` （セキュリティの設定のため）、
- `hdfs-site.xml` （HDFS の設定のため）
-を置くことでなされます。
-YARN クラスタ上でクエリを実行する場合（`cluster` モードの場合）、
-ドライバと YARN クラスタにより起動されたすべてのエグゼキュータにおいて
-`lib_managed/jars` ディレクトリ配下に `datanucleus` jar が、
-`conf/` ディレクトリ配下に `hive-site.xml` が存在している必要があります。
+`conf/` ディレクトリ配下に `hive-site.xml` （HDFS の設定のため）が存在している必要があります。
 <!-- /ja -->
 
 
@@ -2152,7 +2031,7 @@ The following options can be used to configure the version of Hive that is used 
       property can be one of three options:
       <ol>
         <li><code>builtin</code></li>
-        Use Hive 1.2.1, which is bundled with the Spark assembly jar when <code>-Phive</code> is
+        Use Hive 1.2.1, which is bundled with the Spark assembly when <code>-Phive</code> is
         enabled. When this option is chosen, <code>spark.sql.hive.metastore.version</code> must be
         either <code>1.2.1</code> or not defined.
         <li><code>maven</code></li>
@@ -2208,7 +2087,7 @@ spark classpath. For example, to connect to postgres from the Spark Shell you wo
 following command:
 
 {% highlight bash %}
-SPARK_CLASSPATH=postgresql-9.3-1102-jdbc41.jar bin/spark-shell
+bin/spark-shell --driver-class-path postgresql-9.4.1207.jar --jars postgresql-9.4.1207.jar
 {% endhighlight %}
 
 Tables from the remote database can be loaded as a DataFrame or Spark SQL Temporary table using
@@ -2234,9 +2113,7 @@ the Data Sources API. The following options are supported:
   <tr>
     <td><code>driver</code></td>
     <td>
-      The class name of the JDBC driver needed to connect to this URL. This class will be loaded
-      on the master and workers before running an JDBC commands to allow the driver to
-      register itself with the JDBC subsystem.
+      The class name of the JDBC driver to use to connect to this URL.
     </td>
   </tr>
   
@@ -2276,7 +2153,7 @@ val jdbcDF = sqlContext.read.format("jdbc").options(
 
 {% highlight java %}
 
-Map<String, String> options = new HashMap<String, String>();
+Map<String, String> options = new HashMap<>();
 options.put("url", "jdbc:postgresql:dbserver");
 options.put("dbtable", "schema.tablename");
 
@@ -2331,10 +2208,8 @@ OPTIONS (
 # Performance Tuning // パフォーマンス・チューニング
 
 <!-- en -->
-For some workloads
- it is possible to improve performance
-  by either caching data in memory,
-  or by turning on some experimental options.
+For some workloads it is possible to improve performance by either caching data in memory, or by
+turning on some experimental options.
 <!-- /en --><!-- ja -->
 いくつかの workloads について、
 メモリにデータをキャッシュするか、
@@ -2409,11 +2284,9 @@ that these options will be deprecated in future release as more optimizations ar
 # Distributed SQL Engine // 分散 SQL エンジン
 
 <!-- en -->
-Spark SQL can also act as a distributed query engine
- using its JDBC/ODBC or command-line interface.
-In this mode, end-users or applications
- can interact with Spark SQL directly to run SQL queries,
- without the need to write any code.
+Spark SQL can also act as a distributed query engine using its JDBC/ODBC or command-line interface.
+In this mode, end-users or applications can interact with Spark SQL directly to run SQL queries,
+without the need to write any code.
 <!-- /en --><!-- ja -->
 Spark SQL は
 JDBC/ODBC またはコマンドラインインターフェイスを使って
@@ -2511,6 +2384,13 @@ options.
      --conf spark.sql.hive.thriftServer.singleSession=true \
      ...
    {% endhighlight %}
+ - Since 1.6.1, withColumn method in sparkR supports adding a new column to or replacing existing columns
+   of the same name of a DataFrame.
+
+ - From Spark 1.6, LongType casts to TimestampType expect seconds instead of microseconds. This
+   change was made to match the behavior of Hive 1.2 for more consistent type casting to TimestampType
+   from numeric types. See [SPARK-11724](https://issues.apache.org/jira/browse/SPARK-11724) for
+   details.
 
 ## Upgrading From Spark SQL 1.4 to 1.5
 
@@ -2531,14 +2411,13 @@ options.
  - In the `sql` dialect, floating point numbers are now parsed as decimal. HiveQL parsing remains
    unchanged.
  - The canonical name of SQL/DataFrame functions are now lower case (e.g. sum vs SUM).
- - It has been determined that using the DirectOutputCommitter when speculation is enabled is unsafe
-   and thus this output committer will not be used when speculation is on, independent of configuration.
  - JSON data source will not automatically load new files that are created by other applications
    (i.e. files that are not inserted to the dataset through Spark SQL).
    For a JSON persistent table (i.e. the metadata of the table is stored in Hive Metastore),
    users can use `REFRESH TABLE` SQL command or `HiveContext`'s `refreshTable` method
    to include those new files to the table. For a DataFrame representing a JSON dataset, users need to recreate
    the DataFrame and the new DataFrame will include new files.
+ - DataFrame.withColumn method in pySpark supports adding a new column or replacing existing columns of the same name.
 
 ## Upgrading from Spark SQL 1.3 to 1.4
 
@@ -2616,6 +2495,16 @@ sqlContext.setConf("spark.sql.retainGroupColumns", "false")
 </div>
 
 </div>
+
+
+#### Behavior change on DataFrame.withColumn
+
+Prior to 1.4, DataFrame.withColumn() supports adding a column only. The column will always be added
+as a new column with its specified name in the result DataFrame even if there may be any existing
+columns of the same name. Since 1.4, DataFrame.withColumn() supports adding a column of a different
+name from names of all existing columns or replacing existing columns of the same name.
+
+Note that this change is only for Scala API, not for PySpark and SparkR.
 
 
 ## Upgrading from Spark SQL 1.0-1.2 to 1.3
@@ -2699,58 +2588,13 @@ Python UDF registration is unchanged.
 When using DataTypes in Python you will need to construct them (i.e. `StringType()`) instead of
 referencing a singleton.
 
-## Migration Guide for Shark Users
-
-### Scheduling
-To set a [Fair Scheduler](job-scheduling.html#fair-scheduler-pools) pool for a JDBC client session,
-users can set the `spark.sql.thriftserver.scheduler.pool` variable:
-
-    SET spark.sql.thriftserver.scheduler.pool=accounting;
-
-### Reducer number
-
-In Shark, default reducer number is 1 and is controlled by the property `mapred.reduce.tasks`. Spark
-SQL deprecates this property in favor of `spark.sql.shuffle.partitions`, whose default value
-is 200. Users may customize this property via `SET`:
-
-    SET spark.sql.shuffle.partitions=10;
-    SELECT page, count(*) c
-    FROM logs_last_month_cached
-    GROUP BY page ORDER BY c DESC LIMIT 10;
-
-You may also put this property in `hive-site.xml` to override the default value.
-
-For now, the `mapred.reduce.tasks` property is still recognized, and is converted to
-`spark.sql.shuffle.partitions` automatically.
-
-### Caching
-
-The `shark.cache` table property no longer exists, and tables whose name end with `_cached` are no
-longer automatically cached. Instead, we provide `CACHE TABLE` and `UNCACHE TABLE` statements to
-let user control table caching explicitly:
-
-    CACHE TABLE logs_last_month;
-    UNCACHE TABLE logs_last_month;
-
-**NOTE:** `CACHE TABLE tbl` is now __eager__ by default not __lazy__. Don’t need to trigger cache materialization manually anymore.
-
-Spark SQL newly introduced a statement to let user control table caching whether or not lazy since Spark 1.2.0:
-
-	CACHE [LAZY] TABLE [AS SELECT] ...
-
-Several caching related features are not supported yet:
-
-* User defined partition level cache eviction policy
-* RDD reloading
-* In-memory cache write through policy
-
 ## Compatibility with Apache Hive // Apache Hive との互換性
 
 <!-- en -->
 Spark SQL is designed to be compatible with the Hive Metastore, SerDes and UDFs.
 Currently Hive SerDes and UDFs are based on Hive 1.2.1,
- and Spark SQL can be connected to different versions of Hive Metastore
-(from 0.12.0 to 1.2.1. Also see [Interacting with Different Versions of Hive Metastore](#interacting-with-different-versions-of-hive-metastore)).
+and Spark SQL can be connected to different versions of Hive Metastore
+(from 0.12.0 to 1.2.1. Also see [Interacting with Different Versions of Hive Metastore] (#interacting-with-different-versions-of-hive-metastore)).
 <!-- /en --><!-- ja -->
 Spark SQL は Hive metastore, SerDe, UDF と互換性を持つようにデザインされています。
 現在は Hive SerDe と UDF は Hive 1.2.1 に基づいており、

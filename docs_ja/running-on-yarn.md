@@ -17,13 +17,7 @@ Java system properties or environment variables not managed by YARN, they should
 Spark application's configuration (driver, executors, and the AM when running in client mode).
 
 <!-- en -->
-There are two deploy modes that can be used to launch Spark applications on YARN.
-In `cluster` mode,
- the Spark driver runs inside an application master process
-  which is managed by YARN on the cluster,
- and the client can go away after initiating the application.
-In `client` mode, the driver runs in the client process,
- and the application master is only used for requesting resources from YARN.
+There are two deploy modes that can be used to launch Spark applications on YARN. In `cluster` mode, the Spark driver runs inside an application master process which is managed by YARN on the cluster, and the client can go away after initiating the application. In `client` mode, the driver runs in the client process, and the application master is only used for requesting resources from YARN.
 <!-- /en --><!-- ja -->
 YARN 上で Spark アプリケーションを起動するために使えるモードが 2 つあります。
 `cluster` モードでは、 Spark のドライバは
@@ -34,10 +28,7 @@ YARN 上で Spark アプリケーションを起動するために使えるモ�
 <!-- /ja -->
 
 <!-- en -->
-Unlike [Spark standalone](spark-standalone.html) and [Mesos](running-on-mesos.html) modes,
- in which the master's address is specified in the `--master` parameter,
- in YARN mode the ResourceManager's address is picked up from the Hadoop configuration.
-Thus, the `--master` parameter is `yarn`.
+Unlike [Spark standalone](spark-standalone.html) and [Mesos](running-on-mesos.html) modes, in which the master's address is specified in the `--master` parameter, in YARN mode the ResourceManager's address is picked up from the Hadoop configuration. Thus, the `--master` parameter is `yarn`.
 <!-- /en --><!-- ja -->
 マスタのアドレスが `--master` パラメータで指定される
 [Spark スタンドアロン](spark-standalone.html) や [Mesos](running-on-mesos.html) モードと異なり、
@@ -73,8 +64,8 @@ In `cluster` mode, the driver runs on a different machine than the client, so `S
     $ ./bin/spark-submit --class my.main.Class \
         --master yarn \
         --deploy-mode cluster \
-        --jars my-other-jar.jar,my-other-other-jar.jar
-        my-main-jar.jar
+        --jars my-other-jar.jar,my-other-other-jar.jar \
+        my-main-jar.jar \
         app_arg1 app_arg2
 
 
@@ -91,11 +82,7 @@ Most of the configs are the same for Spark on YARN as for other deployment modes
 # Debugging your Application
 
 <!-- en -->
-In YARN terminology, executors and application masters run inside "containers".
-YARN has two modes for handling container logs after an application has completed.
-If log aggregation is turned on (with the `yarn.log-aggregation-enable` config),
- container logs are copied to HDFS and deleted on the local machine.
-These logs can be viewed from anywhere on the cluster with the `yarn logs` command.
+In YARN terminology, executors and application masters run inside "containers". YARN has two modes for handling container logs after an application has completed. If log aggregation is turned on (with the `yarn.log-aggregation-enable` config), container logs are copied to HDFS and deleted on the local machine. These logs can be viewed from anywhere on the cluster with the `yarn logs` command.
 <!-- /en --><!-- ja -->
 YARN の用語でいうと、エグゼキュータとアプリケーション・マスタは「コンテナ」の中で実行されます。
 YARN には、アプリケーションの完了後にコンテナのログをハンドリングするためのモードが 2 つあります。
@@ -107,17 +94,7 @@ YARN には、アプリケーションの完了後にコンテナのログをハ
     yarn logs -applicationId <app ID>
 
 <!-- en -->
-will print out the contents of all log files from all containers from the given application.
-You can also view the container log files directly in HDFS using the HDFS shell or API.
-The directory where they are located
- can be found by looking at your YARN configs
- (`yarn.nodemanager.remote-app-log-dir` and `yarn.nodemanager.remote-app-log-dir-suffix`).
-The logs are also available on the Spark Web UI under the Executors Tab.
-You need to
- have both the Spark history server and the MapReduce history server running
- and configure `yarn.log.server.url` in `yarn-site.xml` properly.
-The log URL on the Spark history server UI
- will redirect you to the MapReduce history server to show the aggregated logs.
+will print out the contents of all log files from all containers from the given application. You can also view the container log files directly in HDFS using the HDFS shell or API. The directory where they are located can be found by looking at your YARN configs (`yarn.nodemanager.remote-app-log-dir` and `yarn.nodemanager.remote-app-log-dir-suffix`). The logs are also available on the Spark Web UI under the Executors Tab. You need to have both the Spark history server and the MapReduce history server running and configure `yarn.log.server.url` in `yarn-site.xml` properly. The log URL on the Spark history server UI will redirect you to the MapReduce history server to show the aggregated logs.
 <!-- /en --><!-- ja -->
 このコマンドを実行すると、指定されたアプリケーションの全てのコンテナのすべてのログファイルの内容を表示します。
 HDFS のシェルや API を使って HDFS 内のログファイルを直接見ることもできます。
@@ -172,6 +149,19 @@ If you need a reference to the proper location to put log files in the YARN so t
   </td>
 </tr>
 <tr>
+  <td><code>spark.driver.memory</code></td>
+  <td>1g</td>
+  <td>
+    Amount of memory to use for the driver process, i.e. where SparkContext is initialized.
+    (e.g. <code>1g</code>, <code>2g</code>).
+
+    <br /><em>Note:</em> In client mode, this config must not be set through the <code>SparkConf</code>
+    directly in your application, because the driver JVM has already started at that point.
+    Instead, please set this through the <code>--driver-memory</code> command line option
+    or in your default properties file.
+  </td>
+</tr>
+<tr>
   <td><code>spark.driver.cores</code></td>
   <td><code>1</code></td>
   <td>
@@ -202,6 +192,13 @@ If you need a reference to the proper location to put log files in the YARN so t
   <td>The default HDFS replication (usually <code>3</code>)</td>
   <td>
     HDFS replication level for the files uploaded into HDFS for the application. These include things like the Spark jar, the app jar, and any distributed cache files/archives.
+  </td>
+</tr>
+<tr>
+  <td><code>spark.yarn.stagingDir</code></td>
+  <td>Current user's home directory in the filesystem</td>
+  <td>
+    Staging directory used while submitting applications.
   </td>
 </tr>
 <tr>
@@ -261,10 +258,31 @@ If you need a reference to the proper location to put log files in the YARN so t
   </td>
 </tr>
 <tr>
+  <td><code>spark.yarn.dist.jars</code></td>
+  <td>(none)</td>
+  <td>
+    Comma-separated list of jars to be placed in the working directory of each executor.
+  </td>
+</tr>
+<tr>
+  <td><code>spark.executor.cores</code></td>
+  <td>1 in YARN mode, all the available cores on the worker in standalone mode.</td>
+  <td>
+    The number of cores to use on each executor. For YARN and standalone mode only.
+  </td>
+</tr>
+<tr>
  <td><code>spark.executor.instances</code></td>
   <td><code>2</code></td>
   <td>
     The number of executors. Note that this property is incompatible with <code>spark.dynamicAllocation.enabled</code>. If both <code>spark.dynamicAllocation.enabled</code> and <code>spark.executor.instances</code> are specified, dynamic allocation is turned off and the specified number of <code>spark.executor.instances</code> is used.
+  </td>
+</tr>
+<tr>
+  <td><code>spark.executor.memory</code></td>
+  <td>1g</td>
+  <td>
+    Amount of memory to use per executor process (e.g. <code>2g</code>, <code>8g</code>).
   </td>
 </tr>
 <tr>
@@ -303,14 +321,25 @@ If you need a reference to the proper location to put log files in the YARN so t
   </td>
 </tr>
 <tr>
-  <td><code>spark.yarn.jar</code></td>
+  <td><code>spark.yarn.jars</code></td>
   <td>(none)</td>
   <td>
-    The location of the Spark jar file, in case overriding the default location is desired.
-    By default, Spark on YARN will use a Spark jar installed locally, but the Spark jar can also be
+    List of libraries containing Spark code to distribute to YARN containers.
+    By default, Spark on YARN will use Spark jars installed locally, but the Spark jars can also be
     in a world-readable location on HDFS. This allows YARN to cache it on nodes so that it doesn't
-    need to be distributed each time an application runs. To point to a jar on HDFS, for example,
-    set this configuration to <code>hdfs:///some/path</code>.
+    need to be distributed each time an application runs. To point to jars on HDFS, for example,
+    set this configuration to <code>hdfs:///some/path</code>. Globs are allowed.
+  </td>
+</tr>
+<tr>
+  <td><code>spark.yarn.archive</code></td>
+  <td>(none)</td>
+  <td>
+    An archive containing needed Spark jars for distribution to the YARN cache. If set, this
+    configuration replaces <code>spark.yarn.jars</code> and the archive is used in all the
+    application's containers. The archive should contain jar files in its root directory.
+    Like with the previous option, the archive can also be hosted on HDFS to speed up file
+    distribution.
   </td>
 </tr>
 <tr>
@@ -348,7 +377,9 @@ If you need a reference to the proper location to put log files in the YARN so t
   <td>(none)</td>
   <td>
   A string of extra JVM options to pass to the YARN Application Master in client mode.
-  In cluster mode, use <code>spark.driver.extraJavaOptions</code> instead.
+  In cluster mode, use <code>spark.driver.extraJavaOptions</code> instead. Note that it is illegal
+  to set maximum heap size (-Xmx) settings with this option. Maximum heap size settings can be set
+  with <code>spark.yarn.am.memory</code>
   </td>
 </tr>
 <tr>
@@ -373,6 +404,14 @@ If you need a reference to the proper location to put log files in the YARN so t
   Defines the validity interval for AM failure tracking.
   If the AM has been running for at least the defined interval, the AM failure count will be reset.
   This feature is not enabled if not configured, and only supported in Hadoop 2.6+.
+  </td>
+</tr>
+<tr>
+  <td><code>spark.yarn.executor.failuresValidityInterval</code></td>
+  <td>(none)</td>
+  <td>
+  Defines the validity interval for executor failure tracking.
+  Executor failures which are older than the validity interval will be ignored.
   </td>
 </tr>
 <tr>
