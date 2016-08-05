@@ -7,10 +7,40 @@ title: Structured Streaming Programming Guide
 * This will become a table of contents (this text will be scraped).
 {:toc}
 
-# Overview
-Structured Streaming is a scalable and fault-tolerant stream processing engine built on the Spark SQL engine. You can express your streaming computation the same way you would express a batch computation on static data.The Spark SQL engine will take care of running it incrementally and continuously and updating the final result as streaming data continues to arrive. You can use the [Dataset/DataFrame API](sql-programming-guide.html) in Scala, Java or Python to express streaming aggregations, event-time windows, stream-to-batch joins, etc. The computation is executed on the same optimized Spark SQL engine. Finally, the system ensures end-to-end exactly-once fault-tolerance guarantees through checkpointing and Write Ahead Logs. In short, *Structured Streaming provides fast, scalable, fault-tolerant, end-to-end exactly-once stream processing without the user having to reason about streaming.*
+# Overview // 概観
 
+<!-- en -->
+Structured Streaming is a scalable and fault-tolerant stream processing engine built on the Spark SQL engine. You can express your streaming computation the same way you would express a batch computation on static data.The Spark SQL engine will take care of running it incrementally and continuously and updating the final result as streaming data continues to arrive. You can use the [Dataset/DataFrame API](sql-programming-guide.html) in Scala, Java or Python to express streaming aggregations, event-time windows, stream-to-batch joins, etc. The computation is executed on the same optimized Spark SQL engine. Finally, the system ensures end-to-end exactly-once fault-tolerance guarantees through checkpointing and Write Ahead Logs. In short, *Structured Streaming provides fast, scalable, fault-tolerant, end-to-end exactly-once stream processing without the user having to reason about streaming.*
+<!-- /en --><!-- ja -->
+構造化ストリーミングは、Spark SQL エンジンの上に構築された、
+スケーラブルで耐障害性のあるストリーム処理エンジンです。
+静的なデータに対するバッチ計算を表現するのと同じ方法で
+ストリーミング計算を表現できます。
+Spark SQL エンジンは、
+インクリメンタルかつ連続的な実行と、
+到着し続けるデータに合わせた最終結果の更新の面倒をみます。
+streaming aggregations, event-time windows, stream-to-batch joins 
+を表現するために Scala、Java、Python の
+ [Dataset/DataFrame API](sql-programming-guide.html) 
+が利用できます。
+計算は最適化された同じ Spark SQL エンジン上で実行されます。
+最終的に、システムは
+チェックポインティングとライトアヘッドログを通じて
+end-to-end exactly-once な耐障害性の保証を確実にします。
+手短に言えば、 *構造化ストリーミングは、
+ユーザにストリーミングについて考えさせることなしに、
+高速でスケーラブルで耐障害性があり
+end-to-end exactly-once なストリーム処理を提供します。*
+<!-- /ja -->
+
+<!-- en -->
 **Spark 2.0 is the ALPHA RELEASE of Structured Streaming** and the APIs are still experimental. In this guide, we are going to walk you through the programming model and the APIs. First, let's start with a simple example - a streaming word count. 
+<!-- /en --><!-- ja -->
+**Spark 2.0 は構造化ストリーミングのアルファリリースであり、**
+API はまだ実験的なものです。
+このガイドでは、プログラミングモデルと API をお見せしようとしています。
+まずはシンプルな例、ストリーミングワードカウントから始めましょう。
+<!-- /ja -->
 
 # Quick Example
 Let’s say you want to maintain a running word count of text data received from a data server listening on a TCP socket. Let’s see how you can express this using Structured Streaming. You can see the full code in 
