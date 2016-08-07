@@ -383,30 +383,86 @@ Batch: 1
 
 # Programming Model
 
+<!-- en -->
 The key idea in Structured Streaming is to treat a live data stream as a 
 table that is being continuously appended. This leads to a new stream 
 processing model that is very similar to a batch processing model. You will 
 express your streaming computation as standard batch-like query as on a static 
 table, and Spark runs it as an *incremental* query on the *unbounded* input 
 table. Let’s understand this model in more detail.
+<!-- /en --><!-- ja -->
+構造化ストリーミングにおいてキーとなるアイデアは、
+リアルタイムのデータストリームを
+継続的に追加されるテーブルとして扱うというものです。
+これにより、
+バッチ処理モデルにとてもよく似た新しい処理モデルがもたらされます。
+あなたが静的なテーブル上の
+標準的な batch-like なクエリとしてストリーミング計算を表現すると、
+Spark はそれを
+ *unbounded*  な入力テーブルに対する
+ *インクリメンタルな* クエリとして
+実行します。
+では、このモデルをより詳しく理解していきましょう。
+<!-- /ja -->
 
 ## Basic Concepts
+
+<!-- en -->
 Consider the input data stream as the “Input Table”. Every data item that is 
 arriving on the stream is like a new row being appended to the Input Table.
+<!-- /en --><!-- ja -->
+入力データストリームを「入力テーブル」とみなします。
+ストリーム上で到着するすべての data item は
+入力テーブルに追加される行のようなものです。
+<!-- /ja -->
 
 ![Stream as a Table](img/structured-streaming-stream-as-a-table.png "Stream as a Table")
 
+<!-- en -->
 A query on the input will generate the “Result Table”. Every trigger interval (say, every 1 second), new rows get appended to the Input Table, which eventually updates the Result Table. Whenever the result table gets updated, we would want to write the changed result rows to an external sink. 
+<!-- /en --><!-- ja -->
+入力に対するクエリは「結果テーブル」を生成します。
+すべてのトリガインターバル（たとえば毎秒とします）において、
+入力テーブルに新しい行が追加され、
+ひいては結果テーブルが更新されます。
+結果テーブルが更新された場合はいつも、
+変化した結果の行が外部の sink に書き込まれるようにしたいです。
+<!-- /ja -->
 
 ![Model](img/structured-streaming-model.png)
 
+<!-- en -->
 The “Output” is defined as what gets written out to the external storage. The output can be defined in different modes 
+<!-- /en --><!-- ja -->
+「出力」は外部のストレージに何が書き出されるかとして定義されます。
+出力は異なるモードで定義されます。
+<!-- /ja -->
 
-  - *Complete Mode* - The entire updated Result Table will be written to the external storage. It is up to the storage connector to decide how to handle writing of the entire table. 
+  - <!-- en -->
+    *Complete Mode* - The entire updated Result Table will be written to the external storage. It is up to the storage connector to decide how to handle writing of the entire table. 
+    <!-- /en --><!-- ja -->
+    *complete モード* - 
+    更新された結果テーブル全体が外部ストレージに書き出される。
+    テーブル全体の書き出しをどのように処理するかの決定は
+    storage connector に委ねられている。
+    <!-- /ja -->
 
-  - *Append Mode* - Only the new rows appended in the Result Table since the last trigger will be written to the external storage. This is applicable only on the queries where existing rows in the Result Table are not expected to change.
+  - <!-- en -->
+    *Append Mode* - Only the new rows appended in the Result Table since the last trigger will be written to the external storage. This is applicable only on the queries where existing rows in the Result Table are not expected to change.
+    <!-- /en --><!-- ja -->
+    *append モード* - 最後のトリガーで外部ストレージに書かれた後に
+    結果テーブルに新しく追加された行のみ。
+    これは結果テーブル内の既存の行に対する変更が期待されていないクエリ
+    に対してのみ適用できる。
+    <!-- /ja -->
   
-  - *Update Mode* - Only the rows that were updated in the Result Table since the last trigger will be written to the external storage (not available yet in Spark 2.0). Note that this is different from the Complete Mode in that this mode does not output the rows that are not changed.
+  - <!-- en -->
+    *Update Mode* - Only the rows that were updated in the Result Table since the last trigger will be written to the external storage (not available yet in Spark 2.0). Note that this is different from the Complete Mode in that this mode does not output the rows that are not changed.
+    <!-- /en --><!-- ja -->
+    *update モード* - 最後のトリガーで外部ストレージに書かれた後に
+    結果テーブルで更新された行のみ（Spark 2.0 ではまだ利用不可）。
+    変更のない行を出力しないという点で complete モードとは異なっている点に注意。
+    <!-- /ja -->
 
 Note that each mode is applicable on certain types of queries. This is discussed in detail [later](#output-modes).
 
