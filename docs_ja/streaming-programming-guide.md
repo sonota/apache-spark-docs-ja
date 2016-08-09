@@ -672,6 +672,19 @@ receive it there. However, for local testing and unit tests, you can pass "local
 in-process (detects the number of cores in the local system). Note that this internally creates a [SparkContext](api/scala/index.html#org.apache.spark.SparkContext) (starting point of all Spark functionality) which can be accessed as `ssc.sparkContext`.
 <!-- /en --><!-- ja -->
 `appName` パラメータはクラスタの UI に表示されるアプリケーション名です。
+`master` には、
+[Spark または Mesos、YARN クラスタの URL](submitting-applications.html#master-urls)、
+もしくはローカルモードで実行する場合は特殊な文字列 __"local[\*]"__ を指定します。
+実際にクラスタで実行する場合には、
+プログラム内で `master` をハードコードするのではなく、
+[`spark-submit` でアプリケーションを起動し](submitting-applications.html)、
+そこで指定します。
+しかし、ローカルでのテストとユニットテストでは、
+Spark Streaming を実行するためにプロセス内で  "local[\*]" を渡せます
+（ローカルのシステムのコア数を検出する）。
+`ssc.sparkContext` としてアクセスできる
+[SparkContext](api/scala/index.html#org.apache.spark.SparkContext)
+（Spark のすべての機能の開始点）が内部で生成される点に注意してください。
 <!-- /ja -->
 
 <!-- en -->
