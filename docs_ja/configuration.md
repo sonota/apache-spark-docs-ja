@@ -196,9 +196,15 @@ of the most common options to set are:
   <td><code>spark.submit.deployMode</code></td>
   <td>(none)</td>
   <td>
+    <!-- en -->
     The deploy mode of Spark driver program, either "client" or "cluster",
     Which means to launch driver program locally ("client")
     or remotely ("cluster") on one of the nodes inside the cluster.
+    <!-- /en --><!-- ja -->
+    Spark ドライバプログラムのデプロイモード。
+    "client"（ドライバプログラムをローカルで起動する）
+    または "cluster"（クラスタ内のノードの一つで起動する）。
+    <!-- /ja -->
   </td>
 </tr>
 </table>
