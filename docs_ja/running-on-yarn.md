@@ -130,7 +130,16 @@ Spark ヒストリー・サーバの UI におけるログの URL は、
 集約されたログを表示するために、あなたを MapReduce ヒストリー・サーバにリダイレクトするでしょう。
 <!-- /ja -->
 
+<!-- en -->
 When log aggregation isn't turned on, logs are retained locally on each machine under `YARN_APP_LOGS_DIR`, which is usually configured to `/tmp/logs` or `$HADOOP_HOME/logs/userlogs` depending on the Hadoop version and installation. Viewing logs for a container requires going to the host that contains them and looking in this directory.  Subdirectories organize log files by application ID and container ID. The logs are also available on the Spark Web UI under the Executors Tab and doesn't require running the MapReduce history server.
+<!-- /en --><!-- ja -->
+ログの集約を有効にしていない場合、ログは各マシンの `YARN_APP_LOGS_DIR` 
+（Hadoop のバージョンと installation に依存して、通常は `/tmp/logs` または `$HADOOP_HOME/logs/userlogs` に設定されている）
+配下に留め置かれます。
+コンテナのログを見るには、それらを持っている当該ホストに入ってディレクトリの中を見る必要があります。
+サブディレクトリはアプリケーションIDとコンテナIDによってログファイルをまとめています。
+ログは Spark Web UI の Executors タブで見ることもでき、MapReduce の history サーバを実行する必要はありません。
+<!-- /ja -->
 
 To review per-container launch environment, increase `yarn.nodemanager.delete.debug-delay-sec` to a
 large value (e.g. `36000`), and then access the application cache through `yarn.nodemanager.local-dirs`
@@ -139,23 +148,65 @@ all environment variables used for launching each container. This process is use
 classpath problems in particular. (Note that enabling this requires admin privileges on cluster
 settings and a restart of all node managers. Thus, this is not applicable to hosted clusters).
 
+<!-- en -->
 To use a custom log4j configuration for the application master or executors, here are the options:
+<!-- /en --><!-- ja -->
+アプリケーションマスタまたはエグゼキュータのためにカスタマイズした log4j の設定を使うために、
+次のような方法があります:
+<!-- /ja -->
 
-- upload a custom `log4j.properties` using `spark-submit`, by adding it to the `--files` list of files
+- <!-- en -->
+  upload a custom `log4j.properties` using `spark-submit`, by adding it to the `--files` list of files
   to be uploaded with the application.
-- add `-Dlog4j.configuration=<location of configuration file>` to `spark.driver.extraJavaOptions`
+  <!-- /en --><!-- ja -->
+  `--files` のファイルのリストに追加することにより、
+  カスタマイズした `log4j.properties` を`spark-submit` を使ってアップロードする。
+  <!-- /ja -->
+- <!-- en -->
+  add `-Dlog4j.configuration=<location of configuration file>` to `spark.driver.extraJavaOptions`
   (for the driver) or `spark.executor.extraJavaOptions` (for executors). Note that if using a file,
   the `file:` protocol should be explicitly provided, and the file needs to exist locally on all
   the nodes.
-- update the `$SPARK_CONF_DIR/log4j.properties` file and it will be automatically uploaded along
+  <!-- /en --><!-- ja -->
+  または `spark.executor.extraJavaOptions`（エグゼキュータ用）に
+  `-Dlog4j.configuration=<location of configuration file>` を追加する。
+  ファイルを使う場合、 `file:` プロトコルを明示的に提供するべきで、ファイルはすべてのノードにローカルに存在している必要がある
+  点に注意。
+  <!-- /ja -->
+- <!-- en -->
+  update the `$SPARK_CONF_DIR/log4j.properties` file and it will be automatically uploaded along
   with the other configurations. Note that other 2 options has higher priority than this option if
   multiple options are specified.
+  <!-- /en --><!-- ja -->
+  `$SPARK_CONF_DIR/log4j.properties` ファイルを更新すると、
+  他の設定と一緒に自動的にアップロードされる。
+  複数の方法で指定された場合、他の2つの方法はこの方法より高い優先度を持つ点に注意。
+  <!-- /ja -->
 
+<!-- en -->
 Note that for the first option, both executors and the application master will share the same
 log4j configuration, which may cause issues when they run on the same node (e.g. trying to write
 to the same log file).
+<!-- /en --><!-- ja -->
+1つ目の方法では、エグゼキュータとアプリケーションマスタの両方が同じ log4j の設定を共有します。
+それらが同じノードで実行されている場合、
+問題（たとえば、同じファイルに書き込もうとするなど）を起こすかもしれない点に注意してください。
+<!-- /ja -->
 
+<!-- en -->
 If you need a reference to the proper location to put log files in the YARN so that YARN can properly display and aggregate them, use `spark.yarn.app.container.log.dir` in your `log4j.properties`. For example, `log4j.appender.file_appender.File=${spark.yarn.app.container.log.dir}/spark.log`. For streaming applications, configuring `RollingFileAppender` and setting file location to YARN's log directory will avoid disk overflow caused by large log files, and logs can be accessed using YARN's log utility.
+<!-- /en --><!-- ja -->
+YARN がそれらを適切に表示・集約できるようにするため、
+YARN においてログファイルを置くための
+適切な場所への参照を必要とする場合は
+`log4j.properties` 内の `spark.yarn.app.container.log.dir` を利用してください。
+たとえば `log4j.appender.file_appender.File=${spark.yarn.app.container.log.dir}/spark.log` のように。
+ストリーミングアプリケーションの場合、
+`RollingFileAppender` を指定し
+ファイルの場所を YARN のログディレクトリにすると、
+ログ肥大によって起こるディスクのオーバーフローが避けられ、
+YARN のユーティリティを使ってログにアクセスできるようになります。
+<!-- /ja -->
 
 #### Spark Properties
 
